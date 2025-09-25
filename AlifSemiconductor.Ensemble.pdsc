@@ -1194,6 +1194,7 @@
     </family>
 
   </devices>
+
   <!-- examples section: Contains Example projects for DevKit-E7   -->
   <examples>
     <!--<example name="LED Blinky M55-HE" doc="Abstract.txt" folder="Examples/LED_Blinky">
@@ -1210,6 +1211,7 @@
         <component Cclass="SOC Peripherals TestApp" Cgroup="TestApp" Csub="LED Blinky" Cvendor="Alif Semiconductor"/>
       </attributes>
     </example>-->
+
 
     <example name="Blinky_M55_HE" folder="Boards/DevKit-e8/Examples/Blinky_HE" doc="README.md">
       <description>Blinky example running on M55 High Efficiency core</description>
@@ -3107,7 +3109,12 @@
 
   </components>
 
+
   <csolution>
+    <template name="Project Template" path="Boards/Templates/project_template" file="project_template.csolution.yml" condition="Ensemble CMSIS-Core">
+      <description>Create a Project Template solution </description>
+    </template>
+
     <clayer type="Board" path="Boards/AppKit-e7-aiml/Layers/M55_HE" file="Board_HE.clayer.yml" copy-to="Board/AppKit-E7_M55_HE" condition="AppKit-E7-AIML"/>
     <clayer type="Board" path="Boards/AppKit-e7-aiml/Layers/M55_HP" file="Board_HP.clayer.yml" copy-to="Board/AppKit-E7_M55_HP" condition="AppKit-E7-AIML"/>
 

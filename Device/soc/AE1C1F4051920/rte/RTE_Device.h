@@ -3127,7 +3127,7 @@
 // <o> Number of bits to shift <0-8>
 // <i> Defines How much bit to shift before storing in sample register.
 // <i> Default: 8
-#define RTE_ADC120_SHIFT_N_BIT         (0)
+#define RTE_ADC120_SHIFT_N_BIT         (8)
 
 // <o> Left or Right shift
 //     <0=> LEFT SHIFT

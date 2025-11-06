@@ -2622,6 +2622,7 @@
 		<file category="header" name="drivers/include/sys_ctrl_adc.h"/>
 		<file category="header" name="Alif_CMSIS/Include/config/analog_config.h" version="2.0.4" attr="config"/>
 		<file category="header" name="drivers/include/sys_ctrl_analog.h"/>
+		<file category="source" name="drivers/source/sys_ctrl_analog.c"/>
 	  </files>
     </component>
 
@@ -2638,6 +2639,7 @@
 		<file category="header" name="drivers/include/sys_ctrl_dac.h"/>
 	    <file category="header" name="Alif_CMSIS/Include/config/analog_config.h" version="2.0.4" attr="config"/>
 	    <file category="header" name="drivers/include/sys_ctrl_analog.h"/>
+	    <file category="source" name="drivers/source/sys_ctrl_analog.c"/>
       </files>
     </component>
 
@@ -2753,6 +2755,7 @@
 	   <file category="header" name="drivers/include/sys_ctrl_cmp.h"/>
 	   <file category="header" name="Alif_CMSIS/Include/config/analog_config.h" version="2.0.4" attr="config"/>
 	   <file category="header" name="drivers/include/sys_ctrl_analog.h"/>
+	   <file category="source" name="drivers/source/sys_ctrl_analog.c"/>
      </files>
     </component>
 

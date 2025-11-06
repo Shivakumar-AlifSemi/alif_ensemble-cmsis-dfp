@@ -154,6 +154,9 @@ SD_DRV_STATUS sd_host_init(sd_handle_t *pHsd, sd_param_t *p_sd_param)
     uint8_t  powerlevel;
     uint16_t reg;
 
+    /* clear the global SD Handle */
+    memset(&Hsd, 0, sizeof(Hsd));
+
     /* Enable SDMMC Clock */
     enable_sd_periph_clk();
 
@@ -316,7 +319,7 @@ RE_INIT:
         }
     }
 
-    if (pHsd->sd_card.flags == SDMMC_1P8V_FLAG) {
+    if (pHsd->sd_card.flags & SDMMC_1P8V_FLAG) {
 
         if (sd_switch_voltage(pHsd, SDMMC_VOL_1P8V)) {
 

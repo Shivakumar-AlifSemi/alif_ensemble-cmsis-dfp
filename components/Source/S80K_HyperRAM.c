@@ -19,6 +19,7 @@
 
 #include "S80K_HyperRAM.h"
 #include "RTE_Device.h"
+#include "sys_utils.h"
 
 /**
   \fn          int32_t s80k_hyperram_init(OSPI_Type *ospi, AES_Type *aes)
@@ -29,6 +30,7 @@
  */
 int32_t s80k_hyperram_init(OSPI_Type *ospi, AES_Type *aes)
 {
+    ARG_UNUSED(aes);
     ospi_transfer_t ospi_config;
     uint32_t        buff[3];
 

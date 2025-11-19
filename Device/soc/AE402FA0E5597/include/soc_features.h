@@ -87,6 +87,7 @@
 #define SOC_FEAT_AES_BAUD2_DELAY_VAL               (0)
 #define SOC_FEAT_AES_OSPI_SIGNALS_DELAY            (1)
 #define SOC_FEAT_AES_OSPI_HAS_XIP_WRITE_HC_DFS     (1)
+#define SOC_FEAT_AES_HAS_ADDR_CTRL_SHIM            (1)
 
 #define SOC_FEAT_I2S0_MASTER_MODE                  (1)
 #define SOC_FEAT_I2S1_MASTER_MODE                  (1)

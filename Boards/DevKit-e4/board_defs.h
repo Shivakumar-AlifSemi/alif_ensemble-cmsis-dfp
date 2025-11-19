@@ -2427,4 +2427,9 @@
 // <o> "MIC_INPUT_SCLK" GPIO pin alternate function <0-7>
 #define BOARD_MIC_INPUT_SCLK_ALTERNATE_FUNCTION 2
 
+// <e> "ISSI HYPERRAM" connected to HSPI presence flag
+#define BOARD_ISSI_HYPERRAM_PRESENT             1
+
+// <e> "APS512XXN PSRAM" connected to HSPI presence flag
+#define BOARD_APS512XXN_PSRAM_PRESENT           0
 // </h>

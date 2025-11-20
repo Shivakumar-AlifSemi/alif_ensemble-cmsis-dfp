@@ -30,10 +30,13 @@ extern int app_main(void);
 extern int shield_setup(void);
 extern int stdio_init(void);
 
+<<<<<<< HEAD
 #if defined(ETHOSU_ARCH)
 extern void ethos_setup (void);
 #endif
 
+=======
+>>>>>>> 235dbb53 (Boards: DevKit-E8: add board layer using M55_HP)
 #ifdef __cplusplus
 }
 #endif

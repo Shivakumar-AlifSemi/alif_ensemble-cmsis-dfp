@@ -203,7 +203,7 @@ else()
     list(APPEND     RM_TEST_APPS_LIST      "demo_lvgl")
 endif()
 
-COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_hyperram_freertos.c            ENABLE_XIP_HYPERRAM    TEST_APP_SRCS   "test-apps")
+COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_hyperram_freertos.c            ENABLE_XIP_PSRAM       TEST_APP_SRCS   "test-apps")
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_camera_arx3a0_freertos.c       ENABLE_ARX3A0_CAMERA   TEST_APP_SRCS   "test-apps")
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_camera_mt9m114_freertos.c      ENABLE_MT9M114_CAMERA  TEST_APP_SRCS   "test-apps")
 

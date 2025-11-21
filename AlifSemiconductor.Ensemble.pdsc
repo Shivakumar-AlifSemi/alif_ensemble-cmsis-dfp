@@ -1798,6 +1798,11 @@
       <accept Pname="M55_HP" Dname="AE402FA0*"/>
     </condition>
 
+    <condition id="AppKit-E8-AIML">
+      <description>Alif Semiconductor Ensemble AppKit-E8-AIML Board</description>
+      <require Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E8-AIML" />
+    </condition>
+
     <condition id="Ensemble CMSIS-Core">
       <description>Generic Alif Semiconductor M55_HP and M55_HE device startup and depends on CMSIS Core</description>
       <require condition="Ensemble"/>
@@ -2315,7 +2320,7 @@
         <file category="source" name="Boards/Templates/lwip/httpd/main.c" attr="template" select="LWIP httpd Demo"/>
 
         <!-- Baremetal Templates for E8  -->
-        <file category="source" name="Boards/Templates/Baremetal/demo_hyperram_e8.c" attr="template" select="OSPI Hyperram XIP Baremetal Demo" condition="E8"/>
+        <file category="source" name="Boards/Templates/Baremetal/demo_psram_e8.c" attr="template" select="OSPI PSRAM XIP Baremetal Demo" condition="E8"/>
         <!-- Baremetal Templates for E1C  -->
         <file category="source" name="Boards/Templates/Baremetal/demo_hyperram_e1c.c" attr="template" select="OSPI Hyperram XIP Baremetal Demo" condition="E1C"/>
 
@@ -3070,16 +3075,18 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI HYPERRAM XIP" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
-      <description>OSPI XIP Mode setup for ISSI HyperRAM Device on Alif Semiconductor SOC</description>
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+      <description>OSPI XIP Mode setup for available PSRAM Device on Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
-        #define RTE_Drivers_XIP_HYPERRAM        /* OSPI XIP HYPERRAM */
+        #define RTE_Drivers_XIP_PSRAM              /* OSPI XIP PSRAM */
       </RTE_Components_h>
       <files>
-	<file category="header" name="drivers/include/ospi_hyperram_xip.h"/>
-        <file category="source" name="drivers/source/ospi_hyperram_xip.c"/>
+	<file category="header" name="drivers/include/ospi_psram_xip.h"/>
+        <file category="source" name="drivers/source/ospi_psram_xip.c"/>
     <file category="header" name="components/Include/S80K_HyperRAM.h" condition="E8"/>
     <file category="source" name="components/Source/S80K_HyperRAM.c" condition="E8"/>
+    <file category="header" name="components/Include/APS512XXN_PSRAM.h" condition="AppKit-E8-AIML"/>
+    <file category="source" name="components/Source/APS512XXN_PSRAM.c" condition="AppKit-E8-AIML"/>
       </files>
     </component>
 

@@ -44,8 +44,8 @@
 #define RTE_Drivers_SD                      1 /* Driver SD                                */
 /* AlifSemiconductor::Device.SOC Peripherals.OSPI Controller */
 #define RTE_Drivers_OSPI                    1 /* Driver OSPI                              */
-/* AlifSemiconductor::BSP.OSPI Hyper RAM XIP     */
-#define RTE_Drivers_XIP_HYPERRAM            1 /* Driver Hyper RAM XIP                     */
+/* AlifSemiconductor::BSP.OSPI PSRAM XIP     */
+#define RTE_Drivers_XIP_PSRAM               1 /* Driver PSRAM XIP                         */
 /* AlifSemiconductor::BSP.OSPI FLASH XIP Core   */
 #define RTE_Drivers_ISSI_FLASH_XIP_CORE     1 /* Driver OSPI XIP CORE                     */
 /* AlifSemiconductor::BSP.OSPI FLASH XIP Utility  */

@@ -85,6 +85,10 @@ SECTIONS
     LONG ( LOADADDR(.data.at_dtcm) )
     LONG ( ADDR(.data.at_dtcm) )
     LONG ( SIZEOF(.data.at_dtcm)/4 )
+
+    LONG ( LOADADDR(.nonsecure0_region_load) )
+    LONG ( ADDR(.nonsecure0_region_load) )
+    LONG ( SIZEOF(.nonsecure0_region_load)/4 )
     __copy_table_end__ = .;
   } > ITCM
 
@@ -167,10 +171,14 @@ SECTIONS
     __bss_end__ = .;
   } > DTCM
 
-  .nonsecure0_region (NOLOAD) :
+  .nonsecure0_region_load :
   {
     . = ALIGN(TGU_BLOCK_SIZE);
     __ns_region_0_start = .;
+    *usbd_config*(.rodata*)
+  } > DTCM AT > ITCM
+  .nonsecure0_region_noload (NOLOAD) :
+  {
     * (eth_buf)
     * (usb_dma_buf)
     * (sd_dma_buf)

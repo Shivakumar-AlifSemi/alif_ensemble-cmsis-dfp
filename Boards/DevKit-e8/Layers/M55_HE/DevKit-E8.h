@@ -29,10 +29,17 @@
 #include "cmsis_vstream.h"
 
 // DevKit-E8 mikroBUS pin definitions
+<<<<<<< HEAD
 #define MIKROBUS_AN          GPIO_PIN(0, 6)
 #define MIKROBUS_INT         GPIO_PIN(8, 1)
 #define MIKROBUS_PWM         GPIO_PIN(5, 6)
 #define MIKROBUS_RST         GPIO_PIN(8, 3)
+=======
+#define MIKROBUS_AN         GPIO_PIN(0, 6)
+#define MIKROBUS_INT        GPIO_PIN(8, 1)
+#define MIKROBUS_PWM        GPIO_PIN(5, 6)
+#define MIKROBUS_RST        GPIO_PIN(8, 3)
+>>>>>>> 4a5b88ea (Boards: DevKit-e8: Layers: update M55_HE layer)
 
 // CMSIS Driver instances on mikroBUS connector
 #define MIKROBUS_I2C         0
@@ -40,11 +47,17 @@
 #define MIKROBUS_UART        0
 
 // CMSIS Driver instances of Board peripherals
+<<<<<<< HEAD
 #define CMSIS_DRIVER_ETH     0  // CMSIS Driver Ethernet MAC instance number
 #define CMSIS_DRIVER_SAI     LP // CMSIS Driver SAI instance number
 #define CMSIS_DRIVER_USART   4  // CMSIS Driver USART instance number
 #define CMSIS_DRIVER_USBD    0  // CMSIS Driver USB Device instance number
 #define CMSIS_DRIVER_USBD_HS 1  // CMSIS Driver USB Device high-speed support
+=======
+#define CMSIS_DRIVER_ETH    0  // CMSIS Driver Ethernet MAC instance number
+#define CMSIS_DRIVER_SAI    LP // CMSIS Driver SAI instance number
+#define CMSIS_DRIVER_USART  4  // CMSIS Driver USART instance number
+>>>>>>> 4a5b88ea (Boards: DevKit-e8: Layers: update M55_HE layer)
 
 // Retarget stdio to CMSIS UART
 #define RETARGET_STDIO_UART  4

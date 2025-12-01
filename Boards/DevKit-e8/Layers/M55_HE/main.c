@@ -70,7 +70,26 @@ void clock_init(void)
 }
 
 /*
+<<<<<<< HEAD
   Initializes the VBAT power control registers to enable MIPI DPHY/USB PHY.
+=======
+  Initializes clocks.
+*/
+void clock_init(void)
+{
+    uint32_t rval;
+    uint32_t error_code = 0;
+
+    /* Enable the HFOSCx2 (76.8MHz) clock used by I2S */
+    rval = SERVICES_clocks_enable_clock(se_services_s_handle, CLKEN_HFOSCx2, true, &error_code);
+    if ((rval != 0) || (error_code != 0)) {
+        return;
+    }
+}
+
+/*
+  Initializes the VBAT power control registers to enable MIPI DPHY.
+>>>>>>> 4a5b88ea (Boards: DevKit-e8: Layers: update M55_HE layer)
 */
 void vbat_init(void)
 {

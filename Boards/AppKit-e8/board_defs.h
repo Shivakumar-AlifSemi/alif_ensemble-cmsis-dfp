@@ -1266,7 +1266,7 @@
 #define BOARD_ISSI_FLASH_RESET_GPIO_PORT                15
 // <o> "ISSI_FLASH_RESET" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_ISSI_FLASH_RESET_GPIO_PIN                 5
+#define BOARD_ISSI_FLASH_RESET_GPIO_PIN                 7
 
 // <e> "WM8904_CODEC" on I2S presence flag
 #define BOARD_WM8904_CODEC_PRESENT                      1

@@ -28,10 +28,10 @@
 #include "cmsis_vstream.h"
 
 // DevKit-E8 mikroBUS pin definitions
-#define MIKROBUS_AN          GPIO_PIN(0, 6)
-#define MIKROBUS_INT         GPIO_PIN(8, 1)
-#define MIKROBUS_PWM         GPIO_PIN(5, 6)
-#define MIKROBUS_RST         GPIO_PIN(8, 3)
+#define MIKROBUS_AN         GPIO_PIN(0, 6)
+#define MIKROBUS_INT        GPIO_PIN(8, 1)
+#define MIKROBUS_PWM        GPIO_PIN(5, 6)
+#define MIKROBUS_RST        GPIO_PIN(8, 3)
 
 // CMSIS Driver instances on mikroBUS connector
 #define MIKROBUS_I2C         0

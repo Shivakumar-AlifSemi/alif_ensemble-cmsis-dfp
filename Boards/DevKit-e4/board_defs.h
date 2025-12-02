@@ -2090,7 +2090,7 @@
 #define BOARD_ISSI_FLASH_RESET_GPIO_PORT                15
 // <o> "ISSI_FLASH_RESET" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_ISSI_FLASH_RESET_GPIO_PIN                 5
+#define BOARD_ISSI_FLASH_RESET_GPIO_PIN                 7
 
 // P0_0 ADC12 instance number (Do Not Modify!)
 #define BOARD_P0_0_ADC12_INSTANCE                       0

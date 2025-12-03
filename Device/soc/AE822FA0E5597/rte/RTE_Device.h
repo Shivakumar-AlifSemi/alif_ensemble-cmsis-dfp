@@ -9376,6 +9376,36 @@
 #endif  // defined(RTSS_HE)
 // </h> I2C (Inter Integrated Circuit)
 
+// <h> RANGE_SENSOR (Range Sensor)
+// <e> RANGE_SENSOR (Object Range Measurement Unit) [Driver_RANGE_SENSOR]
+// <i> Configuration settings for Driver_RANGE_SENSOR in component::Drivers:RANGE_SENSOR
+#define RTE_RANGE_SENSOR 1
+
+#if RTE_RANGE_SENSOR
+
+// <e> CH201 (Time of Flight Sensor) [Driver_CH201]
+// <i> Configuration settings for Driver_CH201 in component::Drivers:CH201
+#define RTE_CH201 1
+
+#if RTE_CH201
+
+// <o> CH201 I2C Bus speed range <0-400000>
+// <i> Defines CH201 I2C speed in Hertz
+// <i> Default: 400000
+#define RTE_CH201_I2C_SPEED_HZ   400000
+
+// <o> CH201 RTC calibration pulse range <1-1000>
+// <i> Defines CH201 sensor's internal RTC calculation pulse in millisec
+// <i> Default: 100
+#define RTE_CH201_RTC_CAL_PULSE_MS 100
+
+#endif
+//</e> CH201 (Time of Flight Sensor) [Driver_CH201]
+
+#endif
+//</e> RANGE_SENSOR (Object Range Measurement Unit) [Driver_RANGE_SENSOR]
+//</h> RANGE_SENSOR (Range Sensor)
+
 // <e> DMA0 (Direct Memory Access Controller) [Driver_DMA0]
 // <i> Configuration settings for Driver_DMA0 in component ::Drivers:DMA
 #define RTE_DMA0 1

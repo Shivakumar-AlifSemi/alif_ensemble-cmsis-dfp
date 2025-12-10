@@ -158,7 +158,7 @@ static int32_t mac_hw_init(MAC_DEV *dev)
     dev->regs->DMA_BUS_MODE |= DMA_BUS_MODE_SFT_RESET;
 
     do {
-        osDelay(1);
+        sys_busy_loop_us(1000);
         timeout--;
     } while ((dev->regs->DMA_BUS_MODE & DMA_BUS_MODE_SFT_RESET) && timeout);
 
@@ -942,7 +942,7 @@ static int32_t PHY_Read(uint8_t phy_addr, uint8_t reg_addr, uint16_t *data, MAC_
             *data = dev->regs->MAC_MDIO_DATA;
             break;
         }
-        osDelay(1);
+        sys_busy_loop_us(1000);
         timeout--;
     } while (timeout);
 
@@ -982,7 +982,7 @@ static int32_t PHY_Write(uint8_t phy_addr, uint8_t reg_addr, uint16_t data, MAC_
         if (!(dev->regs->MAC_MDIO_ADDR & MAC_MDIO_ADDR_GB)) {
             break;
         }
-        osDelay(1);
+        sys_busy_loop_us(1000);
         timeout--;
     } while (timeout);
 

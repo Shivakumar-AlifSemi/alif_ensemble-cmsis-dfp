@@ -327,10 +327,10 @@ int32_t usbd_stop_transfer(USB_DRIVER *drv, uint8_t ep_num, uint8_t dir, uint32_
 
     phy_ep  = USB_GET_PHYSICAL_EP(ep_num, dir);
     ept     = &drv->eps[phy_ep];
-    trb_ptr = &ept->ep_trb[ept->trb_enqueue];
-    if (trb_ptr->ctrl) {
-        ept->trb_enqueue = 0;
-        trb_ptr->ctrl    = 0;
+    if (ept->trb_enqueue == 0U) {
+        ept->trb_enqueue = NO_OF_TRB_PER_EP - 1U;
+    } else {
+        ept->trb_enqueue--;
     }
     /* check the endpoint stall condition */
     if (ept->ep_status & USB_EP_STALL) {
@@ -365,6 +365,11 @@ int32_t usbd_stop_transfer(USB_DRIVER *drv, uint8_t ep_num, uint8_t dir, uint32_
 #endif
         return ret;
     }
+    trb_ptr = &ept->ep_trb[ept->trb_enqueue];
+    if (trb_ptr->ctrl) {
+        trb_ptr->ctrl    = 0;
+    }
+    ept->trb_enqueue = 0;
     if (force_rm == 1) {
         ept->ep_resource_index = 0U;
     }

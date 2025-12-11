@@ -1,8 +1,8 @@
-# Board: AlifSemiconductor AppKit-E7-AIML
+# Board: AlifSemiconductor DevKit-E8
 
 ## Board Layer for M55 High Efficiency Core
 
-Device: AE722F80F55D5LS:M55_HE
+Device: AE822FA0E5597LS0:M55_HE
 
 This setup is configured using **Conductor Tool**, an interactive tool provided by Alif Semiconductor for device configuration.
 Refer to ["Alif Conductor Tool Manual"](https://conductor.alifsemi.com/Alif_HTML_DCT_User_Help/Content/Help%20Manual.htm) for additional information.
@@ -11,7 +11,7 @@ Refer to ["Alif Conductor Tool Manual"](https://conductor.alifsemi.com/Alif_HTML
 
 | System Component        | Setting
 |:------------------------|:----------------------------------------
-| Heap                    | 32 kB (configured in M55_HE linker file)
+| Heap                    | 96 kB (configured in M55_HE linker file)
 | Stack (MSP)             |  8 kB (configured in M55_HE linker file)
 
 ### STDIO mapping
@@ -19,18 +19,21 @@ Refer to ["Alif Conductor Tool Manual"](https://conductor.alifsemi.com/Alif_HTML
 **STDIO** is routed to Virtual COM port via **UART4** peripheral
 
 > Note:
-> For STDOUT (printf output) configure J15-A & J15-B to position U4 (UART4)
+> For STDOUT (printf output) configure SW4 to position U4 (UART4)
 
 ### CMSIS-Driver mapping
 
-| CMSIS-Driver           | Peripheral | Board connector/component  | Connection
-|:-----------------------|:-----------|:---------------------------|:----------------------
-| Driver_USART4          | UART4      | PRG USB connector (J3)     | STDIN, STDOUT, STDERR
-| Driver_USBD0           | USB        | SOC USB connector (J1)     | CMSIS_USB_Device
-| CMSIS-Driver VIO       | GPIO       | Buttons, RGB LED, Joystick | CMSIS_VIO
-| Driver_vStreamAudioIn  | SAI3       | I2S Microphone (U13, U15)  | CMSIS_VSTREAM_AUDIO_IN
-| Driver_vStreamVideoIn  | MIPI CSI   | MIPI Camera (J10, J12)     | CMSIS_VSTREAM_VIDEO_IN
-| Driver_vStreamVideoOut | MIPI DSI   | GLCD Display (J18)         | CMSIS_VSTREAM_VIDEO_OUT
+| CMSIS-Driver           | Peripheral | Board connector/component    | Connection
+|:-----------------------|:-----------|:-----------------------------|:----------------------
+| Driver_ETH_MAC0        | ETH        | Ethernet RJ45 connector (J5) | CMSIS_ETH
+| Driver_I2C0            | I2C0       | MikroBUS Header              | MIKROBUS_I2C
+| Driver_SPI0            | SPI3       | MikroBUS Header              | MIKROBUS_SPI
+| Driver_USART4          | UART4      | PRG USB connector (J3)       | STDIN, STDOUT, STDERR
+| Driver_USBD0           | USB        | SoC USB connector (J2)       | CMSIS_USB_Device
+| CMSIS-Driver VIO       | GPIO       | RGB LED, Joystick            | CMSIS_VIO
+| Driver_vStreamAudioIn  | LPI2S      | I2S Microphone (U14, U16)    | CMSIS_VSTREAM_AUDIO_IN
+| Driver_vStreamVideoIn  | MIPI CSI   | MIPI Camera (J16, J22)       | CMSIS_VSTREAM_VIDEO_IN
+| Driver_vStreamVideoOut | MIPI DSI   | GLCD Display (J21)           | CMSIS_VSTREAM_VIDEO_OUT
 
 ### CMSIS-Driver Virtual I/O mapping
 
@@ -68,7 +71,5 @@ In VS Code use the menu command **Terminal - Run Tasks** and execute:
 
 - "Alif: Install M55_HE or M55_HP debug stubs (single core configuration)"
 
-> Note:
->
-> - For Windows ensure that the Terminal default is `Git Bash` or `PowerShell`.
-> - Configure J15-A & J15-B to position SE (Secure UART) to enable SETOOLS communication with the device.
+> Note: For Windows ensure that the Terminal default is `Git Bash` or `PowerShell`.
+> - Configure SW4 to position SE (Secure UART) to enable SETOOLS communication with the device.

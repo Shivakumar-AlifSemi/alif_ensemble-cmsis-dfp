@@ -1252,13 +1252,16 @@
 // PIN6 <7=> PIN7
 #define BOARD_LCD_RESET_GPIO_PIN                        5
 
-// <o> "ISSI_FLASH_RESET" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4
+// OSPI Flash instance number (Do Not Modify!)
+#define BOARD_OSPI_FLASH_INSTANCE                       2
+
+// <o> "OSPI_FLASH_RESET" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4
 // <5=> GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <10=> GPIO10 <11=> GPIO11 <12=> GPIO12
 // <13=> GPIO13 <14=> GPIO14 <15=> LPGPIO
-#define BOARD_ISSI_FLASH_RESET_GPIO_PORT                15
-// <o> "ISSI_FLASH_RESET" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
+#define BOARD_OSPI_FLASH_RESET_GPIO_PORT                15
+// <o> "OSPI_FLASH_RESET" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_ISSI_FLASH_RESET_GPIO_PIN                 7
+#define BOARD_OSPI_FLASH_RESET_GPIO_PIN                 7
 
 // <e> "WM8904_CODEC" on I2S presence flag
 #define BOARD_WM8904_CODEC_PRESENT                      1

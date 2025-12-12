@@ -9,7 +9,7 @@
  */
 
 /*******************************************************************************
- * @file     : demo_flash_issi.c
+ * @file     : demo_flash.c
  * @author   : Khushboo Singh
  * @email    : khushboo.singh@alifsemi.com
  * @version  : V1.0.0
@@ -33,15 +33,15 @@
 
 #include "app_utils.h"
 
-#define FLASH_NUM 1
+#define FLASH_NUM  BOARD_OSPI_FLASH_INSTANCE
 
 extern ARM_DRIVER_FLASH ARM_Driver_Flash_(FLASH_NUM);
 #define ptrFLASH       (&ARM_Driver_Flash_(FLASH_NUM))
 
-#define OSPI_RESET_PIN BOARD_ISSI_FLASH_RESET_GPIO_PIN
+#define OSPI_RESET_PIN BOARD_OSPI_FLASH_RESET_GPIO_PIN
 
-extern ARM_DRIVER_GPIO ARM_Driver_GPIO_(BOARD_ISSI_FLASH_RESET_GPIO_PORT);
-ARM_DRIVER_GPIO       *GPIODrv = &ARM_Driver_GPIO_(BOARD_ISSI_FLASH_RESET_GPIO_PORT);
+extern ARM_DRIVER_GPIO ARM_Driver_GPIO_(BOARD_OSPI_FLASH_RESET_GPIO_PORT);
+ARM_DRIVER_GPIO       *GPIODrv = &ARM_Driver_GPIO_(BOARD_OSPI_FLASH_RESET_GPIO_PORT);
 
 #define FLASH_ADDR  0x00
 #define BUFFER_SIZE 1024

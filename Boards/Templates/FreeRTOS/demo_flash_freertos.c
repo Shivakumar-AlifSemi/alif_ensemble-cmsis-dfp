@@ -8,7 +8,7 @@
  */
 
 /*******************************************************************************
- * @file     : demo_flash_issi_freertos.c
+ * @file     : demo_flash_freertos.c
  * @author   : Khushboo Singh
  * @email    : khushboo.singh@alifsemi.com
  * @Version  : V1.0.0
@@ -44,13 +44,13 @@
 /* Thread id of thread */
 TaskHandle_t xDemoTask;
 
-#define FLASH_NUM 1
+#define FLASH_NUM BOARD_OSPI_FLASH_INSTANCE
 
 extern ARM_DRIVER_FLASH ARM_Driver_Flash_(FLASH_NUM);
 #define ptrFLASH (&ARM_Driver_Flash_(FLASH_NUM))
 
-extern ARM_DRIVER_GPIO ARM_Driver_GPIO_(BOARD_ISSI_FLASH_RESET_GPIO_PORT);
-ARM_DRIVER_GPIO       *GPIODrv = &ARM_Driver_GPIO_(BOARD_ISSI_FLASH_RESET_GPIO_PORT);
+extern ARM_DRIVER_GPIO ARM_Driver_GPIO_(BOARD_OSPI_FLASH_RESET_GPIO_PORT);
+ARM_DRIVER_GPIO       *GPIODrv = &ARM_Driver_GPIO_(BOARD_OSPI_FLASH_RESET_GPIO_PORT);
 
 #define FLASH_ADDR  0x00
 #define BUFFER_SIZE 1024
@@ -78,27 +78,27 @@ static int32_t prvSetupPinMUX(void)
         return lRet;
     }
 
-    lRet = GPIODrv->Initialize(BOARD_ISSI_FLASH_RESET_GPIO_PIN, 0);
+    lRet = GPIODrv->Initialize(BOARD_OSPI_FLASH_RESET_GPIO_PIN, 0);
     if (lRet != ARM_DRIVER_OK) {
         return -1;
     }
 
-    lRet = GPIODrv->PowerControl(BOARD_ISSI_FLASH_RESET_GPIO_PIN, ARM_POWER_FULL);
+    lRet = GPIODrv->PowerControl(BOARD_OSPI_FLASH_RESET_GPIO_PIN, ARM_POWER_FULL);
     if (lRet != ARM_DRIVER_OK) {
         return -1;
     }
 
-    lRet = GPIODrv->SetDirection(BOARD_ISSI_FLASH_RESET_GPIO_PIN, GPIO_PIN_DIRECTION_OUTPUT);
+    lRet = GPIODrv->SetDirection(BOARD_OSPI_FLASH_RESET_GPIO_PIN, GPIO_PIN_DIRECTION_OUTPUT);
     if (lRet != ARM_DRIVER_OK) {
         return -1;
     }
 
-    lRet = GPIODrv->SetValue(BOARD_ISSI_FLASH_RESET_GPIO_PIN, GPIO_PIN_OUTPUT_STATE_LOW);
+    lRet = GPIODrv->SetValue(BOARD_OSPI_FLASH_RESET_GPIO_PIN, GPIO_PIN_OUTPUT_STATE_LOW);
     if (lRet != ARM_DRIVER_OK) {
         return -1;
     }
 
-    lRet = GPIODrv->SetValue(BOARD_ISSI_FLASH_RESET_GPIO_PIN, GPIO_PIN_OUTPUT_STATE_HIGH);
+    lRet = GPIODrv->SetValue(BOARD_OSPI_FLASH_RESET_GPIO_PIN, GPIO_PIN_OUTPUT_STATE_HIGH);
     if (lRet != ARM_DRIVER_OK) {
         return -1;
     }

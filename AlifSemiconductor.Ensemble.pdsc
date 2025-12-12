@@ -2225,7 +2225,7 @@
         <!--file category="source" name="Boards/Templates/Baremetal/lv_port_disp.c" attr="template" select="LVGL Baremetal Demo"/-->
         <file category="source" name="Boards/Templates/Baremetal/demo_mram.c" attr="template" select="MRAM Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_spi_microwire.c" attr="template" select="Microwire Baremetal Demo"/>
-        <file category="source" name="Boards/Templates/Baremetal/demo_flash_issi.c" attr="template" select="OSPI FLASH Baremetal Demo"/>
+        <file category="source" name="Boards/Templates/Baremetal/demo_flash.c" attr="template" select="OSPI FLASH Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_hyperram_e7.c" attr="template" select="OSPI Hyperram XIP Baremetal Demo" condition="E7"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_parallel_display.c" attr="template" select="Parallel Display Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_pdm.c" attr="template" select="PDM Baremetal Demo"/>
@@ -2295,7 +2295,7 @@
         <file category="source" name="Boards/Templates/bayer2rgb/bayer2rgb.c" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/bayer2rgb/bayer.c" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
         <file category="header" name="Boards/Templates/bayer2rgb/bayer.h" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
-        <file category="source" name="Boards/Templates/FreeRTOS/demo_flash_issi_freertos.c" attr="template" select="OSPI Flash FreeRTOS Demo"/>
+        <file category="source" name="Boards/Templates/FreeRTOS/demo_flash_freertos.c" attr="template" select="OSPI Flash FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_hyperram_freertos.c" attr="template" select="OSPI Hyperram XIP FreeRTOS Demo" condition="E7"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_parallel_display_freertos.c" attr="template" select="Parallel Display FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_pdm_freertos.c" attr="template" select="PDM FreeRTOS Demo"/>
@@ -3097,7 +3097,18 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/IS25WX256.c"/>
-	<file category="header" name="components/Include/IS25WX256.h"/>
+        <file category="header" name="components/Include/IS25WX256.h"/>
+      </files>
+    </component>
+
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="OSPI Flash MX66UW1G" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+      <description>External Peripherals Drivers</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_MX66UW1G_FLASH
+      </RTE_Components_h>
+      <files>
+        <file category="source" name="components/Source/MX66UW1G.c" condition="AppKit-E8-AIML"/>
+	<file category="header" name="components/Include/MX66UW1G.h" condition="AppKit-E8-AIML"/>
       </files>
     </component>
 

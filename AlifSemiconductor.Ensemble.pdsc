@@ -2201,6 +2201,7 @@
         <file category="source" name="Boards/Templates/Baremetal/demo_canfd_extloopback.c" attr="template" select="CANFD External Loopback Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_canfd_intloopback.c" attr="template" select="CANFD Internal Loopback Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_canfd_blockingmode.c" attr="template" select="CANFD Polling Mode Baremetal Demo"/>
+        <file category="source" name="Boards/Templates/Baremetal/demo_ch201_tof.c" attr="template" select="CH201 TOF Sensor Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_cdc200.c" attr="template" select="CDC200 Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_cmp.c" attr="template" select="CMP Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_crc.c" attr="template" select="CRC Baremetal Demo"/>
@@ -2737,6 +2738,49 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/OV5675_camera_sensor.c"/>
+      </files>
+    </component>
+
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CH201 TOF Sensor" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+      <description>External Peripherals Drivers</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_CH201             /* CH201 TOF Sensor */
+      </RTE_Components_h>
+      <files>
+        <file category="header" name="Alif_CMSIS/Include/Driver_Common.h"/>
+        <file category="header" name="components/Include/Driver_Range_Sensor.h"/>
+        <file category="header" name="components/Include/sensor_utils.h"/>
+        <file category="header" name="components/Source/CH201_Private.h"/>
+        <file category="source" name="components/Source/CH201_Private.c"/>
+        <file category="source" name="components/Source/Driver_CH201.c"/>
+        <file category="header" name="libs/ch201/chirp_board_config.h"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_api.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/chbsp_dummy.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_common.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_driver.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_log.c"/>
+        <file category="header" name="libs/ch201/invn/soniclib/ch_extra_display_utils.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/chirp_bsp.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/ch_log.h"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_math_utils.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/ch_rangefinder.c"/>
+        <file category="header" name="libs/ch201/invn/soniclib/ch_rangefinder.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/ch_rangefinder_types.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/soniclib.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_asic_shasta.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_asic_whitney.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_common.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_driver.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_helper.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/ch_math_utils.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/details/icu.h"/>
+        <file category="source" name="libs/ch201/invn/soniclib/sensor_fw/ch201/ch201_gprmt.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/sensor_fw/ch201/ch201_gprmt_fw.c"/>
+        <file category="source" name="libs/ch201/invn/soniclib/sensor_fw/ch201/_ch201_gprmt_plugin_version.c"/>
+        <file category="header" name="libs/ch201/invn/soniclib/sensor_fw/ch201/ch201_gprmt.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/sensor_fw/ch201/ch201.h"/>
+        <file category="header" name="libs/ch201/invn/soniclib/sensor_fw/ch101/ch101.h"/>
+        <file category="source" name="libs/ch201/invn/soniclib/extra/ch_extra_display_utils.c"/>
       </files>
     </component>
 

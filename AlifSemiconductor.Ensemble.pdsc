@@ -1297,7 +1297,7 @@
         <feature type="VCC" n="1.71" m="4.2"/>
         <feature type="Temp" n="-40" m="105"/>
 
-         <device Dname="AE1C1F4051920PH">
+         <device Dname="AE1C1F4051920PH0">
           <!-- On-chip NVM Region -->
           <memory name="MRAM" start="0x80000000" size="0x0018C000" access="rx" default="1"/>
 

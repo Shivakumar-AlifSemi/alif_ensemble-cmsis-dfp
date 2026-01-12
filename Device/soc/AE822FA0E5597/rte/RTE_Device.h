@@ -10572,7 +10572,7 @@
 //    <1=> ENABLED
 // <i> Defines Bit Manipulation Control for GPIO13.
 // <i> Default: DISABLED
-#define RTE_GPIO13_BIT_MANIPULATION  1
+#define RTE_GPIO13_BIT_MANIPULATION  0
 
 // <o> GPIO13_PIN1 IRQ Priority
 // <i> Defines Interrupt priority for GPIO13_PIN1.

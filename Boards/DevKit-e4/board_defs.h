@@ -304,36 +304,6 @@
 // <o> OSPI1 onboard memory size
 #define BOARD_OSPI1_MEM_SIZE                            33554432
 
-// <o> Number of CH201 sensors
-#define BOARD_CH201_MAX_NUM_SENSORS                     1
-
-// <o> Number of CH201 buses
-#define BOARD_CH201_NUM_BUSES                           1
-
-// <o> Number of CH201 interrupt pins
-#define BOARD_CH201_SENSOR_INT_PIN                      1
-
-// <o> Number of CH201 trigger pins
-#define BOARD_CH201_SENSOR_TRIG_PIN                     1
-
-// <o> CH201 TOF PROG pin GPIO port number
-#define BOARD_CH201_SENSOR_PROG_IO_PORT                 6
-
-// <o> CH201 TOF PROG pin number
-#define BOARD_CH201_SENSOR_PROG_PIN_NO                  2
-
-// <o> CH201 TOF INT pin GPIO port numbet
-#define BOARD_CH201_SENSOR_INT_IO_PORT                  6
-
-// <o> CH201 TOF INT pin number
-#define BOARD_CH201_SENSOR_INT_PIN_NO                   3
-
-// <o> CH201 TOF RESET pin GPIO port number
-#define BOARD_CH201_SENSOR_RESET_IO_PORT                6
-
-// <o> CH201 TOF RESET pin number range
-#define BOARD_CH201_SENSOR_RESET_PIN_NO                 4
-
 // </h>
 // <h> GPIO port/pin numbers, analog instance/input numbers, etc.
 // <o> FLEX IO pins supply voltage <0=> 3.3 V <1=> 1.8 V

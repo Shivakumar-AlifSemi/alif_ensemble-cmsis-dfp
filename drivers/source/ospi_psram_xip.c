@@ -158,7 +158,7 @@ int ospi_psram_xip_init(ospi_psram_xip_config *config)
         ospi_hyperbus_xip_init(ospi, config->wait_cycles, is_dual_octal);
     } else if (config->ram_type == RAM_TYPE_PSRAM) {
         /* Initialize OSPI psram xip configuration */
-        ospi_psram_xip_cfg(ospi, config->wait_cycles, is_dual_octal);
+        ospi_psram_xip_cfg(ospi, config->wait_cycles-1, is_dual_octal);
     } else {
         return -1;
     }

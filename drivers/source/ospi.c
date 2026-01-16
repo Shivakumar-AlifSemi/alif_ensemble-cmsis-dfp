@@ -577,10 +577,10 @@ void ospi_psram_xip_cfg(OSPI_Type *ospi, uint8_t wait_cycles, bool is_dual_octal
             | (0x1 << XIP_CTRL_INST_EN_OFFSET)
             | (0x0 << XIP_CTRL_CONT_XFER_EN_OFFSET)
             | (0x0 << XIP_CTRL_XIP_HYPERBUS_EN_OFFSET)
-            | (0x1 << XIP_CTRL_RXDS_SIG_EN_OFFSET)
+            | (0x0 << XIP_CTRL_RXDS_SIG_EN_OFFSET)
             | (0x0 << XIP_CTRL_XIP_MBL_OFFSET)
             | (0x0 << XIP_CTRL_XIP_PREFETCH_EN_OFFSET)
-            | (0x0 << XIP_CTRL_RXDS_VL_EN_OFFSET);
+            | (0x1 << XIP_CTRL_RXDS_VL_EN_OFFSET);
 
     ospi->OSPI_XIP_CTRL = val;
 
@@ -591,7 +591,7 @@ void ospi_psram_xip_cfg(OSPI_Type *ospi, uint8_t wait_cycles, bool is_dual_octal
             | (0x1 << XIP_WRITE_CTRL_WR_SPI_DDR_EN_OFFSET)
             | (0x1 << XIP_WRITE_CTRL_WR_INST_DDR_EN_OFFSET)
             | (0x0 << XIP_WRITE_CTRL_XIPWR_HYPERBUS_EN_OFFSET)
-            | (0x1 << XIP_WRITE_CTRL_XIPWR_RXDS_SIG_EN_OFFSET)
+            | (0x0 << XIP_WRITE_CTRL_XIPWR_RXDS_SIG_EN_OFFSET)
             | (0x1 << XIP_WRITE_CTRL_XIPWR_DM_EN_OFFSET)
 #if (SOC_FEAT_AES_OSPI_HAS_XIP_WRITE_HC_DFS)
             | (0x1 << XIP_WRITE_CTRL_XIPWR_DFS_HC_OFFSET)

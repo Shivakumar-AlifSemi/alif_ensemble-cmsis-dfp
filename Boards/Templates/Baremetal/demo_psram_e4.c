@@ -42,7 +42,7 @@
 #define RAM_SIZE_BYTES      (64 * 1024 * 1024)  /* 64MB */
 
 static ospi_psram_xip_config ram_config = {
-    .instance       = BOARD_ISSI_RAM_OSPI_INSTANCE,
+    .instance       = BOARD_PSRAM_OSPI_INSTANCE,
 #if BOARD_ISSI_HYPERRAM_PRESENT
     .ram_init       = NULL,
     .ram_type       = RAM_TYPE_HYPERRAM

@@ -161,8 +161,8 @@
 #define BOARD_MISC_ENABLED                              1
 // </e>
 
-// <o> "ISSI RAM" OSPI instance number <0>
-#define BOARD_ISSI_RAM_OSPI_INSTANCE                    0
+// <o> "PSRAM" OSPI instance number <0> (Do Not Modify!)
+#define BOARD_PSRAM_OSPI_INSTANCE                       0
 
 // <o> "ISSI Flash" OSPI instance number <1>
 #define BOARD_ISSI_FLASH_OSPI_INSTANCE                  1

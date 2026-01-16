@@ -73,7 +73,7 @@ ARM_DRIVER_GPIO       *GPIODrv = &ARM_Driver_GPIO_(BOARD_IS66_HYPERRAM_RESET_GPI
 static uint16_t buff[BUFFER_SIZE / sizeof(uint16_t)]; /* Buffer size of 16KB */
 
 static ospi_psram_xip_config issi_config = {
-    .instance       = BOARD_ISSI_RAM_OSPI_INSTANCE,
+    .instance       = BOARD_PSRAM_OSPI_INSTANCE,
     .ram_init       = NULL, /* No special initialization needed by the hyperram device */
     .ram_type       = RAM_TYPE_HYPERRAM};
 

@@ -153,9 +153,6 @@
 #define BOARD_MISC_ENABLED                              1
 // </e>
 
-// <o> "ISSI RAM" OSPI instance number <0>
-#define BOARD_ISSI_RAM_OSPI_INSTANCE                    0
-
 // <o> "ISSI Flash" OSPI instance number <1>
 #define BOARD_ISSI_FLASH_OSPI_INSTANCE                  1
 
@@ -2064,6 +2061,9 @@
 // <o> "IS66_HYPERRAM_RESET" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
 #define BOARD_IS66_HYPERRAM_RESET_GPIO_PIN              6
+
+// <o> "PSRAM" OSPI instance number <0> (Do Not Modify!)
+#define BOARD_PSRAM_OSPI_INSTANCE                       0
 
 // OSPI Flash instance number (Do Not Modify!)
 #define BOARD_OSPI_FLASH_INSTANCE                       1

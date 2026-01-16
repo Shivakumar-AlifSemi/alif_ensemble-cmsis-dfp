@@ -1282,6 +1282,9 @@
 // PIN6 <7=> PIN7
 #define BOARD_LCD_RESET_GPIO_PIN                        6
 
+// <o> "PSRAM" OSPI instance number <0> (Do Not Modify!)
+#define BOARD_PSRAM_OSPI_INSTANCE                       0
+
 // OSPI Flash instance number (Do Not Modify!)
 #define BOARD_OSPI_FLASH_INSTANCE                       2
 

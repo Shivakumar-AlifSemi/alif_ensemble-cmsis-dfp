@@ -66,7 +66,7 @@ static uint8_t aps512xxn_read_reg(OSPI_Type *ospi, uint32_t reg_addr,
     cmd_addr_buff[1] = reg_addr;
 
     config->addr_len       = SPI_ADDR_L_32_BIT;
-    config->dummy_cycle    = wait_cycles;
+    config->dummy_cycle    = wait_cycles-1;
     config->tx_total_cnt   = 2;
     config->tx_current_cnt = 0;
     config->rx_total_cnt   = 1;
@@ -122,7 +122,27 @@ int32_t aps512xxn_psram_init(OSPI_Type *ospi, AES_Type *aes)
     ARG_UNUSED(aes);
 #endif
     ospi_transfer_t ospi_config;
-    uint8_t         reg_value;
+    uint8_t         reg_value, write_latency;
+
+    switch (RTE_APS512XXN_PSRAM_WAIT_CYCLES) {
+    case 3:
+        write_latency = 0x0;
+        break;
+    case 4:
+        write_latency = 0x4;
+        break;
+    case 5:
+        write_latency = 0x2;
+        break;
+    case 6:
+        write_latency = 0x6;
+        break;
+    case 7:
+        write_latency = 0x1;
+        break;
+    default:
+        return -1; /* invalid WLC */
+    }
 
     ospi_set_dfs(ospi, APS512XXN_OSPI_REG_DFS);
 
@@ -140,25 +160,23 @@ int32_t aps512xxn_psram_init(OSPI_Type *ospi, AES_Type *aes)
         return -1;
     }
 
-    /* modify wait cycles if not matches for default setting */
-    if (RTE_APS512XXN_PSRAM_WAIT_CYCLES != APS512XXN_INIT_READ_WRITE_WAIT_CYCLES) {
-        /* config read wait cycles */
-        reg_value = (0x0 << APS512XXN_MODE_REG0_LATENCY_TYPE |
-            RTE_APS512XXN_PSRAM_WAIT_CYCLES << APS512XXN_MODE_REG0_READ_LATENCY_CODE |
-            0x0 << APS512XXN_MODE_REG0_DRIVE_STR);
-        aps512xxn_write_reg(ospi, APS512XXN_MODE_REG0_ADDR,
+    /* config read wait cycles */
+    reg_value = (0x0 << APS512XXN_MODE_REG0_LATENCY_TYPE |
+                (RTE_APS512XXN_PSRAM_WAIT_CYCLES - 3) << APS512XXN_MODE_REG0_READ_LATENCY_CODE |
+                 0x0 << APS512XXN_MODE_REG0_DRIVE_STR);
+    aps512xxn_write_reg(ospi, APS512XXN_MODE_REG0_ADDR,
                 reg_value, &ospi_config);
 
-        /* config write wait cycles */
-        reg_value = (0x0 << APS512XXN_MODE_REG4_READ_RF_RATE |
-                RTE_APS512XXN_PSRAM_WAIT_CYCLES << APS512XXN_MODE_REG4_WRITE_LATENCY_CODE |
-            0x0 << APS512XXN_MODE_REG4_PASR);
-        aps512xxn_write_reg(ospi, APS512XXN_MODE_REG4_ADDR,
+    /* config write wait cycles */
+    reg_value = (0x0 << APS512XXN_MODE_REG4_READ_RF_RATE |
+                 write_latency << APS512XXN_MODE_REG4_WRITE_LATENCY_CODE |
+                 0x0 << APS512XXN_MODE_REG4_PASR);
+    aps512xxn_write_reg(ospi, APS512XXN_MODE_REG4_ADDR,
                 reg_value, &ospi_config);
-    }
 
-    /* config device mode, disable hybrid burst */
-    reg_value = (0x1 << APS512XXN_MODE_REG8_BURST_LEN |
+    /* config device mode, burst len & disable hybrid burst */
+    reg_value = ((RTE_APS512XXN_PSRAM_DUAL_OCTAL_MODE_ENABLE ? 0 : 1)
+                     << APS512XXN_MODE_REG8_BURST_LEN |
                  0x0 << APS512XXN_MODE_REG8_BURST_TYPE |
                  0x0 << APS512XXN_MODE_REG8_RBX_READ_EN |
                  RTE_APS512XXN_PSRAM_DUAL_OCTAL_MODE_ENABLE << APS512XXN_MODE_REG8_TRANSFER_MODE);

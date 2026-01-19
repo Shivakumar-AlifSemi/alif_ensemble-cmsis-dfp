@@ -18,6 +18,7 @@ solution:
 
   # List different hardware targets that are used to deploy the solution.
   target-types:
+
     - type: DevKit-E8
       board: DevKit-E8
       device: AE822FA0E5597LS0

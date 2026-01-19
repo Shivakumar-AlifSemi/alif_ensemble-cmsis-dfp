@@ -4,8 +4,8 @@ The `Alif Semiconductor Ensemble Device Family Pack` contains Device and Board s
 
 - [Alif Semiconductor Ensemble E1C/E1/E3/E5/E7/E8](https://alifsemi.com/products/ensemble/) AI/ML microcontroller series with up two Arm Cortex-M55 and two Arm Ethos-U55/U85 microNPUs.
 - [Alif Semiconductor Ensemble E8 DevKit](https://alifsemi.com/support/kits/) single board computer with access to all signals and pins for power/performance profiling.
-- [Alif Semiconductor Ensemble E7 DevKit - Gen 2](https://alifsemi.com/support/kits/) single board computer with access to all signals and pins for power/performance profiling.
-- [Alif Semiconductor Ensemble E7 AI/ML AppKit - Gen 2](https://alifsemi.com/support/kits/) single board computer with camera/image, motion, sound sensors and display.
+- [Alif Semiconductor Ensemble E7 DevKit - D1](https://alifsemi.com/support/kits/) single board computer with access to all signals and pins for power/performance profiling.
+- [Alif Semiconductor Ensemble E7 AI/ML AppKit - D1](https://alifsemi.com/support/kits/) single board computer with camera/image, motion, sound sensors and display.
 
 This Pack contains:
 

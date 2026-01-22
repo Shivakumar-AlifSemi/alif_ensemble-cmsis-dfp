@@ -23,33 +23,17 @@ Refer to ["Alif Conductor Tool Manual"](https://conductor.alifsemi.com/Alif_HTML
 
 ### CMSIS-Driver mapping
 
-<<<<<<< HEAD
 | CMSIS-Driver           | Peripheral | Board connector/component    | Connection
 |:-----------------------|:-----------|:-----------------------------|:----------------------
 | Driver_ETH_MAC0        | ETH        | Ethernet RJ45 connector (J5) | CMSIS_ETH
 | Driver_I2C0            | I2C0       | MikroBUS Header              | MIKROBUS_I2C
 | Driver_SPI0            | SPI3       | MikroBUS Header              | MIKROBUS_SPI
 | Driver_USART4          | UART4      | PRG USB connector (J3)       | STDIN, STDOUT, STDERR
-<<<<<<< HEAD
 | Driver_USBD0           | USB        | SoC USB connector (J2)       | CMSIS_USB_Device
-=======
->>>>>>> 4a5b88ea (Boards: DevKit-e8: Layers: update M55_HE layer)
 | CMSIS-Driver VIO       | GPIO       | RGB LED, Joystick            | CMSIS_VIO
 | Driver_vStreamAudioIn  | LPI2S      | I2S Microphone (U14, U16)    | CMSIS_VSTREAM_AUDIO_IN
 | Driver_vStreamVideoIn  | MIPI CSI   | MIPI Camera (J16, J22)       | CMSIS_VSTREAM_VIDEO_IN
 | Driver_vStreamVideoOut | MIPI DSI   | GLCD Display (J21)           | CMSIS_VSTREAM_VIDEO_OUT
-=======
-| CMSIS-Driver           | Peripheral | Board connector/component     | Connection
-|:-----------------------|:-----------|:------------------------------|:----------------------
-| Driver_ETH_MAC0        | ETH        | Ethernet RJ45 connector (J28) | CMSIS_ETH
-| Driver_I2C0            | I2C0       | MikroBUS Header               | MIKROBUS_I2C
-| Driver_SPI0            | SPI0       | MikroBUS Header               | MIKROBUS_SPI
-| Driver_USART4          | UART4      | PRG USB connector (J3)        | STDIN, STDOUT, STDERR
-| CMSIS-Driver VIO       | GPIO       | Buttons, RGB LED, Joystick    | CMSIS_VIO
-| Driver_vStreamAudioIn  | SAI3       | I2S Microphone (U13, U15)     | CMSIS_VSTREAM_AUDIO_IN
-| Driver_vStreamVideoIn  | MIPI CSI   | MIPI Camera (J16, J22)        | CMSIS_VSTREAM_VIDEO_IN
-| Driver_vStreamVideoOut | MIPI DSI   | GLCD Display (J21, J23)       | CMSIS_VSTREAM_VIDEO_OUT
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
 
 ### CMSIS-Driver Virtual I/O mapping
 

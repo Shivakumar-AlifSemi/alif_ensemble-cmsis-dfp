@@ -22,23 +22,16 @@
 #include "Driver_GPIO_Private.h"
 #include "Driver_ETH_MAC.h"
 #include "Driver_I2C.h"
-<<<<<<< HEAD
 #include "Driver_SPI.h"
 #include "Driver_USART.h"
 #include "Driver_USBD.h"
-=======
-#include "Driver_SAI.h"
-#include "Driver_SPI.h"
-#include "Driver_USART.h"
->>>>>>> 235dbb53 (Boards: DevKit-E8: add board layer using M55_HP)
 #include "cmsis_vstream.h"
 
 // DevKit-E8 mikroBUS pin definitions
-#define MIKROBUS_AN         GPIO_PIN(0, 6)
-#define MIKROBUS_INT        GPIO_PIN(8, 1)
-#define MIKROBUS_PWM        GPIO_PIN(5, 6)
-<<<<<<< HEAD
-#define MIKROBUS_RST        GPIO_PIN(8, 3)
+#define MIKROBUS_AN          GPIO_PIN(0, 6)
+#define MIKROBUS_INT         GPIO_PIN(8, 1)
+#define MIKROBUS_PWM         GPIO_PIN(5, 6)
+#define MIKROBUS_RST         GPIO_PIN(8, 3)
 
 // CMSIS Driver instances on mikroBUS connector
 #define MIKROBUS_I2C         0
@@ -53,36 +46,14 @@
 
 // Retarget stdio to CMSIS UART
 #define RETARGET_STDIO_UART  4
-=======
-
-// CMSIS Driver instances on mikroBUS connector
-#define MIKROBUS_I2C        0
-#define MIKROBUS_SPI        3
-#define MIKROBUS_UART       0
-
-// CMSIS Driver instances of Board peripherals
-#define CMSIS_DRIVER_ETH    0  // CMSIS Driver Ethernet MAC instance number
-#define CMSIS_DRIVER_SAI    3  // CMSIS Driver SAI instance number
-#define CMSIS_DRIVER_USART  4  // CMSIS Driver USART instance number
-
-// Retarget stdio to CMSIS UART
-#define RETARGET_STDIO_UART 4
->>>>>>> 235dbb53 (Boards: DevKit-E8: add board layer using M55_HP)
 
 // CMSIS Drivers
 extern ARM_DRIVER_ETH_MAC Driver_ETH_MAC0;        /* Ethernet         */
 extern ARM_DRIVER_I2C     Driver_I2C0;            /* mikroBUS I2C     */
-<<<<<<< HEAD
 extern ARM_DRIVER_SPI     Driver_SPI3;            /* mikroBUS SPI     */
 extern ARM_DRIVER_USART   Driver_USART0;          /* mikroBUS UART    */
 extern ARM_DRIVER_USART   Driver_USART4;          /* PRG USB          */
 extern ARM_DRIVER_USBD    Driver_USBD0;           /* USB Device       */
-=======
-extern ARM_DRIVER_SAI     Driver_SAI3;            /* I2S Microphones  */
-extern ARM_DRIVER_SPI     Driver_SPI3;            /* mikroBUS SPI     */
-extern ARM_DRIVER_USART   Driver_USART0;          /* mikroBUS UART    */
-extern ARM_DRIVER_USART   Driver_USART4;          /* PRG USB          */
->>>>>>> 235dbb53 (Boards: DevKit-E8: add board layer using M55_HP)
 extern vStreamDriver_t    Driver_vStreamAudioIn;  /* Audio In Stream  */
 extern vStreamDriver_t    Driver_vStreamVideoIn;  /* Video In Stream  */
 extern vStreamDriver_t    Driver_vStreamVideoOut; /* Video Out Stream */

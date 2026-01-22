@@ -1,10 +1,6 @@
 layer:
   type: Board
-<<<<<<< HEAD
   description: DevKit-E8 board setup using M55_HE and Ethos-U55
-=======
-  description: DevKit-E8 board setup using M55_HE
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
   for-board: Alif Semiconductor::DevKit-E8:Gen 1
   for-device: Alif Semiconductor::AE822FA0E5597LS0:M55_HE
   device: :M55_HE
@@ -19,10 +15,7 @@ layer:
       provides:
         - CMSIS_ETH
         - CMSIS_USART
-<<<<<<< HEAD
         - CMSIS_USB_Device
-=======
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
         - CMSIS_VIO
         - CMSIS_VSTREAM_AUDIO_IN
         - CMSIS_VSTREAM_VIDEO_IN
@@ -61,11 +54,7 @@ layer:
     - pack: ARM::CMSIS-Driver@^2.10.0
     - pack: ARM::ethos-u-core-driver@^1.25.2
 
-<<<<<<< HEAD
   # List miscellaneous options passed via the command line to the build tool.
-=======
-  # List miscelaneous options passed via the command line to the build tool.
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
   misc:
     - for-compiler: AC6
       Link:
@@ -93,10 +82,7 @@ layer:
     - component: CMSIS Driver:SAI
     - component: CMSIS Driver:SPI
     - component: CMSIS Driver:USART
-<<<<<<< HEAD
     - component: CMSIS Driver:USB Device
-=======
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
     - component: CMSIS Driver:VIO:Board&DevKit-E8
     - component: CMSIS Driver:vStream:AudioIn&DevKit-E8
     - component: CMSIS Driver:vStream:VideoIn&DevKit-E8
@@ -132,13 +118,9 @@ layer:
         - file: ./main.c
         - file: ./main.h
         - file: ./DevKit-E8.h
-<<<<<<< HEAD
         - file: ./ethos_setup.c
         - file: ./retarget_stdio.c
         - file: ./ext_init.c
-=======
-        - file: ./retarget_stdio.c
->>>>>>> 5a8fa18e (Boards: DevKit-E8: add board layer using M55_HE)
 
     - group: Ethos Interface
       files:

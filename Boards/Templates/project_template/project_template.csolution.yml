@@ -25,16 +25,16 @@ solution:
   # List different hardware targets that are used to deploy the solution.
   target-types:
     - type: AE822FA0E5597LS0
-      board: DevKit-E8:Gen 1
+      board: DevKit-E8
       device: AE822FA0E5597LS0
 
     #- type: AE722F80F55D5LS
       #device: AE722F80F55D5LS
-      #board: DevKit-E7:Gen 2
+      #board: DevKit-E7
 
     #- type: AE1C1F4051920PH
       #device: AE1C1F4051920PH
-      #board: DevKit-E1C:Gen 1
+      #board: DevKit-E1C
 
 
   # List of different build configurations.

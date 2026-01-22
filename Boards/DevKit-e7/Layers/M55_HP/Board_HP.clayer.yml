@@ -1,7 +1,7 @@
 layer:
   type: Board
   description: DevKit-E7 board setup using M55_HP
-  for-board: Alif Semiconductor::DevKit-E7:Gen 2
+  for-board: Alif Semiconductor::DevKit-E7
   for-device: Alif Semiconductor::AE722F80F55D5LS:M55_HP
   device: :M55_HP
 

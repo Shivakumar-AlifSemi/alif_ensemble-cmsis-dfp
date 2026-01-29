@@ -1,0 +1,137 @@
+cbuild-run:
+  generated-by: csolution version 2.12.0+p48-gd3223e31
+  solution: ../hello.csolution.yml
+  target-type: AE822FA0E5597LS0
+  target-set: <default>
+  compiler: GCC
+  board: Alif Semiconductor::DevKit-E8:Gen 1
+  board-pack: AlifSemiconductor::Ensemble@2.0.4
+  device: Alif Semiconductor::AE822FA0E5597LS0
+  device-pack: AlifSemiconductor::Ensemble@2.0.4
+  output:
+    - file: M55_HE/AE822FA0E5597LS0/Debug/M55_HE.elf
+      info: generate by M55_HE.Debug+AE822FA0E5597LS0
+      type: elf
+      load: image+symbols
+      pname: M55_HE
+    - file: M55_HE/AE822FA0E5597LS0/Debug/M55_HE.bin
+      info: generate by M55_HE.Debug+AE822FA0E5597LS0
+      type: bin
+      load: none
+      pname: M55_HE
+  system-resources:
+    memory:
+      - name: MRAM
+        access: rx
+        start: 0x80000000
+        size: 0x00580000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM0
+        access: rwx
+        start: 0x02000000
+        size: 0x00400000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM1
+        access: rwx
+        start: 0x08000000
+        size: 0x00400000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM2
+        access: rwx
+        start: 0x50000000
+        size: 0x00040000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM3
+        access: rwx
+        start: 0x50800000
+        size: 0x00100000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM4
+        access: rwx
+        start: 0x58000000
+        size: 0x00040000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+      - name: SRAM5
+        access: rwx
+        start: 0x58800000
+        size: 0x00040000
+        from-pack: AlifSemiconductor::Ensemble@2.0.4
+  system-descriptions:
+    - file: ${CMSIS_PACK_ROOT}/AlifSemiconductor/Ensemble/2.0.4/Debug/SVD/AE822FA0E5597BS0_CM55_HE_View.svd
+      type: svd
+      pname: M55_HE
+    - file: ${CMSIS_PACK_ROOT}/AlifSemiconductor/Ensemble/2.0.4/Debug/SVD/AE822FA0E5597BS0_CM55_HP_View.svd
+      type: svd
+      pname: M55_HP
+  debugger:
+    name: J-Link Server
+    protocol: jtag
+    clock: 4000000
+    start-pname: M55_HE
+    gdbserver:
+      - port: 3333
+        pname: M55_HE
+      - port: 3334
+        pname: M55_HP
+    telnet:
+      - mode: off
+        pname: M55_HE
+        port: 4444
+      - mode: off
+        pname: M55_HP
+        port: 4445
+  debug-sequences:
+    - name: DisableWarmResetHandshake
+      blocks:
+        - execute: |
+            Write32(0x1A601024, 0);
+      pname: M55_HE
+    - name: DisableWarmResetHandshake
+      blocks:
+        - execute: |
+            Write32(0x1A600024, 0);
+      pname: M55_HP
+    - name: DebugDeviceUnlock
+      blocks:
+        - execute: |
+            DAP_Delay(500000);  // Delay for 500ms
+    - name: ResetSystem
+      blocks:
+        - execute: |
+            Sequence("DisableWarmResetHandshake");
+        - execute: |
+            // System Control Space (SCS) offset as defined in Armv6-M/Armv7-M.
+
+            __var SCS_Addr   = 0xE000E000;
+            __var AIRCR_Addr = SCS_Addr + 0xD0C;
+            __var DHCSR_Addr = SCS_Addr + 0xDF0;
+
+            // Execute SYSRESETREQ via AIRCR
+            Write32(AIRCR_Addr, 0x05FA0004);
+        - while: (Read32(DHCSR_Addr) & 0x02000000)
+          timeout: 500000
+  programming:
+    - algorithm: ${CMSIS_PACK_ROOT}/AlifSemiconductor/Ensemble/2.0.4/Flash/algorithms/Ensemble.FLM
+      start: 0x80000000
+      size: 0x00580000
+      ram-start: 0x00000000
+      ram-size: 0x00020000
+    - algorithm: ${CMSIS_PACK_ROOT}/AlifSemiconductor/Ensemble/2.0.4/Flash/algorithms/Ensemble_IS25WX256.FLM
+      start: 0xC0000000
+      size: 0x02000000
+      ram-start: 0x00000000
+      ram-size: 0x00040000
+  debug-topology:
+    debugports:
+      - dpid: 0
+        accessports:
+          - apid: 0
+            address: 0x00200000
+          - apid: 1
+            address: 0x00300000
+    processors:
+      - pname: M55_HP
+        apid: 0
+      - pname: M55_HE
+        apid: 1
+    dormant: true

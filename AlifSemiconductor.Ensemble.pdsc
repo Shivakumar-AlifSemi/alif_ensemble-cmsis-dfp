@@ -3333,6 +3333,15 @@
       </files>
     </component>
 
+    <component Cclass="BSP" Cgroup="StartKit Config"  Cvariant="StartKit-e1c" Cversion="2.0.0" condition="Board Config E1C">
+      <description>Conductor Tool based board configuration for StartKit-e1c</description>
+      <files>
+        <file category="header" name="Boards/StartKit-e1c/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/StartKit-e1c/pins.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/StartKit-e1c/gpios.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+      </files>
+    </component>
+
 	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDIN" Cversion="2.0.0" condition="Retarget IO STDIN">
       <description>Retarget STDIN to UART</description>
       <files>

@@ -40,6 +40,8 @@
 /* include the CDC200 driver */
 #include "Driver_CDC200.h"
 
+#include "board_config.h"
+
 /* SE Services */
 #include "se_services_port.h"
 
@@ -152,6 +154,15 @@ void cdc_demo_thread_entry(void *pvParameters)
 
     ARM_DRIVER_VERSION version;
     ARG_UNUSED(pvParameters);
+
+#if BOARD_CONFIGURE_LVDS_MUX
+    /* MIPI‑LVDS multiplexer pin */
+    ret = board_gpios_config();
+    if (ret != 0) {
+        printf("Error in gpio pin configuration: %"PRId32"\n", ret);
+        return;
+    }
+#endif
 
     printf("\r\n >>> CDC demo with FreeRTOS is starting up!!! <<< \r\n");
 

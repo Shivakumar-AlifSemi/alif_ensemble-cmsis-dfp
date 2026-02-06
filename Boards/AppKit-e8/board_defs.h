@@ -1321,7 +1321,7 @@
 #define BOARD_WM8904_CODEC_I2C_SCL_ALTERNATE_FUNCTION   5
 
 // <o> "DAC Output" I2S instance number <0=> I2S0 <1=> I2S1 <2=> I2S2  <3=> I2S3  <LP=> LPI2S
-#define BOARD_DAC_OUTPUT_I2S_INSTANCE                   3
+#define BOARD_DAC_OUTPUT_I2S_INSTANCE                   2
 
 // <o> "DAC_OUTPUT_SDO" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <10=> GPIO10 <11=> GPIO11 <12=> GPIO12 <13=>

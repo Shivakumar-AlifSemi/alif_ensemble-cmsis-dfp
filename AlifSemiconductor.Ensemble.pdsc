@@ -1938,6 +1938,12 @@
       <description>Requirement for MIPI DPHY Driver</description>
       <require condition="Ensemble CMSIS_Driver"/>      
     </condition>
+
+    <condition id="OSPI PSRAM UTILITY">
+      <description>Requirement for OSPI PSRAM utility</description>
+      <require condition="Ensemble CMSIS_Driver"/>
+      <require condition="E8"/>
+    </condition>
     
     <condition id="OSPI XIP UTILITY">
       <description>Requirement OSPI XIP utility </description>
@@ -3164,10 +3170,28 @@
       <files>
 	<file category="header" name="drivers/include/ospi_psram_xip.h"/>
         <file category="source" name="drivers/source/ospi_psram_xip.c"/>
-    <file category="header" name="components/Include/S80K_HyperRAM.h" condition="E8"/>
-    <file category="source" name="components/Source/S80K_HyperRAM.c" condition="E8"/>
-    <file category="header" name="components/Include/APS512XXN_PSRAM.h" condition="AppKit-E8-AIML"/>
-    <file category="source" name="components/Source/APS512XXN_PSRAM.c" condition="AppKit-E8-AIML"/>
+    </files>
+    </component>
+
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="S80K HyperRAM" Cversion="2.0.0" condition="OSPI PSRAM UTILITY">
+      <description>OSPI PSRAM XIP Mode setup for available S80K HyperRAM Device on Alif Semiconductor SOC</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_XIP_S80K_HyperRAM             /* S80K HyperRAM */
+      </RTE_Components_h>
+      <files>
+    <file category="header" name="components/Include/S80K_HyperRAM.h" />
+    <file category="source" name="components/Source/S80K_HyperRAM.c" />
+      </files>
+    </component>
+
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="APS PSRAM" Cversion="2.0.0" condition="OSPI PSRAM UTILITY">
+      <description>OSPI PSRAM XIP Mode setup for available APS PSRAM Device on Alif Semiconductor SOC</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_XIP_APS_PSRAM              /* APS_PSRAM*/
+      </RTE_Components_h>
+      <files>
+    <file category="header" name="components/Include/APS512XXN_PSRAM.h" />
+    <file category="source" name="components/Source/APS512XXN_PSRAM.c" />
       </files>
     </component>
 

@@ -2123,7 +2123,7 @@
   </conditions>
 <!-- component section -->
   <components>
-    <component Cclass="Device" Cgroup="Startup" Cversion="2.0.0" condition="Ensemble CMSIS-Core">
+    <component Cclass="Device" Cgroup="Startup" Cversion="2.1.0" condition="Ensemble CMSIS-Core">
       <description>System and Startup file for M55_HP, M55_HP and SOC </description>
       <files>
         <!-- include folder / device header file -->
@@ -2339,7 +2339,7 @@
       </files>
     </component>
 
-    <component Cclass="CMSIS Driver" Cgroup="USART" Cversion="2.0.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="CMSIS Driver" Cgroup="USART" Cversion="2.1.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
       <description>UART Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_USART               /* Driver UART  */
@@ -2354,7 +2354,7 @@
       </files>
     </component>
 
-   <component Cclass="CMSIS Driver" Cgroup="SAI" Cversion="2.0.0" Capiversion="1.2.0" condition="I2S Driver">
+   <component Cclass="CMSIS Driver" Cgroup="SAI" Cversion="2.1.0" Capiversion="1.2.0" condition="I2S Driver">
      <description>I2S Driver for Alif Semiconductor SOC</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_SAI              /* Driver SAI */
@@ -2369,7 +2369,7 @@
      </files>
    </component>
 
-   <component Cclass="CMSIS Driver" Cgroup="I2C" Cversion="2.0.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
+   <component Cclass="CMSIS Driver" Cgroup="I2C" Cversion="2.1.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
      <description>I2C Driver for Alif Semiconductor SOC</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_I2C              /* Driver I2C */
@@ -2384,7 +2384,7 @@
      </files>
    </component>
 
-   <component Cclass="CMSIS Driver" Cgroup="I2C" Csub="LPI2C" Cversion="2.0.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
+   <component Cclass="CMSIS Driver" Cgroup="I2C" Csub="LPI2C" Cversion="2.1.0" Capiversion="2.4.0" condition="Ensemble CMSIS_Driver">
      <description>LPI2C Driver for Alif Semiconductor SOC</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_LPI2C              /* Driver LPI2C */
@@ -2397,7 +2397,7 @@
      </files>
    </component>
 
-   <component Cclass="CMSIS Driver" Cgroup="MCI" Cversion="2.0.0" Capiversion="2.4.0" condition="MCI Driver">
+   <component Cclass="CMSIS Driver" Cgroup="MCI" Cversion="2.1.0" Capiversion="2.4.0" condition="MCI Driver">
      <description>MCI Driver for Alif Semiconductor SOC</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MCI              /* Driver MCI */
@@ -2517,7 +2517,7 @@
      </files>
    </component>
 
-   <component Cclass="BSP" Cgroup="External peripherals" Csub="Ethernet PHY" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+   <component Cclass="BSP" Cgroup="External peripherals" Csub="Ethernet PHY" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
      <description>Generic Ethernet PHY Driver</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_PHY_GENERIC           /* Driver PHY generic */
@@ -2528,7 +2528,7 @@
      </files>
    </component>
 
-   <component Cclass="CMSIS Driver" Cgroup="Ethernet MAC" Cversion="2.0.0" Capiversion="2.2.0" condition="Ensemble CMSIS_Driver">
+   <component Cclass="CMSIS Driver" Cgroup="Ethernet MAC" Cversion="2.1.0" Capiversion="2.2.0" condition="Ensemble CMSIS_Driver">
      <description>Ethernet MAC driver for Alif Semiconductor SOC</description>
      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ETH_MAC           /* Driver ETH MAC */
@@ -2541,7 +2541,7 @@
    </component>
 
 
-   <component Cclass="Device" Cgroup="SOC Peripherals" Csub="PINCONF" Cversion="2.0.0" condition="PINCONF Driver">
+   <component Cclass="Device" Cgroup="SOC Peripherals" Csub="PINCONF" Cversion="2.1.0" condition="PINCONF Driver">
       <description>PinMUX and PinPAD Config Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_LL_PINCONF              /* Driver PinPAD and PinMux */
@@ -2552,7 +2552,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="GPIO" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="GPIO" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>GPIO Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_IO              /* Driver GPIO */
@@ -2565,7 +2565,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="PDM" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="PDM" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>PDM Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_PDM              /* Driver PDM */
@@ -2580,7 +2580,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="LPTIMER" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="LPTIMER" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>LPTIMER Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_LPTIMER              /* Driver LPTIMER */
@@ -2594,7 +2594,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="UTIMER" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="UTIMER" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>UTIMER Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_UTIMER              /* Driver UTIMER */
@@ -2609,7 +2609,7 @@
        </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="RTC" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="RTC" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>Real Time Counter Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_RTC              /* Driver RTC */
@@ -2624,7 +2624,7 @@
     </component>
 
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="WDT" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="WDT" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>Local Watchdog Driver for M55_HP/HE </description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_WDT              /* Driver WDT */
@@ -2637,7 +2637,7 @@
       </files>
     </component>
 
-    <component Cclass="CMSIS Driver" Cgroup="SPI" Cversion="2.0.0" Capiversion="2.3.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="CMSIS Driver" Cgroup="SPI" Cversion="2.1.0" Capiversion="2.3.0" condition="Ensemble CMSIS_Driver">
       <description>SPI Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_SPI              /* Driver SPI */
@@ -2652,7 +2652,7 @@
       </files>
     </component>
 
-    <component Cclass="CMSIS Driver" Cgroup="USB Device" Cversion="2.0.0" Capiversion="2.3.0" condition="USBD Driver">
+    <component Cclass="CMSIS Driver" Cgroup="USB Device" Cversion="2.1.0" Capiversion="2.3.0" condition="USBD Driver">
       <description>USB Device Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_USBD          /* Driver USBD  */
@@ -2669,7 +2669,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CPI" Cversion="2.0.0" condition="Ensemble Camera Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CPI" Cversion="2.1.0" condition="Ensemble Camera Driver">
       <description>CAMERA Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CPI              /* Driver CAMERA Controller */
@@ -2687,7 +2687,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="ISP" Cversion="2.0.0" condition="Ensemble ISP Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="ISP" Cversion="2.1.0" condition="Ensemble ISP Driver">
       <description>ISP Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ISP              /* Driver ISP Controller */
@@ -2704,7 +2704,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor MT9M114" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor MT9M114" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for MT9M114</description>
       <RTE_Components_h> <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_MT9M114            /* Driver CAMERA Sensor */
@@ -2714,7 +2714,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor HM0360" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor HM0360" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for HM0360</description>
       <RTE_Components_h> <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_HM0360           /* Driver CAMERA Sensor */
@@ -2724,7 +2724,7 @@
       </files>
     </component>
     
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor ARX3A0" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor ARX3A0" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for ARX3A0</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_ARX3A0           /* Driver CAMERA Sensor */
@@ -2734,7 +2734,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0144" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0144" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for AR0144</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_AR0144           /* Driver CAMERA Sensor */
@@ -2744,7 +2744,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0145" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0145" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for AR0145</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_AR0145           /* Driver CAMERA Sensor */
@@ -2754,7 +2754,7 @@
       </files>
     </component>
    
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0246" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0246" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for AR0246</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_AR0246           /* Driver CAMERA Sensor */
@@ -2764,7 +2764,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor OV5647" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor OV5647" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for OV5647</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_OV5647           /* Driver CAMERA Sensor */
@@ -2774,7 +2774,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor OV5675" Cversion="2.0.0" condition="Camera Sensor Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor OV5675" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for OV5675</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CAMERA_SENSOR_OV5675           /* Driver CAMERA Sensor */
@@ -2784,7 +2784,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="CH201 TOF Sensor" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CH201 TOF Sensor" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>External Peripherals Drivers</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CH201             /* CH201 TOF Sensor */
@@ -2827,7 +2827,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="I3C" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="I3C" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>I3C Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_I3C                    /* Driver I3C */
@@ -2842,7 +2842,7 @@
       </files>
     </component>
 
-     <component Cclass="Device" Cgroup="SOC Peripherals" Csub="I2C_I3C" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+     <component Cclass="Device" Cgroup="SOC Peripherals" Csub="I2C_I3C" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>I2C Using I3c Bus Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_I2C_I3C           /* Driver I2C_I3C */
@@ -2853,7 +2853,7 @@
     </component>
 
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="ADC" Cversion="2.0.0" condition="Analog Components Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="ADC" Cversion="2.1.0" condition="Analog Components Driver">
       <description>ADC Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ADC           /* Driver ADC */
@@ -2871,7 +2871,7 @@
 	  </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="DAC" Cversion="2.0.0" condition="Analog Components Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="DAC" Cversion="2.1.0" condition="Analog Components Driver">
       <description>DAC Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_DAC           /* Driver DAC */
@@ -2888,7 +2888,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI DSI CSI2 DPHY" Cversion="2.0.0" condition="MIPI DPHY Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI DSI CSI2 DPHY" Cversion="2.1.0" condition="MIPI DPHY Driver">
       <description>MIPI DSI CSI2 DPHY Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>   <!--the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MIPI_DSI_CSI2_DPHY   /* Driver DPHY */
@@ -2903,7 +2903,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI CSI2" Cversion="2.0.0" condition="MIPI CSI2 Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI CSI2" Cversion="2.1.0" condition="MIPI CSI2 Driver">
       <description>MIPI CSI2 Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>   <!--the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MIPI_CSI2              /* Driver MIPI CSI2 */
@@ -2920,7 +2920,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI DSI" Cversion="2.0.0" condition="MIPI DSI Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MIPI DSI" Cversion="2.1.0" condition="MIPI DSI Driver">
       <description>MIPI DSI Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h> <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MIPI_DSI               /* Driver MIPI DSI */
@@ -2938,7 +2938,7 @@
       </files>
     </component>
 
-	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CRC" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CRC" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>CRC Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CRC                     /* Driver CRC*/
@@ -2952,7 +2952,7 @@
      </files>
     </component>
 
-	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="HWSEM" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="HWSEM" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>HWSEM Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_HWSEM                     /* Driver HWSEM*/
@@ -2965,7 +2965,7 @@
      </files>
     </component>
 
-<component Cclass="Device" Cgroup="SOC Peripherals" Csub="DMA" Cversion="2.0.0" condition="Ensemble ">
+<component Cclass="Device" Cgroup="SOC Peripherals" Csub="DMA" Cversion="2.1.0" condition="Ensemble ">
       <description>DMA Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_DMA                   /* Driver DMA*/
@@ -2986,7 +2986,7 @@
      </files>
     </component>
 
-	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CMP" Cversion="2.0.0" condition="Analog Components Driver">
+	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CMP" Cversion="2.1.0" condition="Analog Components Driver">
       <description>CMP Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CMP                  /* Driver COMPARATOR*/
@@ -3004,7 +3004,7 @@
      </files>
     </component>
 
-	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CDC" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+	 <component Cclass="Device" Cgroup="SOC Peripherals" Csub="CDC" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>CDC200 Display controller Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CDC200                 /* Driver CDC200*/
@@ -3020,7 +3020,7 @@
 	   </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="ICM42670P Accelerometer" Cversion="2.0.0" condition="IMU Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="ICM42670P Accelerometer" Cversion="2.1.0" condition="IMU Driver">
       <description>ICM42670P 3-axis Digital Accelerometer for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ICM42670P           /* Driver ICM42670P */
@@ -3032,7 +3032,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="BMI323" Cversion="2.0.0" condition="IMU Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="BMI323" Cversion="2.1.0" condition="IMU Driver">
       <description>BMI323 for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_BMI323          /* Driver BMI323 */
@@ -3044,7 +3044,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI9806E LCD panel" Cversion="2.0.0" condition="ILI LCD Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI9806E LCD panel" Cversion="2.1.0" condition="ILI LCD Driver">
       <description>ILI9806E LCD panel(2 lane) Display  Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MIPI_DSI_ILI9806E_PANEL    /* Driver ILI9806E LCD panel*/
@@ -3054,7 +3054,7 @@
 	   </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI9488 LCD panel" Cversion="2.0.0" condition="ILI LCD Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI9488 LCD panel" Cversion="2.1.0" condition="ILI LCD Driver">
       <description>ILI9488 LCD panel(1 lane) Display  Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MIPI_DSI_ILI9488_PANEL    /* Driver ILI9488 LCD panel*/
@@ -3064,7 +3064,7 @@
 	   </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI6122 LCD panel" Cversion="2.0.0" condition="ILI Parallel LCD Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="ILI6122 LCD panel" Cversion="2.1.0" condition="ILI Parallel LCD Driver">
       <description>ILI6122 LCD panel Display Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CDC_ILI6122_PANEL    /* Driver ILI6122 LCD panel*/
@@ -3075,7 +3075,7 @@
     </component>
 
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MRAM" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="MRAM" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>MRAM Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MRAM              /* Driver MRAM */
@@ -3089,7 +3089,7 @@
       </files>
     </component>
 
-    <component Cclass="CMSIS Driver" Cgroup="CAN" Cversion="2.0.0" Capiversion="1.3.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="CMSIS Driver" Cgroup="CAN" Cversion="2.1.0" Capiversion="1.3.0" condition="Ensemble CMSIS_Driver">
       <description>CAN-FD Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_CANFD              /* Driver CAN-FD */
@@ -3104,7 +3104,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="OSPI" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="OSPI" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>OSPI Controller Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_OSPI              /* Driver OSPI */
@@ -3120,7 +3120,7 @@
       </files>
     </component>
 
-    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="SDMMC" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="SDMMC" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>SDMMC Controller Driver for Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_SD              /* Driver SD */
@@ -3136,7 +3136,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI FLASH XIP" Csub="core" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="BSP" Cgroup="OSPI FLASH XIP" Csub="core" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>OSPI XIP Mode setup for ISSI flash on Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ISSI_FLASH_XIP_CORE              /* OSPI XIP CORE */
@@ -3152,7 +3152,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI FLASH XIP" Csub="utility" Cversion="2.0.0" condition="OSPI XIP UTILITY">
+    <component Cclass="BSP" Cgroup="OSPI FLASH XIP" Csub="utility" Cversion="2.1.0" condition="OSPI XIP UTILITY">
       <description>OSPI XIP Mode setup utility for Alif DevKit-E7</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ISSI_FLASH_XIP_UTILITY              /* OSPI XIP SETUP utility*/
@@ -3162,7 +3162,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>OSPI XIP Mode setup for available PSRAM Device on Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_XIP_PSRAM              /* OSPI XIP PSRAM */
@@ -3173,7 +3173,7 @@
     </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="S80K HyperRAM" Cversion="2.0.0" condition="OSPI PSRAM UTILITY">
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="S80K HyperRAM" Cversion="2.1.0" condition="OSPI PSRAM UTILITY">
       <description>OSPI PSRAM XIP Mode setup for available S80K HyperRAM Device on Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_XIP_S80K_HyperRAM             /* S80K HyperRAM */
@@ -3184,7 +3184,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="APS PSRAM" Cversion="2.0.0" condition="OSPI PSRAM UTILITY">
+    <component Cclass="BSP" Cgroup="OSPI PSRAM XIP" Csub="APS PSRAM" Cversion="2.1.0" condition="OSPI PSRAM UTILITY">
       <description>OSPI PSRAM XIP Mode setup for available APS PSRAM Device on Alif Semiconductor SOC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_XIP_APS_PSRAM              /* APS_PSRAM*/
@@ -3195,7 +3195,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="OSPI Flash ISSI" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="OSPI Flash ISSI" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>External Peripherals Drivers</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_ISSI_FLASH
@@ -3206,7 +3206,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="OSPI Flash MX66UW1G" Cversion="2.0.0" condition="Ensemble CMSIS_Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="OSPI Flash MX66UW1G" Cversion="2.1.0" condition="Ensemble CMSIS_Driver">
       <description>External Peripherals Drivers</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_MX66UW1G_FLASH
@@ -3217,7 +3217,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="GT911 Touch Controller" Cversion="2.0.0" condition="GT911 Touch Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="GT911 Touch Controller" Cversion="2.1.0" condition="GT911 Touch Driver">
       <description>External Peripherals Drivers</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_GT911
@@ -3228,7 +3228,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="External peripherals" Csub="WM8904 CODEC" Cversion="2.0.0" condition="WM8904 CODEC Driver">
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="WM8904 CODEC" Cversion="2.1.0" condition="WM8904 CODEC Driver">
       <description>Driver for WM8904 CODEC</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
         #define RTE_Drivers_WM8904_CODEC  	1           /* Driver */
@@ -3304,7 +3304,7 @@
     </component>
 
 
-    <component Cclass="BSP" Cgroup="Board Config" Cversion="2.0.0" condition="BSP Board Config">
+    <component Cclass="BSP" Cgroup="Board Config" Cversion="2.1.0" condition="BSP Board Config">
       <description>Conductor Tool based board configuration for Board Config</description>
       <files>
         <file category="source" name="libs/board_config/board_config.c"/>
@@ -3312,7 +3312,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e7" Cversion="2.0.0" condition="Board Config E7">
+    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e7" Cversion="2.1.0" condition="Board Config E7">
       <description>Conductor Tool based board configuration for DevKit-e7</description>
       <files>
         <file category="header" name="Boards/DevKit-e7/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
@@ -3321,7 +3321,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e8" Cversion="2.0.0" condition="Board Config E8">
+    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e8" Cversion="2.1.0" condition="Board Config E8">
       <description>Conductor Tool based board configuration for DevKit-e8</description>
       <files>
         <file category="header" name="Boards/DevKit-e8/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
@@ -3330,7 +3330,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E8-AIML" Cversion="2.0.0" condition="Board Config E8">
+    <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E8-AIML" Cversion="2.1.0" condition="Board Config E8">
       <description>Conductor Tool based board configuration for AppKit-e8</description>
       <files>
         <file category="header" name="Boards/AppKit-e8/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
@@ -3339,7 +3339,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e4" Cversion="2.0.0" condition="Board Config E4">
+    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e4" Cversion="2.1.0" condition="Board Config E4">
       <description>Conductor Tool based board configuration for DevKit-e4</description>
       <files>
         <file category="header" name="Boards/DevKit-e4/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
@@ -3348,7 +3348,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e1c" Cversion="2.0.0" condition="Board Config E1C">
+    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e1c" Cversion="2.1.0" condition="Board Config E1C">
       <description>Conductor Tool based board configuration for DevKit-e1c</description>
       <files>
         <file category="header" name="Boards/DevKit-e1c/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
@@ -3357,7 +3357,7 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="StartKit Config"  Cvariant="StartKit-e1c" Cversion="2.0.0" condition="Board Config E1C">
+    <component Cclass="BSP" Cgroup="StartKit Config"  Cvariant="StartKit-e1c" Cversion="2.1.0" condition="Board Config E1C">
       <description>Conductor Tool based board configuration for StartKit-e1c</description>
       <files>
         <file category="header" name="Boards/StartKit-e1c/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
@@ -3366,7 +3366,7 @@
       </files>
     </component>
 
-	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDIN" Cversion="2.0.0" condition="Retarget IO STDIN">
+	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDIN" Cversion="2.1.0" condition="Retarget IO STDIN">
       <description>Retarget STDIN to UART</description>
       <files>
         <file category="header" name="libs/retarget_io/include/retarget_init.h"/>
@@ -3376,7 +3376,7 @@
         <file category="source" name="libs/retarget_io/source/stdin_USART.c"/>
       </files>
     </component>
-	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDOUT" Cversion="2.0.0" condition="Retarget IO STDOUT">
+	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDOUT" Cversion="2.1.0" condition="Retarget IO STDOUT">
       <description>Retarget STDOUT to UART</description>
       <files>
         <file category="header" name="libs/retarget_io/include/retarget_init.h"/>
@@ -3386,7 +3386,7 @@
         <file category="source" name="libs/retarget_io/source/stdout_USART.c"/>
       </files>
     </component>
-	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDERR" Cversion="2.0.0" condition="Retarget IO STDERR">
+	<component Cclass="Services" Cgroup="Retarget IO" Csub="STDERR" Cversion="2.1.0" condition="Retarget IO STDERR">
       <description>Retarget STDERR to UART</description>
       <files>
         <file category="header" name="libs/retarget_io/include/retarget_init.h"/>

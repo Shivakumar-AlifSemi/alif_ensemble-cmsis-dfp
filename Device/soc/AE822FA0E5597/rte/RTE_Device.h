@@ -2701,7 +2701,7 @@
 //    <1=> Dual SPI FRF
 //    <2=> Quad SPI FRF
 //    <3=> Octal SPI FRF
-//    <3=> Dual Octal SPI FRF
+//    <4=> Dual Octal SPI FRF
 // <i> Defines OSPI0 Frame format
 // <i> Default: Octal SPI FRF
 #define RTE_OSPI0_SPI_FRAME_FORMAT                3
@@ -2810,7 +2810,7 @@
 //    <1=> Dual SPI FRF
 //    <2=> Quad SPI FRF
 //    <3=> Octal SPI FRF
-//    <3=> Dual Octal SPI FRF
+//    <4=> Dual Octal SPI FRF
 // <i> Defines OSPI0 Frame format
 // <i> Default: Octal SPI FRF
 #define RTE_OSPI1_SPI_FRAME_FORMAT                3

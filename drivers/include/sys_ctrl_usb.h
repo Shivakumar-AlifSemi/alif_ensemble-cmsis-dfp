@@ -24,6 +24,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "soc.h"
+#include "soc_features.h"
+#ifdef SOC_FEAT_USB_NEED_EXTRA_CLK
+#include "sys_ctrl_sd.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,7 +67,12 @@ static inline void usb_phy_por_clear(void)
  */
 static inline void enable_usb_periph_clk(void)
 {
-    CLKCTL_PER_MST->PERIPH_CLK_ENA |= PERIPH_CLK_ENA_USB_CKEN;
+    uint32_t clock_enable = PERIPH_CLK_ENA_USB_CKEN;
+
+#ifdef SOC_FEAT_USB_NEED_EXTRA_CLK
+    clock_enable |= PERIPH_CLK_ENA_SDC_CKEN;
+#endif
+    CLKCTL_PER_MST->PERIPH_CLK_ENA |= clock_enable;
 }
 
 /**
@@ -74,7 +83,12 @@ static inline void enable_usb_periph_clk(void)
  */
 static inline void disable_usb_periph_clk(void)
 {
-    CLKCTL_PER_MST->PERIPH_CLK_ENA &= ~PERIPH_CLK_ENA_USB_CKEN;
+    uint32_t clock_disable = PERIPH_CLK_ENA_USB_CKEN;
+
+#ifdef SOC_FEAT_USB_NEED_EXTRA_CLK
+    clock_disable |= PERIPH_CLK_ENA_SDC_CKEN;
+#endif
+    CLKCTL_PER_MST->PERIPH_CLK_ENA &= ~clock_disable;
 }
 
 #ifdef __cplusplus

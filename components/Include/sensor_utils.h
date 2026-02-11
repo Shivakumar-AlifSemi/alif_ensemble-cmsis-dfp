@@ -29,6 +29,9 @@ extern "C" {
 /* micro-units per 1 unit */
 #define MICROS_PER_UNIT (1000000LL)
 
+/* milli-units per 1 unit */
+#define MILLIS_PER_UNIT (1000LL)
+
 /* macro to extract integer and fractional part of sensor data */
 #define SENSOR_EXTRACT_INT_FRACT_PART(x, conv_val) {    \
         (x).int_val     = (conv_val / MICROS_PER_UNIT); \

@@ -198,7 +198,7 @@ void vApplicationIdleHook(void)
     ASSERT_HANG_LOOP
 }
 
-#if (ADC_INSTANCE == ADC12)
+#if (ADC_INSTANCE == ADC_12)
 /* Instance for ADC12 */
 extern ARM_DRIVER_ADC  ARM_Driver_ADC12(BOARD_ADC12_INSTANCE);
 static ARM_DRIVER_ADC *ADCdrv = &ARM_Driver_ADC12(BOARD_ADC12_INSTANCE);

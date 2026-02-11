@@ -102,28 +102,20 @@ static ARM_CPI_CAPABILITIES CPI_GetCapabilities(void)
 }
 
 /*
- * \fn         int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam_sensor,
- *                                     ARM_CPI_SignalEvent_t cb_event)
+ * \fn         int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, ARM_CPI_SignalEvent_t cb_event)
  * \brief      Initialize Camera Sensor and CPI.
  *             this function will
  *                 - set the user callback event
- *                 - call Camera Sensor initialize
  *                 - if MIPI CSI is enabled, call CSI initialize
  * \param[in] CPI_RES       Pointer to CPI resources structure
- * \param[in] cam_sensor     Pointer to Camera Sensor Device resources structure
  * \param[in] cb_event       Pointer to Camera Event \ref ARM_CAMERA_CONTROLLER_SignalEvent_t
  * \return    \ref execution_status
  */
-static int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam_sensor,
-                               ARM_CPI_SignalEvent_t cb_event)
+static int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, ARM_CPI_SignalEvent_t cb_event)
 {
 #if (RTE_MIPI_CSI2)
     int32_t ret = ARM_DRIVER_OK;
 #endif
-
-    if (cam_sensor == NULL) {
-        return ARM_DRIVER_ERROR_PARAMETER;
-    }
 
     if (CPI_RES->status.initialized == 1) {
         /* Driver is already initialized */
@@ -152,14 +144,6 @@ static int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam
     }
 #endif
 
-    if (!cam_sensor->cpi_info) {
-        return ARM_DRIVER_ERROR_PARAMETER;
-    }
-
-    /* CPI Frame Configuration. */
-    CPI_RES->cnfg->frame.width  = cam_sensor->width;
-    CPI_RES->cnfg->frame.height = cam_sensor->height;
-
     /* Set the driver flag as initialized. */
     CPI_RES->status.initialized = 1;
 
@@ -167,19 +151,16 @@ static int32_t CPIx_Initialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam
 }
 
 /*
- * \fn        int32_t CPIx_Uninitialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *camera_sensor)
- * \brief     Un-Initialize Camera Sensor and CPI.
- *                - Un-initialize Camera Sensor
+ * \fn        int32_t CPIx_Uninitialize(CPI_RESOURCES *CPI_RES)
+ * \brief     Un-Initialize CPI.
  *                - If MIPI CSI is enabled, call CSI uninitialize
  * \param[in] CPI_RES   Pointer to CPI resources structure
- * \param[in] cam_sensor Pointer to Camera Sensor Device resources structure
  * \return    \ref execution_status
  */
-static int32_t CPIx_Uninitialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *camera_sensor)
+static int32_t CPIx_Uninitialize(CPI_RESOURCES *CPI_RES)
 {
     int32_t ret = ARM_DRIVER_OK;
 
-    ARG_UNUSED(camera_sensor);
     if (CPI_RES->status.initialized == 0) {
         /* Driver is uninitialized */
         return ARM_DRIVER_OK;
@@ -213,18 +194,21 @@ static int32_t CPIx_Uninitialize(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *c
 }
 
 /**
-  \fn        int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, ARM_POWER_STATE state)
+  \fn        int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam_sensor,
+                                       ARM_POWER_STATE state)
   \brief     Camera power control.
   \param[in] CPI_RES   Pointer to CPI resources structure
   \param[in] state      Power state
   \return    \ref execution_status
 */
-static int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, ARM_POWER_STATE state)
+static int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *cam_sensor,
+                                 ARM_POWER_STATE state)
 {
     int32_t ret = ARM_DRIVER_OK;
-    CAMERA_SENSOR_DEVICE *camera_sensor;
 
-    camera_sensor = Get_Camera_Sensor();
+    if (cam_sensor == NULL) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
 
     if (CPI_RES->status.initialized == 0) {
         /* Driver is not initialized */
@@ -252,7 +236,7 @@ static int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, ARM_POWER_STATE state)
             }
 
             /* Call Camera Sensor specific uninit */
-            camera_sensor->ops->Uninit();
+            cam_sensor->ops->Uninit();
 
 #if (RTE_MIPI_CSI2)
             /*Disable MIPI CSI2*/
@@ -283,7 +267,7 @@ static int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, ARM_POWER_STATE state)
             }
 
             /* Call Camera Sensor specific init */
-            ret = camera_sensor->ops->Init();
+            ret = cam_sensor->ops->Init();
             if (ret != ARM_DRIVER_OK) {
                 return ret;
             }
@@ -333,8 +317,8 @@ static int32_t CPIx_PowerControl(CPI_RESOURCES *CPI_RES, ARM_POWER_STATE state)
             }
 
             /* If Suspend API is available, Suspend the Camera sensor. */
-            if (camera_sensor->ops->Suspend) {
-                ret = camera_sensor->ops->Suspend();
+            if (cam_sensor->ops->Suspend) {
+                ret = cam_sensor->ops->Suspend();
                 if (ret) {
                     return ret;
                 }
@@ -632,8 +616,8 @@ static int32_t CPIx_Control(CPI_RESOURCES *CPI_RES, CAMERA_SENSOR_DEVICE *camera
             cpi_info.vertical_cfg.vfp_en         = CPI_RES->cnfg->vertical_cfg->vfp_en;
 #endif
 
-            cpi_info.frame_cfg.data              = CPI_RES->cnfg->frame.width;
-            cpi_info.frame_cfg.row               = (CPI_RES->cnfg->frame.height - 1);
+            cpi_info.frame_cfg.data              = camera_sensor->width;
+            cpi_info.frame_cfg.row               = (camera_sensor->height - 1);
 
             cpi_info.csi_ipi_color_mode          = camera_sensor->cpi_info->csi_mode;
 
@@ -860,18 +844,21 @@ void ARM_ISP_Event_Callback(uint32_t int_event)
 /* wrapper functions for CPI */
 static int32_t CPI_Initialize(ARM_CPI_SignalEvent_t cb_event)
 {
-    cpi_sensor = Get_Camera_Sensor();
-    return CPIx_Initialize(&CPI_CTRL, cpi_sensor, cb_event);
+    return CPIx_Initialize(&CPI_CTRL, cb_event);
 }
 
 static int32_t CPI_Uninitialize(void)
 {
-    return CPIx_Uninitialize(&CPI_CTRL, cpi_sensor);
+    return CPIx_Uninitialize(&CPI_CTRL);
 }
 
 static int32_t CPI_PowerControl(ARM_POWER_STATE state)
 {
-    return CPIx_PowerControl(&CPI_CTRL, state);
+    cpi_sensor = Get_Camera_Sensor();
+    if (cpi_sensor == NULL) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
+    return CPIx_PowerControl(&CPI_CTRL, cpi_sensor, state);
 }
 
 static int32_t CPI_CaptureFrame(void *framebuffer_startaddr)
@@ -967,18 +954,21 @@ static CPI_RESOURCES LPCPI_CTRL = {
 /* wrapper functions for LPCPI */
 static int32_t LPCPI_Initialize(ARM_CPI_SignalEvent_t cb_event)
 {
-    lpcpi_sensor = Get_LPCamera_Sensor();
-    return CPIx_Initialize(&LPCPI_CTRL, lpcpi_sensor, cb_event);
+    return CPIx_Initialize(&LPCPI_CTRL, cb_event);
 }
 
 static int32_t LPCPI_Uninitialize(void)
 {
-    return CPIx_Uninitialize(&LPCPI_CTRL, lpcpi_sensor);
+    return CPIx_Uninitialize(&LPCPI_CTRL);
 }
 
 static int32_t LPCPI_PowerControl(ARM_POWER_STATE state)
 {
-    return CPIx_PowerControl(&LPCPI_CTRL, state);
+    lpcpi_sensor = Get_LPCamera_Sensor();
+    if (lpcpi_sensor == NULL) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
+    return CPIx_PowerControl(&LPCPI_CTRL, lpcpi_sensor, state);
 }
 
 static int32_t LPCPI_CaptureFrame(void *framebuffer_startaddr)

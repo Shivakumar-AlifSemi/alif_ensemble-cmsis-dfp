@@ -116,8 +116,9 @@ COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_cmp_freertos.c                 ENABLE_CM
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_crc_freertos.c                 ENABLE_CRC         TEST_APP_SRCS   "test-apps")
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_dac_freertos.c                 ENABLE_DAC         TEST_APP_SRCS   "test-apps")
 
-COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_flash_issi_freertos.c          ENABLE_ISSI_FLASH      TEST_APP_SRCS   "test-apps")
-COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_gt911_freertos.c               ENABLE_GT911           TEST_APP_SRCS   "test-apps")
+eval_flags(TMP_FLAG     OR      ENABLE_ISSI_FLASH  ENABLE_MX66UW1G_FLASH)
+COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_flash_freertos.c               ${TMP_FLAG}        TEST_APP_SRCS   "test-apps")
+COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_gt911_freertos.c               ENABLE_GT911       TEST_APP_SRCS   "test-apps")
 
 eval_flags(TMP_FLAG     AND     ENABLE_HWSEM       ENABLE_USART)
 if(${TMP_FLAG})
@@ -203,7 +204,7 @@ else()
     list(APPEND     RM_TEST_APPS_LIST      "demo_lvgl")
 endif()
 
-COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_hyperram_freertos.c            ENABLE_XIP_HYPERRAM    TEST_APP_SRCS   "test-apps")
+COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_hyperram_freertos.c            ENABLE_XIP_PSRAM       TEST_APP_SRCS   "test-apps")
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_camera_arx3a0_freertos.c       ENABLE_ARX3A0_CAMERA   TEST_APP_SRCS   "test-apps")
 COND_FILE_ADD(${FREE_RTOS_APP_DIR}/demo_camera_mt9m114_freertos.c      ENABLE_MT9M114_CAMERA  TEST_APP_SRCS   "test-apps")
 

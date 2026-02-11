@@ -282,9 +282,9 @@ int32_t i2c_pinmux(void)
      * Pad function: PADCTRL_READ_ENABLE |
      *               PADCTRL_DRIVER_DISABLED_PULL_UP
      */
-    ret = pinconf_set(PORT_(BOARD_I2C1_SDA_C_GPIO_PORT),
-                      BOARD_I2C1_SDA_C_GPIO_PIN,
-                      PINMUX_ALTERNATE_FUNCTION_5,
+    ret = pinconf_set(PORT_(BOARD_CAMERA_I2C_SDA_GPIO_PORT),
+                      BOARD_CAMERA_I2C_SDA_GPIO_PIN,
+                      BOARD_CAMERA_I2C_SDA_ALTERNATE_FUNCTION,
                       PADCTRL_READ_ENABLE | PADCTRL_DRIVER_DISABLED_PULL_UP);
     if (ret != ARM_DRIVER_OK) {
         printf("\r\n Error: i3c PINMUX and PINPAD failed.\r\n");
@@ -295,9 +295,9 @@ int32_t i2c_pinmux(void)
      * Pad function: PADCTRL_READ_ENABLE
      *               PADCTRL_DRIVER_DISABLED_PULL_UP
      */
-    ret = pinconf_set(PORT_(BOARD_I2C1_SCL_C_GPIO_PORT),
-                      BOARD_I2C1_SCL_C_GPIO_PIN,
-                      PINMUX_ALTERNATE_FUNCTION_5,
+    ret = pinconf_set(PORT_(BOARD_CAMERA_I2C_SCL_GPIO_PORT),
+                      BOARD_CAMERA_I2C_SCL_GPIO_PIN,
+                      BOARD_CAMERA_I2C_SCL_ALTERNATE_FUNCTION,
                       PADCTRL_READ_ENABLE | PADCTRL_DRIVER_DISABLED_PULL_UP);
     if (ret != ARM_DRIVER_OK) {
         printf("\r\n Error: i3c PINMUX and PINPAD failed.\r\n");

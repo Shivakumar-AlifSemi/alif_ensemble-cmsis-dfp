@@ -65,6 +65,11 @@ extern uint32_t SystemREFClock;
 extern uint32_t SystemHFOSCClock;
 
 /**
+ * brief System RTSS HE Clock Frequency (RTSS HE Clock)
+ */
+extern uint32_t SystemRTSSHEClock;
+
+/**
   \brief  Get System AXI Clock value.
 
    returns the currently configured AXI clock value.
@@ -98,5 +103,12 @@ uint32_t GetSystemREFClock(void);
    returns the currently configured HFOSC clock value.
  */
 uint32_t GetSystemHFOSClock(void);
+
+/**
+ * brief  Get System RTSS HE Clock value.
+ *
+ * returns the currently configured RTSS HE clock value.
+ */
+uint32_t GetSystemRTSSHEClock(void);
 
 #endif /* SYS_CLOCKS_H */

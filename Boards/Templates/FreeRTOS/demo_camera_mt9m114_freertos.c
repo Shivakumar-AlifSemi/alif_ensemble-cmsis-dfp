@@ -725,6 +725,13 @@ void camera_demo_thread_entry(void *pvParameters)
     printf("\r\n Camera driver version api:0x%" PRIx16 " driver:0x%" PRIx16 " \r\n", version.api,
             version.drv);
 
+    /* Initialize Camera peripheral */
+    ret = CAMERAdrv->Initialize(camera_callback);
+    if (ret != ARM_DRIVER_OK) {
+        printf("\r\n Error: CAMERA Initialize failed.\r\n");
+        return;
+    }
+
     /* Power up Camera peripheral */
     ret = CAMERAdrv->PowerControl(ARM_POWER_FULL);
     if (ret != ARM_DRIVER_OK) {

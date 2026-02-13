@@ -312,8 +312,8 @@
         <device Dname="AE822FA0E5597LS0">
           <compile Pname="M55_HP" header="Device/core/common/include/alif.h" define="RTSS_HP"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
+          <debug svd="Debug/SVD/AE822FA0E5597LS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
+          <debug svd="Debug/SVD/AE822FA0E5597LS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="IOs" n="120" name="General Purpose I/Os, 1.8V"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
         </device>
@@ -425,16 +425,16 @@
         <device Dname="AE612FA0E5597BS0">
           <compile Pname="M55_HP" header="Device/core/common/include/alif.h" define="RTSS_HP"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <!--debug svd="Debug/SVD/AE612FA0E5597BS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
-          <debug svd="Debug/SVD/AE612FA0E5597BS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/-->
+          <debug svd="Debug/SVD/AE612FA0E5597BS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
+          <debug svd="Debug/SVD/AE612FA0E5597BS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="IOs" n="136" name="General Purpose I/Os, 1.8V"/>
           <feature type="CSP" n="216" name="WLCSP Package"/>
         </device>
         <device Dname="AE612FA0E5597LS0">
           <compile Pname="M55_HP" header="Device/core/common/include/alif.h" define="RTSS_HP"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <!--debug svd="Debug/SVD/AE612FA0E5597LS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
-          <debug svd="Debug/SVD/AE612FA0E5597LS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/-->
+          <debug svd="Debug/SVD/AE612FA0E5597LS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
+          <debug svd="Debug/SVD/AE612FA0E5597LS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="IOs" n="120" name="General Purpose I/Os, 1.8V"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
         </device>
@@ -546,16 +546,16 @@
         <device Dname="AE402FA0E5597BE0">
           <compile Pname="M55_HP" header="Device/core/common/include/alif.h" define="RTSS_HP"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
+          <debug svd="Debug/SVD/AE402FA0E5597BE0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
+          <debug svd="Debug/SVD/AE402FA0E5597BE0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="IOs" n="136" name="General Purpose I/Os, 1.8V"/>
           <feature type="CSP" n="216" name="WLCSP Package"/>
         </device>
         <device Dname="AE402FA0E5597LE0">
           <compile Pname="M55_HP" header="Device/core/common/include/alif.h" define="RTSS_HP"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
-          <debug svd="Debug/SVD/AE822FA0E5597BS0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
+          <debug svd="Debug/SVD/AE402FA0E5597LE0_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
+          <debug svd="Debug/SVD/AE402FA0E5597LE0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="IOs" n="120" name="General Purpose I/Os, 1.8V"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
         </device>
@@ -1306,7 +1306,7 @@
           <memory name="SRAM4" start="0x58000000" size="0x00080000" access="rwx" default="1"/>
           <memory name="SRAM5" start="0x58800000" size="0x00180000" access="rwx" default="1"/>
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
-          <debug Pname="M55_HE" __apid="1"/>
+          <debug svd="Debug/SVD/AE1C1F4051920PH0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
           <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
           <feature type="CAN" n="2" name="CAN-FD Controller"/>

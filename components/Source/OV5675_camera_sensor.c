@@ -17,6 +17,7 @@
 #include "Driver_IO.h"
 #include "Driver_CPI.h"
 #include "sys_utils.h"
+#include "sys_ctrl_cpi.h"
 
 #if (RTE_OV5675_CAMERA_SENSOR_ENABLE)
 
@@ -46,7 +47,9 @@
                             reg_value,                                                             \
                             (CAMERA_SENSOR_I2C_REG_SIZE) reg_size)
 
-#define OV5675_CAMERA_SENSOR_SLAVE_ADDR 0x36
+/* Supported I2C slave addresses for OV5675 sensor modules */
+#define OV5675_CAMERA_SENSOR_SLAVE_ADDR_A 0x10
+#define OV5675_CAMERA_SENSOR_SLAVE_ADDR_B 0x36
 
 #define OV5675_CHIP_ID_REGISTER_VALUE   0x5675
 
@@ -61,9 +64,9 @@
 #define ARRAY_SIZE(x)                   (sizeof(x) / sizeof((x)[0]))
 
 /**
-\brief OV5675 Camera Sensor Register Array Structure
-       used for Camera Configuration.
-*/
+ * @brief OV5675 Camera Sensor Register Array Structure
+ *      used for Camera Configuration.
+ */
 typedef struct _OV5675_REG {
     uint16_t reg_addr;  /* OV5675 Camera Sensor Register Address*/
     uint16_t reg_value; /* OV5675 Camera Sensor Register Value*/
@@ -89,19 +92,19 @@ static ARM_DRIVER_GPIO *GPIO_Driver_CAM_RST =
 extern ARM_DRIVER_I2C ARM_Driver_I2C_(RTE_OV5675_CAMERA_SENSOR_I2C_INSTANCE);
 
 /**
-\brief OV5675 Camera Sensor slave i2c Configuration
-\ref CAMERA_SENSOR_SLAVE_I2C_CONFIG
-*/
+ * @brief OV5675 Camera Sensor slave i2c Configuration
+ * @ref CAMERA_SENSOR_SLAVE_I2C_CONFIG
+ */
 static CAMERA_SENSOR_SLAVE_I2C_CONFIG OV5675_camera_sensor_i2c_cnfg = {
     .drv_i2c                        = &ARM_Driver_I2C_(RTE_OV5675_CAMERA_SENSOR_I2C_INSTANCE),
     .bus_speed                      = ARM_I2C_BUS_SPEED_STANDARD,
-    .cam_sensor_slave_addr          = OV5675_CAMERA_SENSOR_SLAVE_ADDR,
+    .cam_sensor_slave_addr          = OV5675_CAMERA_SENSOR_SLAVE_ADDR_A,
     .cam_sensor_slave_reg_addr_type = CAMERA_SENSOR_I2C_REG_ADDR_TYPE_16BIT,
 };
 
 /**
-\brief OV5675 Camera Sensor Resolution 1296x972
-*/
+ * @brief OV5675 Camera Sensor Resolution 1296x972
+ */
 static const OV5675_REG OV5675_1296x972_10bpp[] = {
     {0x0103, 0x01}, {0x0100, 0x00}, {0x0300, 0x04}, {0x0302, 0x8d}, {0x0303, 0x00}, {0x030d, 0x26},
     {0x3002, 0x21}, {0x3107, 0x23}, {0x3501, 0x20}, {0x3503, 0x0c}, {0x3508, 0x03}, {0x3509, 0x00},
@@ -132,14 +135,36 @@ static const OV5675_REG OV5675_1296x972_10bpp[] = {
 };
 
 /**
-  \fn           int32_t OV5675_Bulk_Write_Reg(const OV5675_REG OV5675_reg[],
-                                              uint32_t total_num, uint32_t reg_size))
-  \brief        write array of registers value to OV5675 Camera Sensor registers.
-  \param[in]    OV5675_reg : OV5675 Camera Sensor Register Array Structure
-  \param[in]    total_num   : total number of registers(size of array)
-  \param[in]    reg_size    : register size in bytes.
-  \return       \ref execution_status
-  */
+ * @fn           void OV5675_Sensor_Enable_Clk_Src(void)
+ * @brief        Enable OV5675 Camera Sensor external clock source configuration.
+ * @param[in]    none
+ * @return       none
+ */
+static void OV5675_Sensor_Enable_Clk_Src(void)
+{
+    set_cpi_pixel_clk(CPI_PIX_CLKSEL_400MZ, RTE_OV5675_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV);
+}
+
+/**
+ * @fn           void OV5675_Sensor_Disable_Clk_Src(void)
+ * @brief        Disable OV5675 Camera Sensor external clock source configuration.
+ * @param[in]    none
+ * @return       none
+ */
+static void OV5675_Sensor_Disable_Clk_Src(void)
+{
+    clear_cpi_pixel_clk();
+}
+
+/**
+ * @fn           int32_t OV5675_Bulk_Write_Reg(const OV5675_REG OV5675_reg[],
+ *                                     uint32_t total_num, uint32_t reg_size)
+ * @brief        write array of registers value to OV5675 Camera Sensor registers.
+ * @param[in]    OV5675_reg : OV5675 Camera Sensor Register Array Structure
+ * @param[in]    total_num   : total number of registers(size of array)
+ * @param[in]    reg_size    : register size in bytes.
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Bulk_Write_Reg(const OV5675_REG OV5675_reg[], uint32_t total_num,
                                      uint32_t reg_size)
 {
@@ -157,11 +182,11 @@ static int32_t OV5675_Bulk_Write_Reg(const OV5675_REG OV5675_reg[], uint32_t tot
 }
 
 /**
-  \fn           int32_t OV5675_Camera_Hard_Reseten(void)
-  \brief        Hard Reset OV5675 Camera Sensor
-  \param[in]    none
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Camera_Hard_Reseten(void)
+ * @brief        Hard Reset OV5675 Camera Sensor
+ * @param[in]    none
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Camera_Hard_Reseten(void)
 {
     int32_t ret = 0;
@@ -216,18 +241,22 @@ static int32_t OV5675_Camera_Hard_Reseten(void)
 }
 
 /**
-  \fn           int32_t OV5675_Init(void)
-  \brief        Initialize OV5675 Camera Sensor
-  this function will
-  - initialize i2c instance
-  - software reset OV5675 Camera Sensor
-  - read OV5675 chip-id, proceed only it is correct.
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Init(void)
+ * @brief        Initialize OV5675 Camera Sensor
+ *               this function will
+ *               - initialize i2c instance
+ *               - software reset OV5675 Camera Sensor
+ *               - read OV5675 chip-id, proceed only
+ *                 it is correct.
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Init(void)
 {
     int32_t  ret      = 0;
     uint32_t rcv_data = 0;
+
+    /* Enable camera sensor clock source config*/
+    OV5675_Sensor_Enable_Clk_Src();
 
     /*camera sensor resten*/
     ret               = OV5675_Camera_Hard_Reseten();
@@ -247,7 +276,14 @@ static int32_t OV5675_Init(void)
     /* Read OV5675 Camera Sensor CHIP ID */
     ret = OV5675_READ_REG(OV5675_REG_CHIPID_H, &rcv_data, 1);
     if (ret != ARM_DRIVER_OK) {
-        return ret;
+        /* Module not found with first known i2c slave addr;
+         * Try the second known address
+         */
+        OV5675_camera_sensor_i2c_cnfg.cam_sensor_slave_addr = OV5675_CAMERA_SENSOR_SLAVE_ADDR_B;
+        ret = OV5675_READ_REG(OV5675_REG_CHIPID_H, &rcv_data, 1);
+        if (ret != ARM_DRIVER_OK) {
+            return ret;
+        }
     }
 
     uint16_t chipid = rcv_data << 8;
@@ -268,11 +304,11 @@ static int32_t OV5675_Init(void)
 }
 
 /**
-  \fn           int32_t OV5675_Start(void)
-  \brief        Start OV5675 Camera Sensor Streaming.
-  \param[in]    none
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Start(void)
+ * @brief        Start OV5675 Camera Sensor Streaming.
+ * @param[in]    none
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Start(void)
 {
     /* Start streaming */
@@ -280,11 +316,11 @@ static int32_t OV5675_Start(void)
 }
 
 /**
-  \fn           int32_t OV5675_Stop(void)
-  \brief        Stop OV5675 Camera Sensor Streaming.
-  \param[in]    none
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Stop(void)
+ * @brief        Stop OV5675 Camera Sensor Streaming.
+ * @param[in]    none
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Stop(void)
 {
     /* Suspend stream */
@@ -292,12 +328,12 @@ static int32_t OV5675_Stop(void)
 }
 
 /**
-  \fn           int32_t OV5675_Control(uint32_t control, uint32_t arg)
-  \brief        Control OV5675 Camera Sensor.
-  \param[in]    control  : Operation
-  \param[in]    arg      : Argument of operation
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Control(uint32_t control, uint32_t arg)
+ * @brief        Control OV5675 Camera Sensor.
+ * @param[in]    control  : Operation
+ * @param[in]    arg      : Argument of operation
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Control(uint32_t control, uint32_t arg)
 {
     ARG_UNUSED(arg);
@@ -312,14 +348,17 @@ static int32_t OV5675_Control(uint32_t control, uint32_t arg)
 }
 
 /**
-  \fn           int32_t OV5675_Uninit(void)
-  \brief        Un-initialize OV5675 Camera Sensor.
-  \param[in]    none
-  \return       \ref execution_status
-  */
+ * @fn           int32_t OV5675_Uninit(void)
+ * @brief        Un-initialize OV5675 Camera Sensor.
+ * @param[in]    none
+ * @return       \ref execution_status
+ */
 static int32_t OV5675_Uninit(void)
 {
     int32_t ret;
+
+    /*Disable camera sensor clock source config*/
+    OV5675_Sensor_Disable_Clk_Src();
 
     ret = GPIO_Driver_CAM_RST->SetValue(RTE_OV5675_CAMERA_SENSOR_RESET_PIN_NO,
                                         GPIO_PIN_OUTPUT_STATE_LOW);
@@ -349,9 +388,9 @@ static int32_t OV5675_Uninit(void)
 }
 
 /**
-\brief OV5675 Camera Sensor CSI informations
-\ref CSI_INFO
-*/
+ * @brief OV5675 Camera Sensor CSI information
+ * \ref CSI_INFO
+ */
 static CSI_INFO OV5675_csi_info = {
     .frequency                = RTE_OV5675_CAMERA_SENSOR_CSI_FREQ,
     .dt                       = RTE_OV5675_CAMERA_SENSOR_CSI_DATA_TYPE,
@@ -362,9 +401,9 @@ static CSI_INFO OV5675_csi_info = {
 };
 
 /**
-\brief OV5675 Camera Sensor Operations
-\ref CAMERA_SENSOR_OPERATIONS
-*/
+ * @brief OV5675 Camera Sensor Operations
+ * \ref CAMERA_SENSOR_OPERATIONS
+ */
 static CAMERA_SENSOR_OPERATIONS OV5675_ops = {
     .Init    = OV5675_Init,
     .Uninit  = OV5675_Uninit,
@@ -374,9 +413,9 @@ static CAMERA_SENSOR_OPERATIONS OV5675_ops = {
 };
 
 /**
-\brief OV5675 Camera Sensor Device Structure
-\ref CAMERA_SENSOR_DEVICE
-*/
+ * @brief OV5675 Camera Sensor Device Structure
+ * \ref CAMERA_SENSOR_DEVICE
+ */
 static CAMERA_SENSOR_DEVICE OV5675_camera_sensor = {
     .interface = CAMERA_SENSOR_INTERFACE_MIPI,
     .width     = RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH,

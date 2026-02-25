@@ -3321,6 +3321,15 @@
       </files>
     </component>
 
+    <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E7-AIML" Cversion="2.1.0" condition="Board Config E7">
+      <description>Conductor Tool based board configuration for AppKit-e7-aiml</description>
+      <files>
+        <file category="header" name="Boards/AppKit-e7-aiml/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/AppKit-e7-aiml/pins.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/AppKit-e7-aiml/gpios.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+      </files>
+    </component>
+
     <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e8" Cversion="2.1.0" condition="Board Config E8">
       <description>Conductor Tool based board configuration for DevKit-e8</description>
       <files>

@@ -1,0 +1,28 @@
+build-idx:
+  generated-by: csolution version 2.12.0+p48-gd3223e31
+  cdefault: cdefault.yml
+  csolution: hello.csolution.yml
+  cbuild-run: out/hello+AE822FA0E5597LS0.cbuild-run.yml
+  tmpdir: tmp
+  cprojects:
+    - cproject: M55_HE/M55_HE.cproject.yml
+  cbuilds:
+    - cbuild: out/M55_HE/AE822FA0E5597LS0/Debug/M55_HE.Debug+AE822FA0E5597LS0.cbuild.yml
+      project: M55_HE
+      configuration: .Debug+AE822FA0E5597LS0
+      messages:
+        warnings:
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/BSP/AE822FA0E5597LS0_M55_HE/board_defs.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/BSP/AE822FA0E5597LS0_M55_HE/gpios.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/BSP/AE822FA0E5597LS0_M55_HE/pins.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/RTE_Device.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/app_mem_regions.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/app_tz.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/core_config.h.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/linker_gnu_mram.ld.src.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Device/AE822FA0E5597LS0_M55_HE/linker_gnu_tcm.ld.src.base' not found; base version unknown
+          - file '/home/kari/alif/ensemble-cmsis-dfp_DEV/Boards/DevKit-e8/Examples/Hello_World/M55_HE/RTE/Services/AE822FA0E5597LS0_M55_HE/retarget_config.h.base' not found; base version unknown
+        info:
+          - hello.cbuild-pack.yml - file is already up-to-date
+          - hello+AE822FA0E5597LS0.cbuild-run.yml - file is already up-to-date
+          - M55_HE.Debug+AE822FA0E5597LS0.cbuild.yml - file is already up-to-date

@@ -452,7 +452,6 @@ void i2c_master_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 {
     uint32_t    i2c_int_status; /* i2c interrupt status */
     uint16_t    xmit_data = 0;
-    static bool tx_abort;
     bool        exit      = false;
 
     i2c_int_status        = (i2c->I2C_INTR_STAT);
@@ -466,7 +465,7 @@ void i2c_master_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 
     /* Transmission Error state check */
     if (transfer->err_state) {
-        tx_abort = true;
+        transfer->abort = true;
         if (transfer->err_state == I2C_ERR_LOST_BUS) {
             /* mark event as master lost arbitration. */
             transfer->status |= I2C_TRANSFER_STATUS_ARBITRATION_LOST;
@@ -496,44 +495,37 @@ void i2c_master_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 
     /* Checks if Tx FIFO is empty then
      * performs the below operations */
-    else if (i2c_int_status & I2C_IC_INTR_STAT_TX_EMPTY) {
-        if (transfer->tx_buf) {
-            do {
-                xmit_data = (uint16_t) (transfer->tx_buf[transfer->tx_curr_cnt++]) |
-                            I2C_IC_DATA_CMD_WRITE_REQ;
+    else if ((!transfer->abort) &&
+             (i2c_int_status & I2C_IC_INTR_STAT_TX_EMPTY)) {
+        do {
+            xmit_data = (uint16_t) (transfer->tx_buf[transfer->tx_curr_cnt++]) |
+                        I2C_IC_DATA_CMD_WRITE_REQ;
 
-                /* Transmitted all the bytes */
-                if (transfer->tx_curr_cnt >= transfer->tx_total_num) {
-                    xmit_data |= ((transfer->xfer_pending) ? 0U : I2C_IC_DATA_CMD_STOP);
-                    exit       = true;
-                }
-
-                /* Updating transmitting data to FIFO */
-                i2c->I2C_DATA_CMD  = xmit_data;
-
-                transfer->curr_cnt = transfer->tx_curr_cnt;
-            } while (i2c_tx_ready(i2c) && (!exit));
-
-            if (exit) {
-                if (transfer->xfer_pending) {
-                    /* transmitted all the bytes, disable tx
-                     * interrupts as restart is requested */
-                    i2c_master_disable_tx_interrupt(i2c);
-
-                    transfer->curr_stat  = I2C_TRANSFER_NONE;
-                    /* mark event as master receive complete successfully. */
-                    transfer->status    |= I2C_TRANSFER_STATUS_DONE;
-                } else {
-                    /* transmitted all the bytes, Mask the TX_EMPTY interrupt */
-                    i2c_mask_interrupt(i2c, I2C_IC_INTR_STAT_TX_EMPTY);
-                }
+            /* Transmitted all the bytes */
+            if (transfer->tx_curr_cnt >= transfer->tx_total_num) {
+                xmit_data |= ((transfer->xfer_pending) ? 0U : I2C_IC_DATA_CMD_STOP);
+                exit       = true;
             }
-        } else {
-            i2c_master_disable_tx_interrupt(i2c);
-            transfer->curr_stat  = I2C_TRANSFER_NONE;
 
-            transfer->status    |= I2C_TRANSFER_STATUS_DONE;
-            transfer->status    |= I2C_TRANSFER_STATUS_INCOMPLETE;
+            /* Updating transmitting data to FIFO */
+            i2c->I2C_DATA_CMD  = xmit_data;
+
+            transfer->curr_cnt = transfer->tx_curr_cnt;
+        } while (i2c_tx_ready(i2c) && (!exit));
+
+        if (exit) {
+            if (transfer->xfer_pending) {
+                /* transmitted all the bytes, disable tx
+                 * interrupts as restart is requested */
+                i2c_master_disable_tx_interrupt(i2c);
+
+                transfer->curr_stat  = I2C_TRANSFER_NONE;
+                /* mark event as master receive complete successfully. */
+                transfer->status    |= I2C_TRANSFER_STATUS_DONE;
+            } else {
+                /* transmitted all the bytes, Mask the TX_EMPTY interrupt */
+                i2c_mask_interrupt(i2c, I2C_IC_INTR_STAT_TX_EMPTY);
+            }
         }
     }
 
@@ -542,14 +534,13 @@ void i2c_master_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
     }
 
     if (i2c_int_status & I2C_IC_INTR_STAT_STOP_DET) {
-        if (tx_abort) {
-            transfer->curr_stat = I2C_TRANSFER_NONE;
-            transfer->status    = I2C_TRANSFER_STATUS_NONE;
-            tx_abort            = false;
-        } else {
-            transfer->curr_stat  = I2C_TRANSFER_NONE;
+        transfer->curr_stat = I2C_TRANSFER_NONE;
+        if (!transfer->abort) {
             /* mark event as master receive complete successfully. */
             transfer->status    |= I2C_TRANSFER_STATUS_DONE;
+        } else {
+            /* clear xfer abort status */
+            transfer->abort = false;
         }
 
         /* transmitted all the bytes, disable the transmit interrupt */

@@ -1205,7 +1205,8 @@ void I2C_HandleIRQStatus(I2C_RESOURCES *I2C_RES)
             I2C_RES->cb_event(ARM_I2C_EVENT_BUS_ERROR);
             i2c_stat->busy = 0U;
         } else if (transfer->status & I2C_TRANSFER_STATUS_INCOMPLETE) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_TRANSFER_INCOMPLETE);
+            I2C_RES->cb_event((ARM_I2C_EVENT_TRANSFER_DONE |
+                               ARM_I2C_EVENT_TRANSFER_INCOMPLETE));
             i2c_stat->busy = 0U;
         } else if (transfer->status & I2C_TRANSFER_STATUS_HS_ACKDET) {
             I2C_RES->cb_event(ARM_I2C_EVENT_HS_ACKDET);

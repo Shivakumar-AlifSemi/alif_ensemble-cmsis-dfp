@@ -743,14 +743,26 @@ void i2c_slave_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 
     /* Slave error state check */
     transfer->err_state = i2c_slave_check_error(i2c, transfer);
+    if (transfer->err_state) {
+        transfer->abort = true;
+        /* mark event as slave lost bus
+         * reason: Abort/bus error
+         */
+        transfer->status    |= I2C_TRANSFER_STATUS_BUS_ERROR;
+        transfer->curr_stat  = I2C_TRANSFER_NONE;
+        transfer->err_state  = I2C_ERR_NONE;
+        /* disable the transmit interrupt */
+        i2c_slave_disable_tx_interrupt(i2c);
+    }
 
     /* Clear Interrupt */
     (void) i2c->I2C_CLR_INTR;
 
-    /* Transfer buffer has data to transmit */
-    if (transfer->tx_buf) {
-        /* Slave is Active */
-        if (i2c->I2C_STATUS & I2C_IC_STATUS_SLAVE_ACT) {
+    /* Slave is Active */
+    if (i2c->I2C_STATUS & I2C_IC_STATUS_SLAVE_ACT) {
+
+        /* Fill data when Read is requested */
+        if ((!transfer->abort) && (i2c_int_status & I2C_IC_INTR_STAT_RD_REQ)) {
             /* checking FIFO is full ready to transmit data */
             while (i2c_tx_ready(i2c)) {
                 xmit_data = (uint16_t) (transfer->tx_buf[transfer->tx_curr_cnt]) |
@@ -774,35 +786,28 @@ void i2c_slave_tx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
                 } /* (xmit_end) */
 
             } /* while(i2c_tx_ready(i2c_reg_ptr)) END*/
-
-        } /* (i2c_reg_ptr->ic_status & I2C_IC_STATUS_SLAVE_ACT) END*/
-
-    } /* (i2c_info_ptr->transfer.tx_buf) END*/
+        } /* Read request END */
+    } /* (i2c_reg_ptr->ic_status & I2C_IC_STATUS_SLAVE_ACT) END*/
 
     if (i2c_int_status & I2C_IC_INTR_STAT_TX_OVER) {
         transfer->tx_over++;
     }
 
-    /* Slave Transmit Abort/bus error */
-    if (transfer->err_state == I2C_ERR_LOST_BUS) {
-        i2c_slave_disable_tx_interrupt(i2c);
-        /* mark event as slave lost bus */
-        transfer->status    |= I2C_TRANSFER_STATUS_BUS_ERROR;
-        transfer->status    |= I2C_TRANSFER_STATUS_DONE;
-        transfer->status    |= I2C_TRANSFER_STATUS_INCOMPLETE;
-
-        transfer->err_state  = I2C_ERR_NONE;
-    }
-
     /* Checks for stop condition */
     if (i2c_int_status & I2C_IC_INTR_STAT_STOP_DET) {
-        /* transmitted all the bytes, disable the transmit interrupt */
-        i2c_slave_disable_tx_interrupt(i2c);
-
         transfer->curr_stat  = I2C_TRANSFER_NONE;
 
         /* mark event as slave transmit complete successfully. */
         transfer->status    |= I2C_TRANSFER_STATUS_DONE;
+        /* disable the transmit interrupt */
+        i2c_slave_disable_tx_interrupt(i2c);
+    }
+
+    if (transfer->abort) {
+        /* Just reset abort flag as the condition is
+         * already addressed above
+         */
+	transfer->abort = false;
     }
 }
 
@@ -863,7 +868,7 @@ void i2c_slave_rx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
                 }
             }
         }
-        /* Checks mode is DMA or if expected nuber of bytes received*/
+        /* Checks mode is DMA or if expected number of bytes received*/
         if (transfer->rx_curr_cnt >= transfer->rx_total_num) {
             transfer->curr_stat  = I2C_TRANSFER_NONE;
             /* mark event as Slave Receive complete successfully. */

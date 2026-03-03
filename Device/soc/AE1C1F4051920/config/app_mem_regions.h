@@ -26,6 +26,22 @@
 
 // </h>
 
+// <h>MRAM User Configuration
+// =======================
+// <h> MRAM User Region
+//   <o> User Base address <0x80000000-0x8018C000:8>
+//   <i> Defines base address of MRAM user region
+#define APP_MRAM_USER_BASE    0x80100000
+
+//   <o> User Region size [bytes] <0x0-0x0018C000:8>
+//   <i> Defines size of MRAM user region
+#define APP_MRAM_USER_SIZE    0x0008C000
+
+// Application executable MRAM region (before USER area)
+#define APP_CODE_MRAM_SIZE  (APP_MRAM_USER_BASE - APP_MRAM_HE_BASE)
+//</h>
+
+
 // <h>RAM Configuration
 // =======================
 // <h> SRAM4

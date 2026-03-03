@@ -16,9 +16,6 @@
 // <e> MRAM (NVM (Non-Volatile Memory)) [Driver_MRAM]
 // <i> Configuration settings for Driver_MRAM in component ::Drivers:MRAM
 #define RTE_MRAM 1
-#if RTE_MRAM
-#define RTE_MRAM_SIZE 0x00580000
-#endif
 // </e> MRAM (NVM (Non-Volatile Memory)) [Driver_MRAM]
 
 // <e> CPI (Camera) [Driver_CPI]

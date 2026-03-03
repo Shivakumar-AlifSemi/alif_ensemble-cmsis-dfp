@@ -558,7 +558,6 @@ void i2c_master_rx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 {
     uint32_t    i2c_int_status; /* i2c interrupt status */
     uint16_t    xmit_data = 0;
-    static bool tx_abort;
     bool        exit      = false;
 
     i2c_int_status        = (i2c->I2C_INTR_STAT);
@@ -572,7 +571,7 @@ void i2c_master_rx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
 
     /* Transmission Error state check */
     if (transfer->err_state) {
-        tx_abort = true;
+        transfer->abort = true;
         if (transfer->err_state == I2C_ERR_LOST_BUS) {
             /* mark event as master lost arbitration. */
             transfer->status |= I2C_TRANSFER_STATUS_ARBITRATION_LOST;
@@ -598,10 +597,9 @@ void i2c_master_rx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
         (void) i2c->I2C_CLR_TX_ABRT;
 
         transfer->err_state = I2C_ERR_NONE;
-    }
-
-    else if (transfer->rx_buf) {
+    } else {
         if (i2c_int_status & I2C_IC_INTR_STAT_TX_EMPTY) {
+
             if (transfer->wr_mode) {
                 while (i2c_tx_ready(i2c)) {
                     xmit_data = (uint16_t) (transfer->tx_buf[transfer->tx_curr_cnt++]) |
@@ -664,67 +662,59 @@ void i2c_master_rx_isr(I2C_Type *i2c, i2c_transfer_info_t *transfer)
                 }
             }
         }
+    }
 
-        if (i2c_int_status & (I2C_IC_INTR_STAT_RX_OVER | I2C_IC_INTR_STAT_RX_UNDER)) {
-            transfer->rx_over++;
-        }
+    if (i2c_int_status & (I2C_IC_INTR_STAT_RX_OVER | I2C_IC_INTR_STAT_RX_UNDER)) {
+        transfer->rx_over++;
+    }
 
-        if (i2c_int_status & I2C_IC_INTR_STAT_STOP_DET) {
-            if (tx_abort) {
-                transfer->curr_stat = I2C_TRANSFER_NONE;
-                transfer->status    = I2C_TRANSFER_STATUS_NONE;
-                tx_abort            = false;
-            } else {
-                /* Checks if rx-dma is not enabled */
-                if (!i2c_is_rx_dma_enable(i2c)) {
-                    /* Check if some data is yet to be received. If yes
-                     * performs the below operations */
-                    if (transfer->rx_curr_cnt < transfer->rx_total_num) {
-                        /* Checks if there are pending data
-                         * present in Rx FIFO that are expected */
-                        if (i2c->I2C_RXFLR >=
-                            (transfer->rx_total_num - (transfer->rx_curr_cnt + 1U))) {
-                            while (transfer->rx_total_num - transfer->rx_curr_cnt) {
-                                /* Read the data available in data buffer. */
-                                transfer->rx_buf[transfer->rx_curr_cnt] =
-                                    i2c_read_data_from_buffer(i2c);
+    if (i2c_int_status & I2C_IC_INTR_STAT_STOP_DET) {
+        if (!transfer->abort) {
+            /* Checks if rx-dma is not enabled */
+            if (!i2c_is_rx_dma_enable(i2c)) {
+                /* Check if some data is yet to be received. If yes
+                 * performs the below operations */
+                if (transfer->rx_curr_cnt < transfer->rx_total_num) {
+                    /* Checks if there are pending data
+                     * present in Rx FIFO that are expected */
+                    if (i2c->I2C_RXFLR >=
+                        (transfer->rx_total_num - (transfer->rx_curr_cnt + 1U))) {
+                        while (transfer->rx_total_num - transfer->rx_curr_cnt) {
+                            /* Read the data available in data buffer. */
+                            transfer->rx_buf[transfer->rx_curr_cnt] =
+                                i2c_read_data_from_buffer(i2c);
 
-                                transfer->rx_curr_cnt++;
-                                transfer->curr_cnt = transfer->rx_curr_cnt;
-                            }
+                            transfer->rx_curr_cnt++;
+                            transfer->curr_cnt = transfer->rx_curr_cnt;
                         }
                     }
-
-                    /* Checks mode is DMA or if expected nuber of bytes received*/
-                    if (transfer->rx_curr_cnt >= transfer->rx_total_num) {
-                        transfer->curr_stat  = I2C_TRANSFER_NONE;
-                        /* mark event as master receive complete successfully. */
-                        transfer->status    |= I2C_TRANSFER_STATUS_DONE;
-                        tx_abort             = false;
-                    } else {
-                        transfer->curr_stat  = I2C_TRANSFER_NONE;
-                        /* mark event as master receive incomplete. */
-                        transfer->status    |= I2C_TRANSFER_STATUS_INCOMPLETE;
-                    }
-
                 }
-                /* Rx-DMA is enabled, so perform the below */
-                else {
+
+                /* Checks mode is DMA or if expected number of bytes received*/
+                if (transfer->rx_curr_cnt >= transfer->rx_total_num) {
                     transfer->curr_stat  = I2C_TRANSFER_NONE;
                     /* mark event as master receive complete successfully. */
                     transfer->status    |= I2C_TRANSFER_STATUS_DONE;
+                } else {
+                    transfer->curr_stat  = I2C_TRANSFER_NONE;
+                    /* mark event as master receive incomplete. */
+                    transfer->status    |= I2C_TRANSFER_STATUS_INCOMPLETE;
                 }
-            }
 
-            /* Stop bit detected, disable the Receive interrupt */
-            i2c_master_disable_rx_interrupt(i2c);
+            }
+            /* Rx-DMA is enabled, so perform the below */
+            else {
+                transfer->curr_stat  = I2C_TRANSFER_NONE;
+                /* mark event as master receive complete successfully. */
+                transfer->status    |= I2C_TRANSFER_STATUS_DONE;
+            }
+        } else {
+            /* clear xfer abort status */
+            transfer->abort = false;
         }
-    } else {
+
+        /* Stop bit detected, disable the Receive interrupt */
         i2c_master_disable_rx_interrupt(i2c);
-        transfer->curr_stat  = I2C_TRANSFER_NONE;
-        /* clear busy status bit. */
-        transfer->status    |= I2C_TRANSFER_STATUS_DONE;
-        transfer->status    |= I2C_TRANSFER_STATUS_INCOMPLETE;
     }
 }
 

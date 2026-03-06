@@ -8,7 +8,7 @@ Step to create Project in VS Code
 
 - Open a command Palette (Ctrl + Shift + P)
 - Select CMSIS: Create a Solution option
-- select Target Board -> Alif Semiconductor -> Devkit-E8(Gen1)
+- select Target Board -> Alif Semiconductor -> Devkit-E8
 - select Target Device -> Alif Semiconductor ->Ensemble -> AE822FA0E5597LS0
 - Templates -> local -> CSolution Example
 - select CSolution_Project
@@ -20,7 +20,7 @@ Step to create Project in VS Code
  Toolchain supported
 =====================
 - GCC, ARMCLANG
-- Alifsemiconductor.Ensemble.2.0.4.pack
+- Alifsemiconductor.Ensemble.2.1.0.pack
 - VS Code
 
 =======================

@@ -304,6 +304,7 @@ typedef struct i2c_transfer_info {
     volatile uint32_t tx_over;   /* i2c tx overflow count   */
     volatile uint32_t rx_over;   /* i2c rx overflow count   */
     volatile int32_t  err_state; /* \ref I2C_ERROR_STATE "current error state for i2c device" */
+    volatile bool     abort;     /* i2c transfer abort */
     volatile I2C_TRANSFER_STATE curr_stat; /* \ref I2C_TRANSFER_STATE "current working state for i2c
                                               device"          */
     volatile uint32_t next_cond; /* \ref I2C_NEXT_CONDTION "next condition for master transmit or

@@ -275,6 +275,7 @@ static int32_t ARM_I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES 
     I2C->slv_addr              &= I2C_7BIT_ADDRESS_MASK;
 
     I2C->transfer.err_state     = I2C_ERR_NONE;
+    I2C->transfer.abort         = false;
     I2C->transfer.next_cond     = I2C_MODE_STOP;
 
     I2C->transfer.tx_over       = 0U;
@@ -355,6 +356,7 @@ static int32_t ARM_I2C_Uninitialize(I2C_RESOURCES *I2C)
     I2C->transfer.xfer_pending     = 0U;
     I2C->transfer.next_cond        = I2C_MODE_STOP;
     I2C->transfer.err_state        = I2C_ERR_NONE;
+    I2C->transfer.abort            = false;
     I2C->transfer.curr_stat        = I2C_TRANSFER_NONE;
 
     /* Clear driver status \ref ARM_I2C_STATUS */
@@ -1060,6 +1062,7 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         I2C->transfer.next_cond = I2C_MODE_STOP;
         I2C->transfer.curr_stat = I2C_TRANSFER_NONE;
         I2C->transfer.err_state = I2C_ERR_NONE;
+        I2C->transfer.abort     = false;
         I2C->transfer.tx_over   = 0U;
         I2C->transfer.rx_over   = 0U;
 

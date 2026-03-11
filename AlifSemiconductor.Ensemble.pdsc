@@ -2338,6 +2338,7 @@
         <file category="source" name="Boards/Templates/cmsis_rtos2/demo_mci_mdk_cmsisrtos2.c" attr="template" select="MCI-MDK CMSIS RTOS2 Demo"/>
         <file category="source" name="Boards/Templates/cmsis_rtos2/demo_usb_device_app.c" attr="template" select="USBD CMSIS RTOS2 Demo"/>
         <file category="source" name="Boards/Templates/cmsis_rtos2/USBD_User_CDC_ACM.c" attr="template" select="USBD CMSIS RTOS2 Demo"/>
+        <file category="source" name="Boards/Templates/FreeRTOS/demo_wdt_freertos.c" attr="template" select="WDT FreeRTOS Demo"/>
 
 	<!--  LWIP templates -->
         <file category="source" name="Boards/Templates/lwip/httpd/fs.c" attr="template" select="LWIP httpd Demo"/>

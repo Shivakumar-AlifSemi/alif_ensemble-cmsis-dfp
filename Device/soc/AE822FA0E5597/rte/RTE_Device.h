@@ -9401,6 +9401,15 @@
 // <i> Default: 100
 #define RTE_CH201_RTC_CAL_PULSE_MS 100
 
+// <o> CH201 LPTIMER channel for Timeout trigger
+// <i> Defines LPTIMER's channel number for CH201 Timeout trigger
+//     <0=>   LPTIMER_CHANNEL_0
+//     <1=>   LPTIMER_CHANNEL_1
+//     <2=>   LPTIMER_CHANNEL_2
+//     <3=>   LPTIMER_CHANNEL_3
+// <i> Default: 1
+#define RTE_CH201_LPTIMER_CHANNEL  1
+
 #endif
 //</e> CH201 (Time of Flight Sensor) [Driver_CH201]
 

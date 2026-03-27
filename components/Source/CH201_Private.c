@@ -29,6 +29,7 @@
 
 /* RTC Driver */
 #include "Driver_RTC.h"
+#include "Driver_LPTIMER.h"
 
 #include "RTE_Device.h"
 
@@ -43,6 +44,10 @@ static ARM_DRIVER_I2C *I2C_MstDrv = &Driver_I2C1;
 /* RTC Driver instance 0 */
 extern ARM_DRIVER_RTC  Driver_RTC0;
 ARM_DRIVER_RTC *RTCdrv = &Driver_RTC0;
+
+/* LPTIMER0 Driver instance */
+extern ARM_DRIVER_LPTIMER Driver_LPTIMER0;
+ARM_DRIVER_LPTIMER       *LPTimerDrv = &Driver_LPTIMER0;
 
 /* Ch201 Program pin control IO port */
 extern ARM_DRIVER_GPIO  ARM_Driver_GPIO_(BOARD_CH201_SENSOR_PROG_IO_PORT);
@@ -63,18 +68,29 @@ static ARM_DRIVER_GPIO *IO_Driver_RESET = &ARM_Driver_GPIO_(BOARD_CH201_SENSOR_R
 #define CH201_I2C_TIMEOUT_US           100000
 #define DELAY_1US                      1
 
-#define CH201_RTC_PRESCALER            1
+/* RTC prescaler for 1Hz */
+#define CH201_RTC_PRESCALER            0x8000
 
-/* RTC clock tick period in microsec
- * when prescaler is 1 */
-#define CH201_RTC_TICK_PERIOD_US       (1000000 / 32768)
+/* LPTIMER_TICK_PERIOD_US clock tick period in microsec */
+#define LPTIMER_TICK_PERIOD_US        (1000000 / 32768)
 
 /* RTC counter to millisec conversion */
-#define CONVERT_RTC_COUNTER_TO_MS(x)   CONVERT_US_TO_MS(x)
+#define CONVERT_RTC_COUNTER_TO_MS(x)   CONVERT_S_TO_MS(x)
+
+
+/**
+ * @brief       CH201 RTC event callback.
+ * @param[in]   event RTC Event
+ * @return      None
+ */
+static void chbsp_rtc_callback(uint32_t event)
+{
+    ARG_UNUSED(event);
+}
 
 /**
  * @brief       CH201 I2C event callback.
- * @param[in]   event Callback Event
+ * @param[in]   event I2C Event
  * @return      None
  */
 static void chbsp_i2c_callback(uint32_t event)
@@ -102,15 +118,15 @@ void chbsp_int_gpio_callback(uint32_t event)
 }
 
 /**
- * @brief       RTC callback event.
- * @param[in]   event RTC Event
+ * @brief       LPTIMER callback event.
+ * @param[in]   event LPTIMER Event
  * @return      None
  */
-void rtc_callback(uint32_t event)
+void chbsp_lptimer_callback(uint8_t event)
 {
-    if (event == ARM_RTC_EVENT_ALARM_TRIGGER) {
-        if (ch201_drv_info.rtc_timeout_cb) {
-            ch201_drv_info.rtc_timeout_cb();
+    if (event == ARM_LPTIMER_EVENT_UNDERFLOW) {
+        if (ch201_drv_info.periodic_timeout_cb) {
+            ch201_drv_info.periodic_timeout_cb();
         }
     }
 }
@@ -140,6 +156,59 @@ static int32_t chbsp_intr_enable(ARM_DRIVER_GPIO *io_driver,
 }
 
 /**
+ * @brief       LPTIMER setup function.
+ * @param[in]   None
+ * @return      \ref execution_status
+ */
+static int32_t chbsp_lptimer_init(void)
+{
+    int32_t ret;
+
+    ret = LPTimerDrv->Initialize(RTE_CH201_LPTIMER_CHANNEL, chbsp_lptimer_callback);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ret = LPTimerDrv->PowerControl(RTE_CH201_LPTIMER_CHANNEL, ARM_POWER_FULL);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ch201_drv_info.state |= CH201_LPTIMER_DRIVER_READY;
+
+    return ARM_DRIVER_OK;
+}
+
+/**
+ * @brief       LPTIMER De-Initialize function.
+ * @param[in]   None
+ * @return      \ref execution_status
+ */
+static int32_t chbsp_lptimer_deinit(void)
+{
+    int32_t ret;
+
+    ret = LPTimerDrv->Stop(RTE_CH201_LPTIMER_CHANNEL);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ret = LPTimerDrv->PowerControl(RTE_CH201_LPTIMER_CHANNEL, ARM_POWER_OFF);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ret = LPTimerDrv->Uninitialize(RTE_CH201_LPTIMER_CHANNEL);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ch201_drv_info.state &= ~CH201_LPTIMER_DRIVER_READY;
+
+    return ARM_DRIVER_OK;
+}
+
+/**
  * @brief       RTC setup function.
  * @param[in]   None
  * @return      \ref execution_status
@@ -149,7 +218,7 @@ static int32_t chbsp_rtc_init(void)
     int32_t ret;
 
     /* Initialize RTC driver */
-    ret = RTCdrv->Initialize(rtc_callback);
+    ret = RTCdrv->Initialize(chbsp_rtc_callback);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
@@ -250,7 +319,7 @@ static int32_t chbsp_gpios_init(void)
     }
 
     ret = IO_Driver_RESET->SetDirection(BOARD_CH201_SENSOR_RESET_PIN_NO,
-                                       GPIO_PIN_DIRECTION_OUTPUT);
+                                        GPIO_PIN_DIRECTION_OUTPUT);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
@@ -1285,6 +1354,26 @@ void chbsp_print_str(const char *str)
 }
 
 /**
+ * @brief       Initialize the periodic timer.
+ * @param       None
+ * @return      Execution status
+ */
+int chbsp_periodic_timer_init(void)
+{
+    return chbsp_lptimer_init();
+}
+
+/**
+ * @brief       De-Initialize the periodic timer.
+ * @param       None
+ * @return      Execution status
+ */
+int chbsp_periodic_timer_deinit(void)
+{
+    return chbsp_lptimer_deinit();
+}
+
+/**
  * @brief       Setup board dependencies.
  * @param[in]   None
  * @return      Execution status
@@ -1332,32 +1421,62 @@ int chbsp_board_deinit(void)
 }
 
 /**
- * @brief       Initialize the periodic timer.
+ * @brief       Start the periodic timer.
  * @param[in]   interval_ms       Interval in millisec
  * @param[in]   callback_func_ptr Callback function
  * @return      Execution status
  */
-int chbsp_periodic_timer_init(uint16_t interval_ms,
-                              ch_timer_callback_t callback_func_ptr)
+int chbsp_periodic_timer_start(uint16_t interval_ms,
+                               ch_timer_callback_t callback_func_ptr)
 {
     int32_t  ret;
-    uint32_t cnt_val;
 
-    if (!(ch201_drv_info.state & CH201_RTC_DRIVER_READY)) {
-        return 0;
+    if (!(ch201_drv_info.state & CH201_LPTIMER_DRIVER_READY)) {
+        return ARM_DRIVER_ERROR;
     }
 
     /* Save callback function */
-    ch201_drv_info.rtc_timeout_cb  = callback_func_ptr;
-    ch201_drv_info.rtc_timeout_val = (CONVERT_MS_TO_US(interval_ms) /
-                                      CH201_RTC_TICK_PERIOD_US);
+    ch201_drv_info.periodic_timeout_cb  = callback_func_ptr;
+    ch201_drv_info.periodic_timeout_val = (CONVERT_MS_TO_US(interval_ms) /
+                                           LPTIMER_TICK_PERIOD_US);
 
-    ret = RTCdrv->ReadCounter(&cnt_val);
-    /* Set RTC Alarm */
-    ret = RTCdrv->Control(ARM_RTC_SET_ALARM,
-                          (cnt_val + ch201_drv_info.rtc_timeout_val));
+    /* Set LPTIMER timeout trigger */
+    ret = LPTimerDrv->Control(RTE_CH201_LPTIMER_CHANNEL,
+                              ARM_LPTIMER_SET_COUNT1,
+                              (void *) &ch201_drv_info.periodic_timeout_val);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
+
+    /* Start the timer */
+    ret = LPTimerDrv->Start(RTE_CH201_LPTIMER_CHANNEL);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    return ARM_DRIVER_OK;
+}
+
+/**
+ * @brief       Stop the periodic timer.
+ * @param       None
+ * @return      Execution status
+ */
+int chbsp_periodic_timer_stop(void)
+{
+    int32_t  ret;
+
+    if (!(ch201_drv_info.state & CH201_LPTIMER_DRIVER_READY)) {
+        return ARM_DRIVER_ERROR;
+    }
+
+    /* Stop the timer */
+    ret = LPTimerDrv->Stop(RTE_CH201_LPTIMER_CHANNEL);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+
+    ch201_drv_info.periodic_timeout_cb = NULL;
+
     return ARM_DRIVER_OK;
 }

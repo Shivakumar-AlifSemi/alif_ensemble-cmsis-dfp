@@ -1861,6 +1861,8 @@
       <require Dname="AE1C1F4051920*" Pname="M55_HE"/>
     </condition>
 
+
+
     <condition id="SoC AE722F80F55D5">
     <description>Alif Semiconductor SoC AE722F80F55D5 device</description>
       <require Dname="AE722F80F55D5*"/>
@@ -1872,6 +1874,32 @@
     <condition id="SoC AE722F80F55D5 M55_HE">
     <description>Alif Semiconductor SoC AE722F80F55D5 device</description>
       <require Dname="AE722F80F55D5*" Pname="M55_HE"/>
+    </condition>
+
+    <condition id="SoC AE302F80F5582">
+    <description>Alif Semiconductor SoC AE302F80F5582 device</description>
+      <require Dname="AE302F80F5582*"/>
+    </condition>
+    <condition id="SoC AE302F80F5582 M55_HP">
+    <description>Alif Semiconductor SoC AE302F80F5582 device</description>
+      <require Dname="AE302F80F5582*" Pname="M55_HP"/>
+    </condition>
+    <condition id="SoC AE302F80F5582 M55_HE">
+    <description>Alif Semiconductor SoC AE302F80F5582 device</description>
+      <require Dname="AE302F80F5582*" Pname="M55_HE"/>
+    </condition>
+
+    <condition id="SoC AE302F80F55D5">
+    <description>Alif Semiconductor SoC AE302F80F55D5 device</description>
+      <require Dname="AE302F80F55D5*"/>
+    </condition>
+    <condition id="SoC AE302F80F55D5 M55_HP">
+    <description>Alif Semiconductor SoC AE302F80F55D5 device</description>
+      <require Dname="AE302F80F55D5*" Pname="M55_HP"/>
+    </condition>
+    <condition id="SoC AE302F80F55D5 M55_HE">
+    <description>Alif Semiconductor SoC AE302F80F55D5 device</description>
+      <require Dname="AE302F80F55D5*" Pname="M55_HE"/>
     </condition>
 
     <condition id="Ensemble CMSIS_Driver">
@@ -1919,7 +1947,7 @@
     <condition id="IMU Driver">
       <description>Requirement for ILI6122 LCD Driver</description>
       <require condition="Ensemble CMSIS_Driver"/>
-      <require Cclass="Device" Cgroup="SOC Peripherals" Csub="I3C"/>      
+      <require Cclass="Device" Cgroup="SOC Peripherals" Csub="I3C"/>
     </condition>
 
     <condition id="PINCONF Driver">
@@ -1970,7 +1998,7 @@
     </condition>
     <condition id="MIPI DPHY Driver">
       <description>Requirement for MIPI DPHY Driver</description>
-      <require condition="Ensemble CMSIS_Driver"/>      
+      <require condition="Ensemble CMSIS_Driver"/>
     </condition>
 
     <condition id="OSPI PSRAM UTILITY">
@@ -1978,7 +2006,7 @@
       <require condition="Ensemble CMSIS_Driver"/>
       <require condition="E8"/>
     </condition>
-    
+
     <condition id="OSPI XIP UTILITY">
       <description>Requirement OSPI XIP utility </description>
       <require condition="Ensemble"/>
@@ -2041,11 +2069,13 @@
       <require Cclass="Services" Cgroup="Secure Enclave" Csub="Initialization Helper"/>
      </condition>
 
-    <condition id="Board Config E7">
-      <description>Requirement for Board Config E7</description>
+    <condition id="board_config_devkit_e7">
+      <description>Requirement for Board Config Devkit E7</description>
       <require Cclass="BSP" Cgroup="Board Config"/>
-      <require Dname="AE722F80F55D5*"/>
-     </condition>
+      <accept Dname="AE722F80F55D5*"/>
+      <accept Dname="AE302F80F5582*"/>
+      <accept Dname="AE302F80F55D5*"/>
+    </condition>
 
    <condition id="Board Config E8">
       <description>Requirement for Board Config E8</description>
@@ -2218,6 +2248,20 @@
         <file category="header" name="Device/soc/AE722F80F55D5/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_hp/" condition="SoC AE722F80F55D5 M55_HP"/>
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_he/" condition="SoC AE722F80F55D5 M55_HE"/>
+
+        <!-- AE302F80F55D5 specific files -->
+        <file category="include" name="Device/soc/AE302F80F55D5/include/" condition="SoC AE302F80F55D5"/>
+        <file category="header" name="Device/soc/AE302F80F55D5/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE302F80F55D5"/>
+        <file category="header" name="Device/soc/AE302F80F55D5/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE302F80F55D5"/>
+        <file category="include" name="Device/soc/AE302F80F55D5/include/rtss_hp/" condition="SoC AE302F80F55D5 M55_HP"/>
+        <file category="include" name="Device/soc/AE302F80F55D5/include/rtss_he/" condition="SoC AE302F80F55D5 M55_HE"/>
+
+        <!-- AE302F80F5582 specific files -->
+        <file category="include" name="Device/soc/AE302F80F5582/include/" condition="SoC AE302F80F5582"/>
+        <file category="header" name="Device/soc/AE302F80F5582/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE302F80F5582"/>
+        <file category="header" name="Device/soc/AE302F80F5582/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE302F80F5582"/>
+        <file category="include" name="Device/soc/AE302F80F5582/include/rtss_hp/" condition="SoC AE302F80F5582 M55_HP"/>
+        <file category="include" name="Device/soc/AE302F80F5582/include/rtss_he/" condition="SoC AE302F80F5582 M55_HE"/>
 
         <!-- AE1C1F4051920 specific files -->
         <file category="include" name="Device/soc/AE1C1F4051920/include/" condition="SoC AE1C1F4051920"/>
@@ -2758,7 +2802,7 @@
         <file category="source" name="components/Source/HM0360_camera_sensor.c"/>
       </files>
     </component>
-    
+
     <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor ARX3A0" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for ARX3A0</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
@@ -2788,7 +2832,7 @@
         <file category="source" name="components/Source/ar0145_camera_sensor.c"/>
       </files>
     </component>
-   
+
     <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor AR0246" Cversion="2.1.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for AR0246</description>
       <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
@@ -3347,16 +3391,16 @@
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e7" Cversion="2.1.0" condition="Board Config E7">
+    <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e7" Cversion="2.1.0" condition="board_config_devkit_e7">
       <description>Conductor Tool based board configuration for DevKit-e7</description>
       <files>
-        <file category="header" name="Boards/DevKit-e7/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Boards/DevKit-e7/pins.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Boards/DevKit-e7/gpios.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/DevKit-e7/board_defs.h" version="2.1.0"  attr="config"/>
+        <file category="header" name="Boards/DevKit-e7/pins.h" version="2.1.0"  attr="config"/>
+        <file category="header" name="Boards/DevKit-e7/gpios.h" version="2.1.0"  attr="config"/>
       </files>
     </component>
 
-    <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E7-AIML" Cversion="2.1.0" condition="Board Config E7">
+    <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E7-AIML" Cversion="2.1.0" condition="board_config_devkit_e7">
       <description>Conductor Tool based board configuration for AppKit-e7-aiml</description>
       <files>
         <file category="header" name="Boards/AppKit-e7-aiml/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>

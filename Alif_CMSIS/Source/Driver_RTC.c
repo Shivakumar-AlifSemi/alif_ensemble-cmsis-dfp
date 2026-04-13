@@ -141,12 +141,6 @@ static int32_t LPRTC_PowerControl(LPRTC_RESOURCES *LPRTC_RES, ARM_POWER_STATE st
             /* enable LPRTC clocks */
             enable_lprtc_clk(LPRTC_RES->inst);
 
-            /* disable LPRTC counter wrap. */
-            lprtc_counter_wrap_disable(LPRTC_RES->regs);
-
-            /* enable LPRTC Prescaler. */
-            lprtc_prescaler_enable(LPRTC_RES->regs);
-
             /* enable LPRTC counter. */
             lprtc_counter_enable(LPRTC_RES->regs);
 
@@ -219,20 +213,22 @@ static int32_t LPRTC_Control(LPRTC_RESOURCES *LPRTC_RES, uint32_t control, uint3
     switch (control) {
     case ARM_RTC_SET_PRESCALER:
         {
-            /* disable LPRTC Prescaler. */
-            lprtc_prescaler_disable(LPRTC_RES->regs);
+            bool prescaler_en = lprtc_is_prescaler_enable(LPRTC_RES->regs);
+            uint16_t prescaler_value = lprtc_get_prescaler(LPRTC_RES->regs);
+            uint16_t new_val = (uint16_t) arg; /* 16-bit prescaler value.*/
 
-            /* disable LPRTC counter. */
-            lprtc_counter_disable(LPRTC_RES->regs);
+            if (!prescaler_en || (prescaler_value != new_val)) {
+                /* disable LPRTC counter and prescaler. */
+                lprtc_counter_prescaler_disable(LPRTC_RES->regs);
 
-            /* load LPRTC counter. */
-            lprtc_load_prescaler(LPRTC_RES->regs, arg);
+                /* load LPRTC prescaler. */
+                if (prescaler_value != new_val) {
+                    lprtc_load_prescaler(LPRTC_RES->regs, new_val);
+                }
 
-            /* enable LPRTC Prescaler. */
-            lprtc_prescaler_enable(LPRTC_RES->regs);
-
-            /* enable LPRTC counter. */
-            lprtc_counter_enable(LPRTC_RES->regs);
+                /* enable LPRTC counter and prescaler. */
+                lprtc_counter_prescaler_enable(LPRTC_RES->regs);
+            }
 
             break;
         }

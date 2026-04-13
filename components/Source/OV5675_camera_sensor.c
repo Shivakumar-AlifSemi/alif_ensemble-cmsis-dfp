@@ -142,7 +142,7 @@ static const OV5675_REG OV5675_1296x972_10bpp[] = {
  */
 static void OV5675_Sensor_Enable_Clk_Src(void)
 {
-    set_cpi_pixel_clk(CPI_PIX_CLKSEL_400MZ, RTE_OV5675_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV);
+    set_cpi_pixel_clk(CPI_PIX_CLKSEL_AXI, RTE_OV5675_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV);
 }
 
 /**

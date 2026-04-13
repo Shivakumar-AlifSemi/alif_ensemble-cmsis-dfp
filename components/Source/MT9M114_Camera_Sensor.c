@@ -677,7 +677,7 @@ static ARM_DRIVER_GPIO *GPIO_Driver_CAM_PWR =
   */
 static void MT9M114_Sensor_Enable_Clk_Src(void)
 {
-    set_cpi_pixel_clk(CPI_PIX_CLKSEL_400MZ, RTE_MT9M114_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV);
+    set_cpi_pixel_clk(CPI_PIX_CLKSEL_AXI, RTE_MT9M114_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV);
 }
 
 /**

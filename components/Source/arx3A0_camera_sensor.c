@@ -1418,7 +1418,7 @@ static int32_t ARX3A0_Bulk_Write_Reg(const ARX3A0_REG arx3A0_reg[], uint32_t tot
   */
 static void ARX3A0_Sensor_Enable_Clk_Src(void)
 {
-    set_cpi_pixel_clk(CPI_PIX_CLKSEL_400MZ, RTE_ARX3A0_CAMERA_SENSOR_CSI_CLK_SCR_DIV);
+    set_cpi_pixel_clk(CPI_PIX_CLKSEL_AXI, RTE_ARX3A0_CAMERA_SENSOR_CSI_CLK_SCR_DIV);
 }
 
 /**

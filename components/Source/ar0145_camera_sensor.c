@@ -213,7 +213,7 @@ static int32_t AR0145_Bulk_Write_Reg(const AR0145_REG AR0145_reg[], uint32_t tot
   */
 static void AR0145_Sensor_Enable_Clk_Src(void)
 {
-    set_cpi_pixel_clk(CPI_PIX_CLKSEL_400MZ, RTE_AR0145_CAMERA_SENSOR_CSI_CLK_SCR_DIV);
+    set_cpi_pixel_clk(CPI_PIX_CLKSEL_AXI, RTE_AR0145_CAMERA_SENSOR_CSI_CLK_SCR_DIV);
 }
 
 /**

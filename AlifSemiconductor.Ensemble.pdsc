@@ -1876,6 +1876,32 @@
       <require Dname="AE722F80F55D5*" Pname="M55_HE"/>
     </condition>
 
+    <condition id="SoC AE512F80F5582">
+    <description>Alif Semiconductor SoC AE512F80F5582 device</description>
+      <require Dname="AE512F80F5582*"/>
+    </condition>
+    <condition id="SoC AE512F80F5582 M55_HP">
+    <description>Alif Semiconductor SoC AE512F80F5582 device</description>
+      <require Dname="AE512F80F5582*" Pname="M55_HP"/>
+    </condition>
+    <condition id="SoC AE512F80F5582 M55_HE">
+    <description>Alif Semiconductor SoC AE512F80F5582 device</description>
+      <require Dname="AE512F80F5582*" Pname="M55_HE"/>
+    </condition>
+
+    <condition id="SoC AE512F80F55D5">
+    <description>Alif Semiconductor SoC AE512F80F55D5 device</description>
+      <require Dname="AE512F80F55D5*"/>
+    </condition>
+    <condition id="SoC AE512F80F55D5 M55_HP">
+    <description>Alif Semiconductor SoC AE512F80F55D5 device</description>
+      <require Dname="AE512F80F55D5*" Pname="M55_HP"/>
+    </condition>
+    <condition id="SoC AE512F80F55D5 M55_HE">
+    <description>Alif Semiconductor SoC AE512F80F55D5 device</description>
+      <require Dname="AE512F80F55D5*" Pname="M55_HE"/>
+    </condition>
+
     <condition id="SoC AE302F80F5582">
     <description>Alif Semiconductor SoC AE302F80F5582 device</description>
       <require Dname="AE302F80F5582*"/>
@@ -2073,6 +2099,8 @@
       <description>Requirement for Board Config Devkit E7</description>
       <require Cclass="BSP" Cgroup="Board Config"/>
       <accept Dname="AE722F80F55D5*"/>
+      <accept Dname="AE512F80F5582*"/>
+      <accept Dname="AE512F80F55D5*"/>
       <accept Dname="AE302F80F5582*"/>
       <accept Dname="AE302F80F55D5*"/>
     </condition>
@@ -2249,6 +2277,20 @@
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_hp/" condition="SoC AE722F80F55D5 M55_HP"/>
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_he/" condition="SoC AE722F80F55D5 M55_HE"/>
 
+        <!-- AE512F80F55D5 specific files -->
+        <file category="include" name="Device/soc/AE512F80F55D5/include/" condition="SoC AE512F80F55D5"/>
+        <file category="header" name="Device/soc/AE512F80F55D5/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE512F80F55D5"/>
+        <file category="header" name="Device/soc/AE512F80F55D5/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE512F80F55D5"/>
+        <file category="include" name="Device/soc/AE512F80F55D5/include/rtss_hp/" condition="SoC AE512F80F55D5 M55_HP"/>
+        <file category="include" name="Device/soc/AE512F80F55D5/include/rtss_he/" condition="SoC AE512F80F55D5 M55_HE"/>
+
+        <!-- AE512F80F5582 specific files -->
+        <file category="include" name="Device/soc/AE512F80F5582/include/" condition="SoC AE512F80F5582"/>
+        <file category="header" name="Device/soc/AE512F80F5582/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE512F80F5582"/>
+        <file category="header" name="Device/soc/AE512F80F5582/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE512F80F5582"/>
+        <file category="include" name="Device/soc/AE512F80F5582/include/rtss_hp/" condition="SoC AE512F80F5582 M55_HP"/>
+        <file category="include" name="Device/soc/AE512F80F5582/include/rtss_he/" condition="SoC AE512F80F5582 M55_HE"/>
+
         <!-- AE302F80F55D5 specific files -->
         <file category="include" name="Device/soc/AE302F80F55D5/include/" condition="SoC AE302F80F55D5"/>
         <file category="header" name="Device/soc/AE302F80F55D5/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE302F80F55D5"/>
@@ -2262,6 +2304,8 @@
         <file category="header" name="Device/soc/AE302F80F5582/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE302F80F5582"/>
         <file category="include" name="Device/soc/AE302F80F5582/include/rtss_hp/" condition="SoC AE302F80F5582 M55_HP"/>
         <file category="include" name="Device/soc/AE302F80F5582/include/rtss_he/" condition="SoC AE302F80F5582 M55_HE"/>
+
+
 
         <!-- AE1C1F4051920 specific files -->
         <file category="include" name="Device/soc/AE1C1F4051920/include/" condition="SoC AE1C1F4051920"/>

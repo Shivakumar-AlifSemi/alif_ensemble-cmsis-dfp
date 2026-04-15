@@ -523,6 +523,13 @@
 #define RTE_MIPI_CSI2 1
 #if RTE_MIPI_CSI2
 
+// <o> Select CSI2 DPHY backend
+//     <0=> CSI2 RX DPHY
+//     <1=> DSI TX DPHY used as RX
+// <i> Selects which DPHY hardware is used by Driver_MIPI_CSI2.
+// <i> Default: CSI2 RX DPHY
+#define RTE_MIPI_CSI2_DPHY_BACKEND          0
+
 // <o> CSI pixel clock select
 //     <0=>  Select AXI clock source
 //     <1=>  Select PLL clock source

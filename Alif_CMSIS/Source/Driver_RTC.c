@@ -35,6 +35,7 @@ static const ARM_DRIVER_VERSION DriverVersion        = {ARM_RTC_API_VERSION, ARM
 /* Driver Capabilities */
 static const ARM_RTC_CAPABILITIES DriverCapabilities = {
     1, /* supports RTC Alarm Callback */
+    1, /* supports RTC Counter wrap mode */
     0  /* Reserved (must be zero) */
 };
 
@@ -245,7 +246,18 @@ static int32_t LPRTC_Control(LPRTC_RESOURCES *LPRTC_RES, uint32_t control, uint3
 
             break;
         }
+    case ARM_RTC_CONTROL_WRAP:
+        {
+            if (arg) {
+                /* enable LPRTC counter wrap. */
+                lprtc_counter_wrap_enable(LPRTC_RES->regs);
+            } else {
+                /* disable LPRTC counter wrap. */
+                lprtc_counter_wrap_disable(LPRTC_RES->regs);
+            }
 
+            break;
+        }
     default:
         /* Unsupported command */
         return ARM_DRIVER_ERROR_UNSUPPORTED;

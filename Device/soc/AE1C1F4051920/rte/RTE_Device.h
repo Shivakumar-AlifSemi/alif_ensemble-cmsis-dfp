@@ -126,6 +126,97 @@
 #endif
 // </e> MT9M114 [Driver_MT9M114]
 
+// <e> OV5640 [Driver_OV5640]
+// <o> Enable/Disable OV5640 camera sensor
+//     <0=> disable
+//     <1=> enable
+// <i> define if to enable or disable OV5640 camera sensor
+// <i> default: disable
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_ENABLE 0
+
+#if (RTE_OV5640_CAMERA_SENSOR_LPCPI_ENABLE)
+
+// <o> Select camera OV5640 pixel clock polarity
+//     <0=> not invert camera pixclk
+//     <1=> invert camera pixclk
+// <i> Defines camera OV5640 pixel clock polarity
+// <i> Default: not invert camera pixclk
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_PIXEL_CLK_POL   0
+
+// <o> Select camera OV5640 HSYNC polarity
+//     <0=>  not invert HSYNC input
+//     <1=>  invert HSYNC input
+// <i> Defines camera OV5640 HSYNC polarity
+// <i> Default:  not invert HSYNC input
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_HSYNC_POL       0
+
+// <o> Select camera OV5640 VSYNC polarity
+//     <0=> not invert VSYNC input
+//     <1=> invert VSYNC input
+// <i> Defines camera OV5640 VSYNC polarity
+// <i> Default:  not invert VSYNC input
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_VSYNC_POL       0
+
+// <o> Select camera OV5640 VSYNC wait
+//     <0=> vsync wait disable
+//     <1=> vsync wait enable
+// <i> Defines camera OV5640 VSYNC wait
+// <i> Default: vsync wait disable
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_VSYNC_WAIT      1
+
+// <o> Select camera OV5640 VSYNC mode
+//     <0=> sync enable
+//     <1=> data enable
+// <i> Defines camera OV5640 VSYNC mode
+// <i> Default: sync enable
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_VSYNC_MODE      0
+
+// <o> Select video data mode
+//     <0=> 1 bit
+//     <1=> 2 bit
+//     <2=> 4 bit
+//     <3=> 8 bit
+// <i> Defines video data mode
+// <i> Default: 8 bit
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_DATA_MODE       3
+
+// <o> Select Data Endianness
+//     <0=> LSB First
+//     <1=> MSB First
+// <i> Select MSB/LSB
+// <i> Default: LSB
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_DATA_ENDIANNESS 0
+
+// <o> Select CODE10ON8
+//     <0=> Disable
+//     <1=> Enable
+// <i> Defines transfer 10-bit coding over 8-bit data bus.
+// <i> Default: 8 bit
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_CODE10ON8       0
+
+// <o> select OV5640 frame height
+// <i> defines select OV5640 frame height.
+// <i> default: 120
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_FRAME_HEIGHT    120
+
+// <o> select OV5640 frame width
+// <i> defines select OV5640 frame width.
+// <i> default: 160
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_FRAME_WIDTH     160
+
+// <o> Select OV5640 camera sensor I2C instance
+// <i> Defines camera sensor OV5640 i2c instance
+//     <0=>   I2C0
+//     <1=>   I2C1
+//     <2=>   I2C2
+//     <3=>   I2C3
+//     <4=>   I2C OVER I3C
+// <i> Default: 1
+#define RTE_OV5640_CAMERA_SENSOR_LPCPI_I2C_INSTANCE    1
+
+#endif
+// </e> OV5640 [Driver_OV5640]
+
 #endif
 // </e> LPCPI (Camera) [Driver_LPCPI]
 

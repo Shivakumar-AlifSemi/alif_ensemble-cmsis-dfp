@@ -529,6 +529,46 @@
 #endif
 // </e> ISP (ISP) [Driver_ISP]
 
+// <e> JPEG (JPEG) [Driver_JPEG]
+// <i> Configuration settings for Driver_JPEG in component ::Drivers:JPEG
+#define RTE_JPEG 1
+#if RTE_JPEG
+
+// <o> JPEG IRQ priority <0-255>
+// <i> Defines Interrupt priority for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_IRQ_PRIORITY               0
+
+// <o> JPEG Encoding Mode
+//    <0=> 4:2:0(4lum+2chrblocks/MCU)
+// <i> Defines encoding mode for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_MODE                       0
+
+// <o> JPEG Encoding Mode
+//    <0=> JPEGENC_420_MODE
+// <i> Defines encoding mode for JPEG.
+// <i> Default: 0
+#define RTE_JPEG_CODING_MODE                0
+
+// <o> JPEG AXI Burst Length
+// <i> AXI burst length for JPEG.
+// <i> Default: 64
+#define RTE_JPEG_AXI_BURST_LENGTH           64
+
+// <o> JPEG AXI write outstanding number
+// <i> AXI write outstanding number for JPEG.
+// <i> Default: 64
+#define RTE_AXI_WRITE_OUTSTANDING_NUM       64
+
+// <o> JPEG AXI read outstanding number
+// <i> AXI read outstanding number for JPEG.
+// <i> Default: 64
+#define RTE_AXI_READ_OUTSTANDING_NUM        64
+
+#endif
+// </e> JPEG (JPEG) [Driver_JPEG]
+
 // <e> MIPI_CSI2 (mipi csi2) [Driver_MIPI_CSI2]
 // <i> Configuration settings for Driver_MIPI_CSI2 in component ::Drivers:MIPI_CSI2
 #define RTE_MIPI_CSI2 1

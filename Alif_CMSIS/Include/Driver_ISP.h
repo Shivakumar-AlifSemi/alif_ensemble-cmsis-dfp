@@ -26,6 +26,12 @@ extern "C" {
 
 #include "Driver_Common.h"
 
+/* Forward declarations for ISP configuration structures */
+/* Use struct tags to avoid redefinition conflicts with ISP library headers */
+struct vsiISP_CALIB_DATA_S;
+struct vsiISP_PORT_ATTR_S;
+struct vsiISP_CHN_ATTR_S;
+
 /* API version */
 #define ARM_ISP_API_VERSION                    ARM_DRIVER_VERSION_MAJOR_MINOR(1, 0)
 
@@ -64,6 +70,13 @@ extern "C" {
  * fn          int32_t Initialize (ARM_ISP_SignalEvent_t cb_event)
  * brief       Initialize ISP Interface.
  * param[in]   cb_event          : Pointer to \ref ARM_ISP_SignalEvent_t
+ * return      @ref execution_status
+ *
+ * fn          int32_t SetConfig (struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr)
+ * brief       Set ISP configuration from application.
+ * param[in]   calib_data        : Pointer to calibration data structure
+ * param[in]   port_attr         : Pointer to port attribute structure
+ * param[in]   chan_attr         : Pointer to channel attribute structure
  * return      @ref execution_status
  *
  * fn          int32_t Uninitialize (void)
@@ -109,7 +122,8 @@ typedef struct _ARM_ISP_CAPABILITIES {
     uint32_t gamma_out: 1;  /* Supports ISP Gamma correction */
     uint32_t wb_stat  : 1;  /* Supports ISP Auto-White Balancing Statistics */
     uint32_t binning  : 1;  /* Supports ISP Binning mode. */
-    uint32_t reserved : 21; /* Reserved (must be zero) */
+    uint32_t scaling  : 1;  /* Supports ISP Scaling */
+    uint32_t reserved : 20; /* Reserved (must be zero) */
 } ARM_ISP_CAPABILITIES;
 
 /*
@@ -124,6 +138,9 @@ typedef struct _ARM_DRIVER_ISP {
 
     /* Pointer to @ref ISP_Initialize : Initialize ISP Interface. */
     int32_t (*Initialize)(ARM_ISP_SignalEvent_t cb_event);
+
+    /* Pointer to @ref ISP_SetConfig : Set ISP configuration from application. */
+    int32_t (*SetConfig)(struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr);
 
     /* Pointer to @ref ISP_Uninitialize : De-initialize ISP Interface*/
     int32_t (*Uninitialize)(void);

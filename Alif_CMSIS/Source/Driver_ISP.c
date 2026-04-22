@@ -58,15 +58,16 @@ static const ARM_ISP_CAPABILITIES DriverCapabilities = {
         * In this mode, ISP can do Auto-Exposure control.
         */
     0, /* BLS */
-    0, /* Demosaic */
+    1, /* Demosaic */
     0, /* Filter */
     0, /* CCM */
     0, /* CSM */
-    0, /* White Balancing */
+    1, /* White Balancing */
     0, /* ae_stat - Auto-Exposure Statistics */
     0, /* Gamma-out */
-    0, /* wb_stat - White-Balancing Statistics */
+    1, /* wb_stat - White-Balancing Statistics */
     0, /* Binning */
+    1, /* Scaling */
     0  /* Reserved (must be zero) */
 };
 
@@ -393,266 +394,10 @@ static int32_t ISP_control(uint32_t control, uint32_t arg, ISP_RESOURCES *isp)
 /* ISP sensor access structure */
 static CAMERA_SENSOR_DEVICE *sensor;
 
-ISP_CALIB_DATA_S calibration_data = {
-    .modules = {
-#if (RTE_ISP_WBM_MODULE)
-        .wbm = {
-            .enable   = 1,
-            .measMode = ISP_AWB_MEAS_MODE_RGB,
-            .measRect = {
-                .hOffs = 0,
-                .vOffs = 0,
-                .hSize = 1920,
-                .vSize = 1080,
-            },
-            // RGB mode of measurement
-            .wpRange = {
-                .maxY       = 0xEB,
-                .refCr_MaxR = 0x80,
-                .minY_MaxG  = 0xC0,
-                .refCb_MaxB = 0x80,
-                .maxCSum    = 0x14,
-                .minC       = 0x14,
-            },
-        },
-#endif /* RTE_ISP_WBM_MODULE */
-
-#if (RTE_ISP_WB_MODULE)
-        .wb = {
-            .enable = 1,
-            .opType = OP_TYPE_AUTO,
-            //.opType = OP_TYPE_MANUAL,
-            .manualAttr = {
-                .wbGain = {0x100, 0x100, 0x100, 0x100},
-            },
-            .autoAttr = {
-                .runInterval   = 1,
-                .speed         = 64,
-                .tolerance     = 1,
-                .initColorTemp = 4500,
-                .calibParam    = {
-                    .centLine = {-756822, -540795, -2485600},
-                    .rgMin    = 995000,
-                    .rgMax    = 2434700,
-                    .wpRange0 = {
-                        .wpLCurve = {
-                            .rg   = {
-                                800000,   918317, 1036630, 1154950, 1273270, 1391580, 1509900,
-                                1628220, 1746530, 1864850, 1983170, 2101480, 2219800, 2291520,
-                                2391170, 2475300
-                            },
-                            .dist = {
-                                4346,    54815, 101574, 145633, 185416, 220875, 250999, 274321,
-                                290001, 295548, 288132, 263269, 215941, 174965, 100294, 13567
-                            },
-                        },
-                        .wpRCurve = {
-                            .rg   = {
-                                800000,  918317,  1036630, 1154950, 1273270, 1391580, 1516450,
-                                1565950, 1690140, 1847260, 1983170, 2101480, 2204780, 2296030,
-                                2373560, 2475800
-                            },
-                            .dist = {
-                                355654, 305185, 258426, 214367, 174584, 139125, 170938, 317311,
-                                332925, 169218, 71868,  96731,  135492, 190735, 258194, 366710
-                            },
-                        },
-                    },
-                    .wpRange1 = {
-                        .wpLCurve = {
-                            .rg   = {
-                                995000,  1128750, 1250800, 1349560, 1448330, 1547100, 1645860,
-                                1744630, 1843390, 1942160, 2040920, 2140900, 2216330, 2305560,
-                                2381430, 2434900
-                            },
-                            .dist = {
-                                -39503,  14716,  58032,  88970, 115812, 139005, 157346, 169761,
-                                175397, 172450, 158581, 139910, 109243,  58664,   7042, -56770
-                            },
-                        },
-                        .wpRCurve = {
-                            .rg   = {
-                                995000,  1115620, 1250800, 1349560, 1448330, 1552250, 1590720,
-                                1670660, 1783930, 1884870, 2040920, 2139690, 2223960, 2296240,
-                                2354920, 2434900
-                            },
-                            .dist = {
-                                154354, 106619,  61968, 31031,  4188,  62094, 238853, 263946,
-                                166529, 48583,  -38581, -10696, 28146, 79446, 127288, 208410
-                            },
-                        },
-                    },
-                    .illuminant[ILLUMINANT_A] = {
-                        .illuType  = ILLUMINANT_A,
-                        .colorTemp = 2856,
-                        .wbGain    = {
-                            0x14c, 0x100, 0x100, 0x2b8
-                        },
-                    },
-                    .illuminant[ILLUMINANT_TL84] = {
-                        .illuType  = ILLUMINANT_TL84,
-                        .colorTemp = 4000,
-                        .wbGain    = {
-                            0x18c, 0x100, 0x100, 0x238
-                        },
-                    },
-                    .illuminant[ILLUMINANT_CWF] = {
-                        .illuType  = ILLUMINANT_CWF,
-                        .colorTemp = 4100,
-                        .wbGain    = {
-                            0x1df, 0x100, 0x100, 0x245
-                        },
-                    },
-                    .illuminant[ILLUMINANT_D50] = {
-                        .illuType  = ILLUMINANT_D50,
-                        .colorTemp = 5000,
-                        .wbGain    = {
-                            0x1E0, 0x100, 0x100, 0x1D0
-                        },
-                    },
-                    .illuminant[ILLUMINANT_D65] = {
-                        .illuType  = ILLUMINANT_D65,
-                        .colorTemp = 6500,
-                        .wbGain    = {
-                            0x200, 0x100, 0x100, 0x1A0
-                        },
-                    },
-                },
-            },
-        },
-#endif /* RTE_ISP_WB_MODULE */
-
-#if (RTE_ISP_CCM_MODULE)
-        .ccm = {
-            .opType = OP_TYPE_AUTO,
-            .manualAttr = {
-                .colorMatrix = {
-                    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
-                },
-                .rOffset = 0,
-                .gOffset = 0,
-                .bOffset = 0,
-            },
-            .autoAttr = {
-                .illuminantCCM[ILLUMINANT_A] = {
-                    .colorTemp = 2856,
-                    .colorMatrix = {
-                        192, -6, -57, -70, 230, -24, 11, -149, 276
-                    },
-                    .rOffset = 0,
-                    .gOffset = 0,
-                    .bOffset = 0,
-                },
-                .illuminantCCM[ILLUMINANT_TL84] = {
-                    .colorTemp = 4000,
-                    .colorMatrix = {
-                        222, -60, -32, -64, 236, -35, 1, -78, 222
-                    },
-                    .rOffset = 0,
-                    .gOffset = 0,
-                    .bOffset = 0,
-                },
-                .illuminantCCM[ILLUMINANT_CWF] = {
-                    .colorTemp = 4100,
-                    .colorMatrix = {
-                        257, -90, -37, -65, 219, -18, 2, -82, 223
-                    },
-                    .rOffset = 0,
-                    .gOffset = 0,
-                    .bOffset = 0,
-                },
-                .illuminantCCM[ILLUMINANT_D50] = {
-                    .colorTemp = 5000,
-                    .colorMatrix = {
-                        207, -55, -23, -48, 224, -34, 6, -89, 222
-                    },
-                    .rOffset = 0,
-                    .gOffset = 0,
-                    .bOffset = 0,
-                },
-                .illuminantCCM[ILLUMINANT_D65] = {
-                    .colorTemp = 6500,
-                    .colorMatrix = {
-                        229, -82, -17, -39, 215, -47, 0, -68, 207
-                    },
-                    .rOffset = 0,
-                    .gOffset = 0,
-                    .bOffset = 0,
-                },
-            },
-        },
-#endif /* RTE_ISP_CCM_MODULE */
-#if (RTE_ISP_DMSC_MODULE)
-        .dmsc = {
-            .enable    = 1,
-            .threshold = 10,
-            .cacAttr   = {
-                .enable      = 0,
-                .hClipMode   = 0,
-                .vClipMode   = 0,
-                .hStart      = 0,
-                .vStart      = 0,
-                .aBlue       = 0,
-                .aRed        = 0,
-                .bBlue       = 0,
-                .bRed        = 0,
-                .cBlue       = 0,
-                .cRed        = 0,
-                .xNormShift  = 7,
-                .xNormFactor = 29,
-                .yNormShift  = 7,
-                .yNormFactor = 29,
-            },
-        },
-#endif /* RTE_ISP_DMSC_MODULE */
-    },
-};
-
-// Configuration of what is coming through the pipeline to the ISP IP.
-ISP_PORT_ATTR_S port_attr = {
-    .ispInputType = INPUT_TYPE_SENSOR,
-    .ispMode      = ISP_MODE_RAW,
-    .hdrMode      = HDR_MODE_LINEAR,
-    .pixelFormat  = PIXEL_FORMAT_GRBG8,
-    .snsRect = {
-        .top    = 0,
-        .left   = 0,
-        .width  = 560,
-        .height = 560,
-    },
-    .inFormRect = {
-        .top    = 0,
-        .left   = 0,
-        .width  = 560,
-        .height = 560,
-    },
-    .iSRect = {
-        .top    = 0,
-        .left   = 0,
-        .width  = 560,
-        .height = 560,
-    },
-    .outFormRect = {
-        .top    = 0,
-        .left   = 0,
-        .width  = 560,
-        .height = 560,
-    },
-};
-
-ISP_CHN_ATTR_S chan_attr = {
-    .transBus = TRANS_BUS_ONLINE,
-    .chnFormat = {
-        .width       = RTE_ISP_OUTPUT_WIDTH,
-        .height      = RTE_ISP_OUTPUT_HEIGHT,
-        .pixelFormat = RTE_ISP_OUTPUT_FORMAT,
-    },
-};
-
 ISP_RESOURCES ISP_RES = {
-    .isp_calib_info = &calibration_data,
-    .isp_port_attr  = &port_attr,
-    .isp_chan_attr  = &chan_attr,
+    .isp_calib_info = NULL,
+    .isp_port_attr  = NULL,
+    .isp_chan_attr  = NULL,
     .cb_event       = NULL,
     .irq_priority   = RTE_ISP_IRQ_PRIORITY,
     .isp_dev_id     = 0,
@@ -678,6 +423,27 @@ static int32_t ISP_Initialize(ARM_ISP_SignalEvent_t cb_event)
 {
     sensor = Get_Camera_Sensor();
     return ISP_Init(cb_event, sensor, &ISP_RES);
+}
+
+/*
+ * fn        int32_t ISP_SetConfig (struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr)
+ * brief     Set ISP configuration from application.
+ * param[in] calib_data Pointer to calibration data structure
+ * param[in] port_attr  Pointer to port attribute structure
+ * param[in] chan_attr  Pointer to channel attribute structure
+ * return    @ref execution_status.
+ */
+static int32_t ISP_SetConfig(struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr)
+{
+    if (!calib_data || !port_attr || !chan_attr) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
+
+    ISP_RES.isp_calib_info = calib_data;
+    ISP_RES.isp_port_attr = port_attr;
+    ISP_RES.isp_chan_attr = chan_attr;
+
+    return ARM_DRIVER_OK;
 }
 
 /*
@@ -832,6 +598,7 @@ ARM_DRIVER_ISP        Driver_ISP = {
     ISP_GetVersion,
     ISP_GetCapabilities,
     ISP_Initialize,
+    ISP_SetConfig,
     ISP_Uninitialize,
     ISP_PowerControl,
     ISP_Start,

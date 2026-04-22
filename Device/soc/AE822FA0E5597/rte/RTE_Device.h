@@ -40,7 +40,7 @@
 //     <1=> enable
 // <i> Defines CPI AXI port
 // <i> Default: AXI port enable
-#define RTE_CPI_AXI_PORT                                      1
+#define RTE_CPI_AXI_PORT                                      0
 
 // <o> Select CPI ISP port
 //     <0=> disable
@@ -479,9 +479,41 @@
 // <i> Default: RGB888
 #define RTE_ISP_OUTPUT_FORMAT 32
 
-#define RTE_ISP_OUTPUT_WIDTH 480
+// <o> ISP Scaler Output Width
+// <i> Width in pixels of the ISP scaler output (after scaling from sensor dimensions).
+#define RTE_ISP_OUTPUT_WIDTH        480
 
-#define RTE_ISP_OUTPUT_HEIGHT 480
+// <o> ISP Scaler Output Height
+// <i> Height in pixels of the ISP scaler output (after scaling from sensor dimensions).
+#define RTE_ISP_OUTPUT_HEIGHT       480
+
+// <o> ISP Sensor Input Width
+// <i> Width in pixels of the sensor input to the ISP pipeline.
+// <i> Default: MT9M114 sensor resolution (1280). Change for different sensors.
+#define RTE_ISP_SENSOR_INPUT_WIDTH  RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH
+
+// <o> ISP Sensor Input Height
+// <i> Height in pixels of the sensor input to the ISP pipeline.
+// <i> Default: MT9M114 sensor resolution (720). Change for different sensors.
+#define RTE_ISP_SENSOR_INPUT_HEIGHT RTE_MT9M114_CAMERA_SENSOR_FRAME_HEIGHT
+
+// <o> ISP Crop Top offset <0-4095>
+// <i> Top offset in pixels for the cropped output window
+#define RTE_ISP_CROP_TOP    0
+
+// <o> ISP Crop Left offset <0-4095>
+// <i> Left offset in pixels for the cropped output window
+#define RTE_ISP_CROP_LEFT   0
+
+// <o> ISP Crop Width <1-4095>
+// <i> Width in pixels of the cropped output window.
+// <i> Default: full sensor input (no crop). Override with smaller value to crop.
+#define RTE_ISP_CROP_WIDTH  RTE_ISP_SENSOR_INPUT_WIDTH
+
+// <o> ISP Crop Height <1-4095>
+// <i> Height in pixels of the cropped output window.
+// <i> Default: full sensor input (no crop). Override with smaller value to crop.
+#define RTE_ISP_CROP_HEIGHT RTE_ISP_SENSOR_INPUT_HEIGHT
 
 #endif
 // </e> ISP (ISP) [Driver_ISP]
@@ -1084,6 +1116,14 @@
 //     <4=>   I2C OVER I3C
 // <i> Default: 1
 #define RTE_MT9M114_CAMERA_SENSOR_MIPI_I2C_INSTANCE            1
+
+// <o> MT9M114 sensor frame width for ISP / CSI2 pipeline
+// <i> Width in pixels of the MT9M114 MIPI sensor frame
+#define RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH  1280
+
+// <o> MT9M114 sensor frame height for ISP / CSI2 pipeline
+// <i> Height in pixels of the MT9M114 MIPI sensor frame
+#define RTE_MT9M114_CAMERA_SENSOR_FRAME_HEIGHT 720
 
 #endif
 // </e> MT9M114_MIPI [Driver_MT9M114_MIPI]

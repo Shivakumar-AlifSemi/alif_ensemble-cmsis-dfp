@@ -77,6 +77,9 @@ static ARM_DRIVER_GPIO *IO_Driver_RESET = &ARM_Driver_GPIO_(BOARD_CH201_SENSOR_R
 /* RTC counter to millisec conversion */
 #define CONVERT_RTC_COUNTER_TO_MS(x)   CONVERT_S_TO_MS(x)
 
+/* I2C tranfer status */
+#define CH201_I2C_XFER_DONE           (1 << 0)
+#define CH201_I2C_XFER_ERR            (1 << 1)
 
 /**
  * @brief       CH201 RTC event callback.
@@ -96,7 +99,14 @@ static void chbsp_rtc_callback(uint32_t event)
 static void chbsp_i2c_callback(uint32_t event)
 {
     /* callback event occurred */
-    ch201_drv_info.ch201_i2c_event |= event;
+    if (event & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | ARM_I2C_EVENT_ADDRESS_NACK |
+                 ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_ARBITRATION_LOST)) {
+        /* Transfer Error. */
+	ch201_drv_info.ch201_i2c_event = CH201_I2C_XFER_ERR;
+    } else if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
+        /* Transfer Done. */
+	ch201_drv_info.ch201_i2c_event = CH201_I2C_XFER_DONE;
+    }
 }
 
 /**
@@ -423,7 +433,7 @@ static int32_t chbsp_write(uint8_t tar_addr, uint16_t reg_addr,
             return 1;
         }
     }
-    if (!(ch201_drv_info.ch201_i2c_event & ARM_I2C_EVENT_TRANSFER_DONE)) {
+    if (!(ch201_drv_info.ch201_i2c_event & CH201_I2C_XFER_DONE)) {
         return 1;
     }
 
@@ -468,7 +478,7 @@ static int32_t chbsp_read(uint8_t tar_addr, uint16_t reg_addr,
             return 1;
         }
     }
-    if (!(ch201_drv_info.ch201_i2c_event & ARM_I2C_EVENT_TRANSFER_DONE)) {
+    if (!(ch201_drv_info.ch201_i2c_event & CH201_I2C_XFER_DONE)) {
         return 1;
     }
     return 0;
@@ -1094,7 +1104,7 @@ int chbsp_i2c_write(ch_dev_t *dev_ptr, const uint8_t *data, uint16_t num_bytes)
             return 1;
         }
     }
-    if (!(ch201_drv_info.ch201_i2c_event & ARM_I2C_EVENT_TRANSFER_DONE)) {
+    if (!(ch201_drv_info.ch201_i2c_event & CH201_I2C_XFER_DONE)) {
         return 1;
     }
 
@@ -1180,7 +1190,7 @@ int chbsp_i2c_read(ch_dev_t *dev_ptr, uint8_t *data, uint16_t num_bytes)
             return 1;
         }
     }
-    if (!(ch201_drv_info.ch201_i2c_event & ARM_I2C_EVENT_TRANSFER_DONE)) {
+    if (!(ch201_drv_info.ch201_i2c_event & CH201_I2C_XFER_DONE)) {
         return 1;
     }
 

@@ -63,14 +63,12 @@ static void camera_sensor_i2c_callback(uint32_t event)
 {
     /* Save received events */
     /* Optionally, user can define specific actions for an event */
-
     if (event &
-       (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | ARM_I2C_EVENT_ADDRESS_NACK | ARM_I2C_EVENT_BUS_ERROR)) {
+        (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | ARM_I2C_EVENT_ADDRESS_NACK |
+         ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_ARBITRATION_LOST)) {
         /* Transfer Error. */
         CB_XferCompletionFlag = CB_XferErr;
-    }
-
-    if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
+    } else if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
         /* Transfer Done. */
         CB_XferCompletionFlag = CB_XferDone;
     }

@@ -176,9 +176,14 @@ static void i2c_mst_conversion_callback(uint32_t event)
  */
 static void i2c_slv_conversion_callback(uint32_t event)
 {
+    if (event & ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
+        /* Transfer or receive is incomplete */
+        slv_cb_status |= I2C_CB_EVENT_TRANSFER_INCOMPLETE;
+    }
+
     if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
         /* Transfer or receive is finished */
-        slv_cb_status = I2C_CB_EVENT_TRANSFER_DONE;
+        slv_cb_status |= I2C_CB_EVENT_TRANSFER_DONE;
     }
 }
 
@@ -298,6 +303,11 @@ static void I2C_demo(void)
     while (slv_cb_status == 0) {
     }
 
+    if (slv_cb_status & I2C_CB_EVENT_TRANSFER_INCOMPLETE) {
+        printf("\r\n Error: Transfer incomplete\n");
+        goto error_poweroff;
+    }
+
     /* Compare received data. */
 #if I2C_DMA_ENABLED
     if (memcmp(&SLV_RX_BUF, &MST_TX_BUF, (MST_BYTE_TO_TRANSMIT * 2)))
@@ -351,6 +361,11 @@ static void I2C_demo(void)
     }
 
     while (slv_cb_status == 0) {
+    }
+
+    if (slv_cb_status & I2C_CB_EVENT_TRANSFER_INCOMPLETE) {
+        printf("\r\n Error: Transfer incomplete\n");
+        goto error_poweroff;
     }
 
     sys_busy_loop_us(1000);

@@ -65,6 +65,8 @@ LR_ROM __ROM_BASE __ROM_SIZE  {    ; load region size_region
     * (.rodata.usbd0_string_descriptor)
 #if __HAS_BULK_SRAM == 0
     * (.bss.lcd_frame_buf)
+    * (.bss.camera_frame_buf)
+    * (.bss.camera_frame_bayer_to_rgb_buf)
 #endif
   }
 

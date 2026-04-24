@@ -72,6 +72,8 @@ LR_ROM __ROM_BASE NOCOMPRESS __ROM_SIZE  {    ; load region size_region
     * (.driver.usbd0)
 #if __HAS_BULK_SRAM == 0
     * (.bss.lcd_frame_buf)
+    * (.bss.camera_frame_buf)
+    * (.bss.camera_frame_bayer_to_rgb_buf)
 #endif
   }
 

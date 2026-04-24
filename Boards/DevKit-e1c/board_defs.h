@@ -84,7 +84,7 @@
 #define BOARD_SLAVE_I2C_INSTANCE                        0
 
 // <o> "Camera" I2C instance number <0-3>
-#define BOARD_CAMERA_I2C_INSTANCE                       0
+#define BOARD_CAMERA_I2C_INSTANCE                       1
 
 // <o> "GT911 Touchscreen" I2C instance number <0-3>
 #define BOARD_GT911_TOUCHSCREEN_I2C_INSTANCE            1
@@ -936,24 +936,24 @@
 // <6=> PIN6 <7=> PIN7
 #define BOARD_CAMERA_POWER_GPIO_PIN                     5
 
-// <o> "I2C0_SDA_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
+// <o> "I2C1_SDA_A" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <10=> GPIO10 <11=> GPIO11 <12=> GPIO12 <13=>
 // GPIO13 <14=> GPIO14 <15=> LPGPIO
-#define BOARD_CAMERA_I2C_SDA_GPIO_PORT                  7
-// <o> "I2C0_SDA_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
+#define BOARD_CAMERA_I2C_SDA_GPIO_PORT                  1
+// <o> "I2C1_SDA_A" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
-#define BOARD_CAMERA_I2C_SDA_GPIO_PIN                   0
-// <o> "I2C0_SDA_C" GPIO pin alternate function <0-7>
+#define BOARD_CAMERA_I2C_SDA_GPIO_PIN                   4
+// <o> "I2C1_SDA_A" GPIO pin alternate function <0-7>
 #define BOARD_CAMERA_I2C_SDA_ALTERNATE_FUNCTION         4
 
-// <o> "I2C0_SDA_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
+// <o> "I2C1_SCL_A" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <10=> GPIO10 <11=> GPIO11 <12=> GPIO12 <13=>
 // GPIO13 <14=> GPIO14 <15=> LPGPIO
-#define BOARD_CAMERA_I2C_SCL_GPIO_PORT                  7
-// <o> "I2C0_SDA_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
+#define BOARD_CAMERA_I2C_SCL_GPIO_PORT                  1
+// <o> "I2C1_SCL_A" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
-#define BOARD_CAMERA_I2C_SCL_GPIO_PIN                   1
-// <o> "I2C0_SDA_C" GPIO pin alternate function <0-7>
+#define BOARD_CAMERA_I2C_SCL_GPIO_PIN                   5
+// <o> "I2C1_SCL_A" GPIO pin alternate function <0-7>
 #define BOARD_CAMERA_I2C_SCL_ALTERNATE_FUNCTION         4
 
 // <o> "LPCAM_HSYNC_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
@@ -983,22 +983,22 @@
 // <o> "LPCAM_PCLK_C" GPIO pin alternate function <0-7>
 #define BOARD_LPCAM_PCLK_ALTERNATE_FUNCTION             5
 
-// <o> "LPCAM_D0_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
+// <o> "LPCAM_D0_B" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_LPCAM_D0_GPIO_PORT                        9
-// <o> "LPCAM_D0_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
+#define BOARD_LPCAM_D0_GPIO_PORT                        7
+// <o> "LPCAM_D0_B" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
 #define BOARD_LPCAM_D0_GPIO_PIN                         0
-// <o> "LPCAM_D0_C" GPIO pin alternate function <0-7>
+// <o> "LPCAM_D0_B" GPIO pin alternate function <0-7>
 #define BOARD_LPCAM_D0_ALTERNATE_FUNCTION               5
 
-// <o> "LPCAM_D1_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
+// <o> "LPCAM_D1_B" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_LPCAM_D1_GPIO_PORT                        9
-// <o> "LPCAM_D1_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
+#define BOARD_LPCAM_D1_GPIO_PORT                        7
+// <o> "LPCAM_D1_B" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
 #define BOARD_LPCAM_D1_GPIO_PIN                         1
-// <o> "LPCAM_D1_C" GPIO pin alternate function <0-7>
+// <o> "LPCAM_D1_B" GPIO pin alternate function <0-7>
 #define BOARD_LPCAM_D1_ALTERNATE_FUNCTION               5
 
 // <o> "LPCAM_D2_B" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>

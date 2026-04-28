@@ -4,7 +4,8 @@ set (DRIVERS_INC            "${ALIF_CMSIS_DRIVER_DIR}/Include;\
                              ${ALIF_ENSEMBLE_DRIVERS_DIR}/include;\
                              ${ALIF_CMSIS_DRIVER_DIR}/Include/config;\
                              ${ALIF_COMPONENTS_DIR}/Include;\
-                             ${ALIF_DEV_SRC_DIR}/libs/isp/inc")
+                             ${ALIF_DEV_SRC_DIR}/libs/isp/inc;\
+                             ${ALIF_DEV_SRC_DIR}/libs/isp")
 
 # Setting variables for OSPI drivers
 set (OSPI_XIP_DIR                       "${ALIF_DEV_SRC_DIR}/ospi_xip")

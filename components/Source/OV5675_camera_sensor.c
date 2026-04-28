@@ -64,6 +64,17 @@
 /*Helper macro*/
 #define ARRAY_SIZE(x)                   (sizeof(x) / sizeof((x)[0]))
 
+/* ISP AE exposure registers (20-bit, stored in 1/16 row units) */
+#define OV5675_COARSE_INTEGRATION_TIME_H    0x3500
+#define OV5675_COARSE_INTEGRATION_TIME_M    0x3501
+#define OV5675_COARSE_INTEGRATION_TIME_L    0x3502
+/* AEC/AGC manual control: bit[3]=manual AEC, bit[2]=manual AGC */
+#define OV5675_AEC_MANUAL_REG               0x3503
+#define OV5675_AEC_MANUAL_BOTH              0x0C
+/* ISP AE gain registers (Q7 format: 0x0080 = 1x, 0x0780 = 15x max) */
+#define OV5675_GLOBAL_GAIN_H                0x3508
+#define OV5675_GLOBAL_GAIN_L                0x3509
+
 /**
  * @brief OV5675 Camera Sensor Register Array Structure
  *      used for Camera Configuration.
@@ -134,6 +145,54 @@ static const OV5675_REG OV5675_1296x972_10bpp[] = {
     {0x3c80, 0x08}, {0x3c83, 0xb1}, {0x3c8c, 0x10}, {0x3c8d, 0x00}, {0x3c90, 0x00}, {0x3c94, 0x00},
     {0x3c95, 0x00}, {0x3c96, 0x00}, {0x37cb, 0x09}, {0x37cc, 0x15}, {0x37cd, 0x1f}, {0x37ce, 0x1f},
 };
+
+#if (RTE_ISP_AE_MODULE)
+/**
+ * @brief Set OV5675 coarse integration time (exposure lines).
+ * @param intLine  : integration time in rows (from ISP AE).
+ */
+static int32_t OV5675_Camera_Exposure_Set(uint32_t intLine)
+{
+    /* Exposure register stores value in 1/16 row units: reg = intLine << 4. */
+    uint32_t reg_val = intLine << 4;
+    int32_t  ret;
+
+    ret = OV5675_WRITE_REG(OV5675_COARSE_INTEGRATION_TIME_H, (reg_val >> 16) & 0x0FU, 1);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+    ret = OV5675_WRITE_REG(OV5675_COARSE_INTEGRATION_TIME_M, (reg_val >> 8)  & 0xFFU, 1);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+    return OV5675_WRITE_REG(OV5675_COARSE_INTEGRATION_TIME_L,  reg_val        & 0xFFU, 1);
+}
+
+/**
+ * @brief Set OV5675 analog gain from ISP AE Q16.16 value.
+ * @param gain_q16_16 : total gain in Q16.16 format (0x10000 = 1x).
+ */
+static int32_t OV5675_Camera_Gain_Set(uint32_t gain_q16_16)
+{
+    /* OV5675 gain register 0x3508-0x3509: Q7 format (0x0080 = 1x, 0x0780 = 15x).
+     * Convert from Q16.16: reg_val = gain_q16_16 * 128 / 65536 = gain_q16_16 >> 9.
+     */
+    uint32_t reg_val = (gain_q16_16 + 0x100U) >> 9U;  /* rounded */
+    int32_t ret;
+
+    if (reg_val < 0x0080U) {
+        reg_val = 0x0080U;  /* floor: 1x */
+    }
+    if (reg_val > 0x0780U) {
+        reg_val = 0x0780U;  /* ceil:  15x */
+    }
+    ret = OV5675_WRITE_REG(OV5675_GLOBAL_GAIN_H, (reg_val >> 8) & 0xFFU, 1);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+    return OV5675_WRITE_REG(OV5675_GLOBAL_GAIN_L, reg_val & 0xFFU, 1);
+}
+#endif /* RTE_ISP_AE_MODULE */
 
 /**
  * @fn           void OV5675_Sensor_Enable_Clk_Src(void)
@@ -337,12 +396,30 @@ static int32_t OV5675_Stop(void)
  */
 static int32_t OV5675_Control(uint32_t control, uint32_t arg)
 {
-    ARG_UNUSED(arg);
+    int32_t ret;
 
+    ARG_UNUSED(arg);
     switch (control) {
     case CPI_CAMERA_SENSOR_CONFIGURE:
-        return OV5675_Bulk_Write_Reg(OV5675_1296x972_10bpp, ARRAY_SIZE(OV5675_1296x972_10bpp), 1);
-        break;
+        ret = OV5675_Bulk_Write_Reg(OV5675_1296x972_10bpp, ARRAY_SIZE(OV5675_1296x972_10bpp), 1);
+        if (ret != ARM_DRIVER_OK) {
+            return ret;
+        }
+#if (RTE_ISP_AE_MODULE)
+        /* Disable internal AEC and AGC; ISP AE module will drive exposure/gain. */
+        return OV5675_WRITE_REG(OV5675_AEC_MANUAL_REG, OV5675_AEC_MANUAL_BOTH, 1);
+#else
+        return ARM_DRIVER_OK;
+#endif
+
+#if (RTE_ISP_AE_MODULE)
+    case CPI_ISP_CAMERA_SENSOR_EXPOSURE:
+        return OV5675_Camera_Exposure_Set(arg & 0xFFFFU);
+
+    case CPI_ISP_CAMERA_SENSOR_GAIN:
+        return OV5675_Camera_Gain_Set(arg);
+#endif
+
     default:
         return ARM_DRIVER_ERROR_PARAMETER;
     }

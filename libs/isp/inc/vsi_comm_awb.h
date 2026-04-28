@@ -109,13 +109,12 @@ typedef struct vsiISP_MWB_ATTR_S {
 /** \brief   Auto WB attribute. */
 typedef struct vsiISP_AWB_ATTR_S {
     vsi_u8_t  runInterval;      /**< \brief The number of interval frames to run AWB. */
-    vsi_u8_t  speed;            /**< \brief The speed of approaching the target.
+    vsi_u16_t speed;            /**< \brief The speed of approaching the target.
                                      \n range [0 256]. */
     vsi_u8_t  tolerance;        /**< \brief The threshold range to reach target.
                                      \n range [0 100].  */
     vsi_u32_t  initColorTemp;   /**< \brief The initial color temperature. */
     ISP_AWB_CALIB_PARAM_S calibParam; /**< \brief The AWB calibration data. */
-    vsi_u8_t  reserver[256];          /**< \brief Reserve */
 } ISP_AWB_ATTR_S;
 
 /** \brief   WB attribute. */

@@ -19,10 +19,10 @@
  ******************************************************************************/
 
 #include "RTE_Components.h"
-
-#ifdef RTE_Drivers_ISP
-
 #include "RTE_Device.h"
+
+#if defined(RTE_Drivers_ISP) && defined(RTE_ISP) && (RTE_ISP == 1)
+
 #include "isp_param.h"
 
 /* ---------------------------------------------------------------------------
@@ -38,7 +38,7 @@ ISP_CALIB_DATA_S calibration_data = {
 #if (RTE_ISP_BLS_MODULE)
         .bls = {
             .enable = 1,
-            .opType = OP_TYPE_AUTO,
+            .opType = OP_TYPE_MANUAL,
             .manualAttr = {
                 .blackLevel = {64, 64, 64, 64},
             },
@@ -71,8 +71,8 @@ ISP_CALIB_DATA_S calibration_data = {
             .blockWin = {
                 .hOffs = 0,
                 .vOffs = 0,
-                .hSize = 1920,
-                .vSize = 1080,
+                .hSize = 1280,
+                .vSize = 720,
             },
         },
 #endif /* RTE_ISP_EXPM_MODULE */
@@ -98,11 +98,11 @@ ISP_CALIB_DATA_S calibration_data = {
                     .min = 1024,
                     .max = 1024,
                 },
-                .aeRunInterval = 1,
-                .aeTarget = 48,
-                .dampOver = 0x40,
-                .dampUnder = 0x40,
-                .tolerance = 1,
+                .aeRunInterval = 6,
+                .aeTarget = 100,
+                .dampOver = 0x10,
+                .dampUnder = 0x10,
+                .tolerance = 30,
                 .antiflicker = {
                     .enable = 0,
                     .flickerFreq = 100,
@@ -134,8 +134,8 @@ ISP_CALIB_DATA_S calibration_data = {
             .measRect = {
                 .hOffs = 0,
                 .vOffs = 0,
-                .hSize = 1920,
-                .vSize = 1080,
+                .hSize = 1280,
+                .vSize = 720,
             },
             .wpRange = {
                 .maxY       = 0xEB,
@@ -151,7 +151,7 @@ ISP_CALIB_DATA_S calibration_data = {
 #if (RTE_ISP_WB_MODULE)
         .wb = {
             .enable = 1,
-            .opType = OP_TYPE_AUTO,
+            .opType = OP_TYPE_MANUAL,
             .manualAttr = {
                 .wbGain = {0x100, 0x100, 0x100, 0x100},
             },
@@ -391,4 +391,4 @@ ISP_CHN_ATTR_S chan_attr = {
     },
 };
 
-#endif /* RTE_Drivers_ISP */
+#endif /* defined(RTE_Drivers_ISP) && defined(RTE_ISP) && (RTE_ISP == 1) */

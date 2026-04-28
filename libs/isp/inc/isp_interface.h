@@ -31,7 +31,7 @@
 // <i> defines if AE Module is enabled or not
 // <i> default: false
 #ifndef RTE_ISP_AE_MODULE
-#define RTE_ISP_AE_MODULE       0
+#define RTE_ISP_AE_MODULE       1
 #endif
 
 // <o> ISP Enable BLS Module

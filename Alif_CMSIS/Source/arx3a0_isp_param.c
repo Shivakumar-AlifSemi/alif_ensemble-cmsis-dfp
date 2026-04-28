@@ -19,16 +19,15 @@
  ******************************************************************************/
 
 #include "RTE_Components.h"
-
-#ifdef RTE_Drivers_ISP
-
 #include "RTE_Device.h"
+
+#if defined(RTE_Drivers_ISP) && defined(RTE_ISP) && (RTE_ISP == 1)
+
 #include "isp_param.h"
 
 /* ---------------------------------------------------------------------------
  * ISP Calibration Data - ARX3A0
- * ---------------------------------------------------------------------------
- */
+ * --------------------------------------------------------------------------- */
 ISP_CALIB_DATA_S calibration_data = {
     .modules = {
         .autoRoute = {
@@ -38,7 +37,7 @@ ISP_CALIB_DATA_S calibration_data = {
 #if (RTE_ISP_BLS_MODULE)
         .bls = {
             .enable = 1,
-            .opType = OP_TYPE_AUTO,
+            .opType = OP_TYPE_MANUAL,
             .manualAttr = {
                 .blackLevel = {64, 64, 64, 64},
             },
@@ -71,8 +70,8 @@ ISP_CALIB_DATA_S calibration_data = {
             .blockWin = {
                 .hOffs = 0,
                 .vOffs = 0,
-                .hSize = 1920,
-                .vSize = 1080,
+                .hSize = 560,
+                .vSize = 560,
             },
         },
 #endif /* RTE_ISP_EXPM_MODULE */
@@ -81,34 +80,34 @@ ISP_CALIB_DATA_S calibration_data = {
         .ae = {
             .opType = OP_TYPE_AUTO,
             .manualAttr = {
-                .intTime = 10000,
-                .again = 3072,
+                .intTime = 10165,
+                .again = 10 * 1024,
                 .dgain = 1024,
             },
             .autoAttr = {
                 .expTimeRange = {
                     .min =  100,
-                    .max =  300000,
+                    .max =  10165,
                 },
                 .againRange = {
-                    .min = 3 * 1024,
-                    .max = 1056 * 1024,
+                    .min = 1 * 1024,
+                    .max = 10 * 1024,
                 },
                 .dgainRange = {
                     .min = 1024,
-                    .max = 1024,
+                    .max = 8 * 1024,
                 },
-                .aeRunInterval = 1,
-                .aeTarget = 48,
-                .dampOver = 0x40,
-                .dampUnder = 0x40,
-                .tolerance = 1,
+                .aeRunInterval = 6,
+                .aeTarget = 100,
+                .dampOver = 0x10,
+                .dampUnder = 0x10,
+                .tolerance = 30,
                 .antiflicker = {
                     .enable = 0,
                     .flickerFreq = 100,
                 },
                 .aeMode = AE_MODE_FIX_FRAME_RATE,
-                .gainThreshold = 1024,
+                .gainThreshold = 12000,
                 .aeRoute = {
                     .totalNum = 0,
                 },
@@ -129,13 +128,13 @@ ISP_CALIB_DATA_S calibration_data = {
 
 #if (RTE_ISP_WBM_MODULE)
         .wbm = {
-            .enable   = 1,
+            .enable   = 0,
             .measMode = ISP_AWB_MEAS_MODE_RGB,
             .measRect = {
                 .hOffs = 0,
                 .vOffs = 0,
-                .hSize = 1920,
-                .vSize = 1080,
+                .hSize = 560,
+                .vSize = 560,
             },
             .wpRange = {
                 .maxY       = 0xEB,
@@ -151,13 +150,13 @@ ISP_CALIB_DATA_S calibration_data = {
 #if (RTE_ISP_WB_MODULE)
         .wb = {
             .enable = 1,
-            .opType = OP_TYPE_AUTO,
+            .opType = OP_TYPE_MANUAL,
             .manualAttr = {
                 .wbGain = {0x100, 0x100, 0x100, 0x100},
             },
             .autoAttr = {
-                .runInterval = 1,
-                .speed = 64,
+                .runInterval = 18,
+                .speed = 4,
                 .tolerance = 1,
                 .initColorTemp = 5000,
                 .calibParam = {
@@ -284,7 +283,7 @@ ISP_CALIB_DATA_S calibration_data = {
 
 #if (RTE_ISP_CCM_MODULE)
         .ccm = {
-            .opType = OP_TYPE_AUTO,
+            .opType = OP_TYPE_MANUAL,
             .manualAttr = {
                 .colorMatrix = {
                     0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80
@@ -345,8 +344,7 @@ ISP_CALIB_DATA_S calibration_data = {
 /* ---------------------------------------------------------------------------
  * ISP Port Attribute - ARX3A0
  * Native resolution: 560x560 (square mode)
- * ---------------------------------------------------------------------------
- */
+ * --------------------------------------------------------------------------- */
 ISP_PORT_ATTR_S port_attr = {
     .ispInputType = INPUT_TYPE_SENSOR,
     .ispMode      = ISP_MODE_RAW,
@@ -380,8 +378,7 @@ ISP_PORT_ATTR_S port_attr = {
 
 /* ---------------------------------------------------------------------------
  * ISP Channel Attribute - ARX3A0
- * ---------------------------------------------------------------------------
- */
+ * --------------------------------------------------------------------------- */
 ISP_CHN_ATTR_S chan_attr = {
     .transBus = TRANS_BUS_ONLINE,
     .chnFormat = {
@@ -391,4 +388,4 @@ ISP_CHN_ATTR_S chan_attr = {
     },
 };
 
-#endif /* RTE_Drivers_ISP */
+#endif /* defined(RTE_Drivers_ISP) && defined(RTE_ISP) && (RTE_ISP == 1) */

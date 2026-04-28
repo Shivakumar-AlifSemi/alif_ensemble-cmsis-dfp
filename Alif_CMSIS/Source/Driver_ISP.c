@@ -35,8 +35,16 @@
 #include "vsios_type.h"
 #include "isp.h"
 
+#include "mpi_isp.h"
 #include "mpi_isp_calib.h"
 #include "vsi_comm_awb.h"
+#include "vsios_log.h"
+
+#if (RTE_ISP_AE_MODULE)
+#include "vsi_comm_ae.h"
+#include "vsi_comm_sns.h"
+#include "sensor_attributes.h"
+#endif /* RTE_ISP_AE_MODULE */
 
 /* CMSIS ISP driver Includes */
 #include "Driver_ISP.h"
@@ -49,6 +57,10 @@ extern void VSI_ISP_IrqProcessFrameEnd(ISP_PORT IspPort);
 extern ISP_AWB_FUNC_S vsiAwbAlgo;
 #endif /* RTE_ISP_WB_MODULE */
 
+#if (RTE_ISP_AE_MODULE)
+extern ISP_AE_FUNC_S vsiAeAlgo;
+#endif /* RTE_ISP_AE_MODULE */
+
 #define ARM_ISP_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(0, 1) /* driver version */
 
 /* Driver Version */
@@ -56,22 +68,115 @@ static const ARM_DRIVER_VERSION DriverVersion = { ARM_ISP_API_VERSION, ARM_ISP_D
 
 /* Driver Capabilities */
 static const ARM_ISP_CAPABILITIES DriverCapabilities = {
-    0, /* AE is not supported,
-        * In this mode, ISP can do Auto-Exposure control.
-        */
-    0, /* BLS */
+    1, /* AE supported */
+    1, /* BLS */
     1, /* Demosaic */
-    0, /* Filter */
-    0, /* CCM */
-    0, /* CSM */
+    1, /* Filter */
+    1, /* CCM */
+    1, /* CSM */
     1, /* White Balancing */
-    0, /* ae_stat - Auto-Exposure Statistics */
-    0, /* Gamma-out */
+    1, /* ae_stat - Auto-Exposure Statistics */
+    1, /* Gamma-out */
     1, /* wb_stat - White-Balancing Statistics */
-    0, /* Binning */
+    1, /* Binning */
     1, /* Scaling */
     0  /* Reserved (must be zero) */
 };
+
+#define LIB_LOG_LEVEL VSI_LOG_LEVEL_INFO
+
+static int log_level(void)
+{
+    return LIB_LOG_LEVEL;
+}
+
+#if (RTE_ISP_AE_MODULE)
+/* Cached sensor values for AE - written in ISR context, read in thread context.
+ * All fields are written only from ISP_IRQHandler; readers must hold a
+ * critical section (PRIMASK) while snapshotting.
+ */
+static struct {
+    uint32_t intLine;
+    uint32_t again;
+    uint32_t dgain;
+} ae_sensor_cache = {0};
+
+/*
+ * AE Sensor Function Callbacks - bridge ISP AE algorithm to CMSIS sensor driver
+ */
+
+static int AE_GetDefaults(ISP_PORT IspPort, AE_SNS_DEFAULT_S *pAeSnsDft)
+{
+    (void)IspPort;
+    if (!pAeSnsDft) {
+        return -1;
+    }
+    *pAeSnsDft = sensor_attributes;
+    pAeSnsDft->linesPer500ms =
+        pAeSnsDft->fullLines * pAeSnsDft->fps / (2 * ISP_SNS_FPS_ACCU);
+    return 0;
+}
+
+static int AE_IntTimeUpdate(ISP_PORT IspPort, vsi_u32_t *pIntLine)
+{
+    (void)IspPort;
+    if (!pIntLine) {
+        return -1;
+    }
+
+    ae_sensor_cache.intLine = *pIntLine;
+    return 0;
+}
+
+static int AE_GainUpdate(ISP_PORT IspPort, vsi_u32_t *pAgain, vsi_u32_t *pDgain)
+{
+    (void)IspPort;
+    if (!pAgain || !pDgain) {
+        return -1;
+    }
+
+    ae_sensor_cache.again = *pAgain;
+    ae_sensor_cache.dgain = *pDgain;
+    return 0;
+}
+
+
+static int AE_QueryExpInfo(ISP_PORT IspPort, vsi_u32_t *pIntLine,
+                           vsi_u32_t *pAgain, vsi_u32_t *pDgain)
+{
+    (void)IspPort;
+    if (!pIntLine || !pAgain || !pDgain) {
+        return -1;
+    }
+    *pIntLine = ae_sensor_cache.intLine;
+    *pAgain = ae_sensor_cache.again;
+    *pDgain = ae_sensor_cache.dgain;
+    return 0;
+}
+
+/*
+ * Public API functions for application
+ */
+
+int ISP_Sensor_AEGetCachedValues(uint32_t *pIntLine, uint32_t *pAgain, uint32_t *pDgain)
+{
+    uint32_t primask;
+
+    if (!pIntLine || !pAgain || !pDgain) {
+        return -1;
+    }
+    primask = __get_PRIMASK();
+    __disable_irq();
+    *pIntLine = ae_sensor_cache.intLine;
+    *pAgain   = ae_sensor_cache.again;
+    *pDgain   = ae_sensor_cache.dgain;
+    __set_PRIMASK(primask);
+    return 0;
+}
+
+#endif /* RTE_ISP_AE_MODULE */
+
+
 
 /*
  * fn        ARM_DRIVER_VERSION ISP_GetVersion(void)
@@ -119,6 +224,9 @@ static int32_t ISP_Init(ARM_ISP_SignalEvent_t cb_event, CAMERA_SENSOR_DEVICE *ca
     isp->cb_event = cb_event;
     isp->state.streaming = 0;
 
+    /* Pass a print function instead of NULL to enable ISP log output. */
+    VsiLogLevelSet(&log_level, NULL);
+
     /* Init ISP system. */
     ret           = VSI_MPI_ISP_Init(isp->isp_dev_id);
     if (ret) {
@@ -128,6 +236,11 @@ static int32_t ISP_Init(ARM_ISP_SignalEvent_t cb_event, CAMERA_SENSOR_DEVICE *ca
     /* Configure ISP work-mode. */
     devAttr.ispWorkMode = WORK_MODE_NORMAL;
     ret                 = VSI_MPI_ISP_SetDevAttr(isp->isp_dev_id, &devAttr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+
+    ret = VSI_MPI_ISP_SetCalib(isp->isp_port_id, isp->isp_calib_info);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
@@ -143,10 +256,30 @@ static int32_t ISP_Init(ARM_ISP_SignalEvent_t cb_event, CAMERA_SENSOR_DEVICE *ca
     }
 #endif /* RTE_ISP_WB_MODULE */
 
-    ret = VSI_MPI_ISP_SetCalib(isp->isp_port_id, isp->isp_calib_info);
-    if (ret) {
-        return ARM_DRIVER_ERROR;
+#if (RTE_ISP_AE_MODULE)
+    /* Register AE sensor function table */
+    {
+        AE_SNS_FUNC_S aeSnsFunc = {0};
+
+        aeSnsFunc.pfnGetAeDefault  = AE_GetDefaults;
+        aeSnsFunc.pfnIntTimeUpdate = AE_IntTimeUpdate;
+        aeSnsFunc.pfnGainUpdate    = AE_GainUpdate;
+        aeSnsFunc.pfnQueryExpInfo  = AE_QueryExpInfo;
+
+        ret = VSI_MPI_ISP_InitAeSnsFunc(isp->isp_port_id, &aeSnsFunc);
+        if (ret) {
+            return ARM_DRIVER_ERROR;
+        }
     }
+
+    /* Register AE algorithm if auto mode */
+    if (isp->isp_calib_info->modules.ae.opType == OP_TYPE_AUTO) {
+        ret = VSI_MPI_ISP_AeRegCallBack(isp->isp_port_id, &vsiAeAlgo);
+        if (ret) {
+            return ARM_DRIVER_ERROR;
+        }
+    }
+#endif /* RTE_ISP_AE_MODULE */
 
     ret = VSI_MPI_ISP_GetPortAttr(isp->isp_port_id, &isp_port_config);
     if (ret) {
@@ -186,6 +319,11 @@ static int32_t ISP_Init(ARM_ISP_SignalEvent_t cb_event, CAMERA_SENSOR_DEVICE *ca
     isp_port_config.snsFps             = 0;
 
     ret = VSI_MPI_ISP_SetPortAttr(isp->isp_port_id, &isp_port_config);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+
+    ret = VSI_MPI_ISP_SetCalib(isp->isp_port_id, isp->isp_calib_info);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
@@ -236,6 +374,13 @@ static int32_t ISP_Uninit(ISP_RESOURCES *isp)
         return ARM_DRIVER_ERROR;
     }
 #endif /* RTE_ISP_WB_MODULE */
+
+#if (RTE_ISP_AE_MODULE)
+    ret = VSI_MPI_ISP_AeUnRegCallBack(isp->isp_port_id);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+#endif /* RTE_ISP_AE_MODULE */
 
     ret = VSI_MPI_ISP_Exit(isp->isp_dev_id);
     if (ret) {
@@ -324,12 +469,12 @@ static int32_t ISP_start(ISP_RESOURCES *isp)
         return ARM_DRIVER_ERROR;
     }
 
-    ret = VSI_MPI_ISP_EnablePort(isp->isp_port_id);
+    ret = VSI_MPI_ISP_EnableChn(isp->isp_chn_id);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
 
-    ret = VSI_MPI_ISP_EnableChn(isp->isp_chn_id);
+    ret = VSI_MPI_ISP_EnablePort(isp->isp_port_id);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
@@ -352,12 +497,12 @@ static int32_t ISP_stop(ISP_RESOURCES *isp)
     }
 
     // Library call to stop capture using ISP library
-    ret = VSI_MPI_ISP_DisableChn(isp->isp_chn_id);
+    ret = VSI_MPI_ISP_DisablePort(isp->isp_port_id);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
 
-    ret = VSI_MPI_ISP_DisablePort(isp->isp_port_id);
+    ret = VSI_MPI_ISP_DisableChn(isp->isp_chn_id);
     if (ret) {
         return ARM_DRIVER_ERROR;
     }
@@ -428,6 +573,18 @@ ISP_RESOURCES ISP_RES = {
     },
     .state = {0},
 };
+
+#if (RTE_ISP_AE_MODULE)
+int ISP_Sensor_AEIsStable(void)
+{
+    ISP_EXPOSURE_INFO_S info = {0};
+    int ret = VSI_MPI_ISP_QueryExposureInfo(ISP_RES.isp_port_id, &info);
+    if (ret) {
+        return -1;
+    }
+    return (int)info.isStable;
+}
+#endif /* RTE_ISP_AE_MODULE */
 
 /*
  * fn        int32_t ISP_Initialize (ARM_ISP_SignalEvent_t cb_event)

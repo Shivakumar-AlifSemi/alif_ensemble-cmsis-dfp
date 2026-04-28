@@ -2841,6 +2841,7 @@
       </RTE_Components_h>
       <files>
         <file category="include" name="libs/isp/inc/"/>
+        <file category="include" name="libs/isp/"/>
         <file category="header" name="Alif_CMSIS/Include/Driver_ISP.h"/>
         <file category="header" name="Alif_CMSIS/Source/Driver_ISP_Private.h"/>
         <file category="source" name="Alif_CMSIS/Source/Driver_ISP.c"/>

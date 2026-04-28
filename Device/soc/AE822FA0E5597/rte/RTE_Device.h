@@ -503,6 +503,7 @@
 // <i> Default: MT9M114 sensor resolution (1280). Change for different sensors.
 #define RTE_ISP_SENSOR_INPUT_WIDTH  RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH
 
+
 // <o> ISP Sensor Input Height
 // <i> Height in pixels of the sensor input to the ISP pipeline.
 // <i> Default: MT9M114 sensor resolution (720). Change for different sensors.

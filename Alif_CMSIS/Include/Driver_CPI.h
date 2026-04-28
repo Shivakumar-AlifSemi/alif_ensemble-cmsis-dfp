@@ -41,6 +41,15 @@ extern "C" {
 #define CPI_CAMERA_SENSOR_AE_TARGET_LUMA                                                           \
     (0x07UL)  ///< CAMERA SENSOR AE Tagret LUMA; arg: Value for target luminance
 
+/* ISP AE: set sensor exposure (integration lines) */
+#define CPI_ISP_CAMERA_SENSOR_EXPOSURE  (0x08UL)
+
+/* ISP AE: set sensor gain; arg is Q16.16 total gain (0x10000 = 1.0x),
+ * computed as (aGain_q10 * dGain_q10) / 16.
+ */
+#define CPI_ISP_CAMERA_SENSOR_GAIN     (0x09UL)
+
+
 /****** CPI Events *****/
 #define ARM_CPI_EVENT_CAMERA_CAPTURE_STOPPED (1UL << 0)  ///< Camera Capture Stopped
 #define ARM_CPI_EVENT_CAMERA_FRAME_HSYNC_DETECTED                                                  \

@@ -107,6 +107,7 @@ typedef struct vsiISP_EXPOSURE_INFO_S {
     vsi_u32_t iso;                       /**< \brief The ISO. the larger the value,
                                                 the more sensitive to light.*/
     vsi_u32_t ratio[HDR_FRAME_MAX - 1]; /**< \brief Not currently supported. */
+    vsi_bool_t isStable;                /* @brief AE has converged. */
 } ISP_EXPOSURE_INFO_S;
 
 /** \brief   AE parameters. */

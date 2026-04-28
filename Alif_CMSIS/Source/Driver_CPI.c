@@ -739,6 +739,10 @@ static int32_t CPIx_Control(CPI_RESOURCES *CPI_RES,
     case CPI_CAMERA_SENSOR_GAIN:
     case CPI_CAMERA_SENSOR_AE:
     case CPI_CAMERA_SENSOR_AE_TARGET_LUMA:
+#if (RTE_ISP_AE_MODULE)
+    case CPI_ISP_CAMERA_SENSOR_EXPOSURE:
+    case CPI_ISP_CAMERA_SENSOR_GAIN:
+#endif
         {
             /*Camera sensor controls*/
             ret = camera_sensor->ops->Control(control, arg);

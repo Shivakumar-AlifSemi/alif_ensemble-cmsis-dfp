@@ -155,6 +155,18 @@ typedef struct _ARM_DRIVER_ISP {
     int32_t (*Control)(uint32_t control, uint32_t arg);
 } const ARM_DRIVER_ISP;
 
+#if (RTE_ISP_AE_MODULE)
+/**
+ * @brief Get cached AE sensor values (snapshot protected by critical section)
+ *
+ * @param pIntLine Pointer to store integration line value
+ * @param pAgain   Pointer to store analog gain value (Q10 format)
+ * @param pDgain   Pointer to store digital gain value (Q10 format)
+ * @return 0 on success, -1 on invalid argument
+ */
+int ISP_Sensor_AEGetCachedValues(uint32_t *pIntLine, uint32_t *pAgain, uint32_t *pDgain);
+#endif /* RTE_ISP_AE_MODULE */
+
 #ifdef __cplusplus
 }
 #endif

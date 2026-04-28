@@ -73,6 +73,9 @@
 // <o> Select MIPI display by default
 #define BOARD_CONFIGURE_LVDS_MUX             1
 
+// <o> Camera video stream enable flag
+#define BOARD_CAMERA_HAS_STREAM_BIT_ENABLED  1
+
 // <e> ETH module enabled flag
 #define BOARD_ETH_ENABLED                    1
 // <e> "RTL8201" on ETH presence flag

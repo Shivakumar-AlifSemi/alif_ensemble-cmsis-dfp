@@ -40,14 +40,14 @@
 //     <1=> enable
 // <i> Defines CPI AXI port
 // <i> Default: AXI port enable
-#define RTE_CPI_AXI_PORT                                      1
+#define RTE_CPI_AXI_PORT                                      0
 
 // <o> Select CPI ISP port
 //     <0=> disable
 //     <1=> enable
 // <i> Defines CPI ISP port
 // <i> Default: ISP port disable
-#define RTE_CPI_ISP_PORT                                      0
+#define RTE_CPI_ISP_PORT                                      1
 
 // <o> CPI Row roundup
 //     <0=> disable
@@ -352,6 +352,180 @@
 
 #endif
 // </e> LPCPI (Camera) [Driver_LPCPI]
+
+// <e> ISP (ISP) [Driver_ISP]
+// <i> Configuration settings for Driver_ISP in component ::Drivers:ISP
+#define RTE_ISP 1
+#if RTE_ISP
+
+// <o> ISP IRQ priority <0-255>
+// <i> Defines Interrupt priority for ISP.
+// <i> Default: 0
+#define RTE_ISP_IRQ_PRIORITY                    0
+
+// <o> ISP Enable AE Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if AE Module is enabled or not
+// <i> default: false
+#define RTE_ISP_AE_MODULE 1
+
+// <o> ISP Enable BLS Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Black Level Subtraction Module is enabled or not
+// <i> default: false
+#define RTE_ISP_BLS_MODULE 1
+
+// <o> ISP Enable DMSC Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Demosaic Module is enabled or not
+// <i> default: false
+#define RTE_ISP_DMSC_MODULE 1
+
+// <o> ISP Enable FLT Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Noise/Sharpening-Filter Module is enabled or not
+// <i> default: false
+#define RTE_ISP_FLT_MODULE 1
+
+// <o> ISP Enable CCM Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Color Correction Matrix Module is enabled or not
+// <i> default: false
+#define RTE_ISP_CCM_MODULE 1
+
+// <o> ISP Enable CSM Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Color Space Conversion Module is enabled or not
+// <i> default: false
+#define RTE_ISP_CSM_MODULE 1
+
+// <o> ISP Enable WB Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if White Balancing Module is enabled or not
+// <i> default: false
+#define RTE_ISP_WB_MODULE 1
+
+// <o> ISP Enable EXPM Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Auto-Exposure Statistics Module is enabled or not
+// <i> default: false
+#define RTE_ISP_EXPM_MODULE 1
+
+// <o> ISP Enable Gamma-out Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Gamma-out Module is enabled or not
+// <i> default: false
+#define RTE_ISP_GAMMAOUT_MODULE 1
+
+// <o> ISP Enable WBM Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if White-Balancing Statistics Module is enabled or not
+// <i> default: false
+#define RTE_ISP_WBM_MODULE 1
+
+// <o> ISP Enable Binning Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if Binning Module is enabled or not
+// <i> default: false
+#define RTE_ISP_BINNING_MODULE 1
+
+// <o> ISP Enable Scaling Module
+//     <0=> disable
+//     <1=> enable
+// <i> defines if scaling Module is enabled or not
+// <i> default: true
+#define RTE_ISP_SCALAR_MODULE 1
+
+// <o> ISP log level
+//    <0=> NONE
+//    <1 => Logs all fatal errors.
+//    <2=> Logs all warnings.
+//    <3=> Logs all informational messages.
+//    <4=> Logs all debug messages.
+//    <5=> Log level verbose
+// <i> Defines ISP logging level
+#define RTE_ISP_LOG_LEVEL 5
+
+// <o> ISP Buffer Count <2-8>
+// <i> Number of video buffers for ISP
+#define RTE_ISP_BUFFER_COUNT 1
+
+// <o> ISP Output Format
+//    <20=> RAW8 (8-bit raw)
+//    <21=> RAW10 (10-bit raw)
+//    <22=> RAW12 (12-bit raw)
+//    <23=> NV12 (YUV420 semi-planar)
+//    <25=> NV16 (YUV422 semi-planar)
+//    <30=> YUV422P (YUV422 planar)
+//    <31=> YUV420P (YUV420 planar)
+//    <32=> YUYV (YUV422 packed)
+//    <37=> YUV400 (Grayscale)
+//    <38=> RGB888 (RGB interleaved)
+//    <39=> RGB888P (RGB planar)
+//    <40=> RAW420SP (RAW420 semi-planar)
+//    <41=> RAW422SP (RAW422 semi-planar)
+// <i> Defines ISP output pixel format for memory dump
+// <i> Default: RGB888
+#define RTE_ISP_OUTPUT_FORMAT 32
+
+// <o> ISP Scaler Output Width
+// <i> Width in pixels of the ISP scaler output (after scaling from sensor dimensions).
+#define RTE_ISP_OUTPUT_WIDTH        480
+
+// <o> ISP Scaler Output Height
+// <i> Height in pixels of the ISP scaler output (after scaling from sensor dimensions).
+#define RTE_ISP_OUTPUT_HEIGHT       480
+
+// <o> ISP Sensor Input Width
+// <i> Width in pixels of the sensor input to the ISP pipeline.
+// <i> Default: MT9M114 sensor resolution (1280). Change for different sensors.
+#define RTE_ISP_SENSOR_INPUT_WIDTH     RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH
+//#define RTE_ISP_SENSOR_INPUT_WIDTH     RTE_ARX3A0_CAMERA_SENSOR_FRAME_WIDTH
+//#define RTE_ISP_SENSOR_INPUT_WIDTH       RTE_OV5675_CAMERA_SENSOR_FRAME_WIDTH
+
+// <o> ISP Sensor Input Height
+// <i> Height in pixels of the sensor input to the ISP pipeline.
+// <i> Default: MT9M114 sensor resolution (720). Change for different sensors.
+#define RTE_ISP_SENSOR_INPUT_HEIGHT    RTE_MT9M114_CAMERA_SENSOR_FRAME_HEIGHT
+//#define RTE_ISP_SENSOR_INPUT_HEIGHT    RTE_ARX3A0_CAMERA_SENSOR_FRAME_HEIGHT
+//#define RTE_ISP_SENSOR_INPUT_HEIGHT      RTE_OV5675_CAMERA_SENSOR_FRAME_HEIGHT
+
+// <o> ISP Crop Top offset <0-4095>
+// <i> Top offset in pixels for the cropped output window
+#define RTE_ISP_CROP_TOP    0
+
+// <o> ISP Crop Left offset <0-4095>
+// <i> Left offset in pixels for the cropped output window
+#define RTE_ISP_CROP_LEFT   0
+
+
+// <o> ISP Crop Width <1-4095>
+// <i> Width in pixels of the cropped output window.
+// <i> Default: full sensor input (no crop). Override with smaller value to crop.
+#define RTE_ISP_CROP_WIDTH  RTE_ISP_SENSOR_INPUT_WIDTH
+
+
+
+// <o> ISP Crop Height <1-4095>
+// <i> Height in pixels of the cropped output window.
+// <i> Default: full sensor input (no crop). Override with smaller value to crop.
+#define RTE_ISP_CROP_HEIGHT RTE_ISP_SENSOR_INPUT_HEIGHT
+
+
+
+#endif
+// </e> ISP (ISP) [Driver_ISP]
 
 // <e> MIPI_CSI2 (mipi csi2) [Driver_MIPI_CSI2]
 // <i> Configuration settings for Driver_MIPI_CSI2 in component ::Drivers:MIPI_CSI2
@@ -959,6 +1133,14 @@
 // <i> Default: 1
 #define RTE_MT9M114_CAMERA_SENSOR_MIPI_I2C_INSTANCE            1
 
+// <o> MT9M114 sensor frame width for ISP / CSI2 pipeline
+// <i> Width in pixels of the MT9M114 MIPI sensor frame
+#define RTE_MT9M114_CAMERA_SENSOR_FRAME_WIDTH  1280
+
+// <o> MT9M114 sensor frame height for ISP / CSI2 pipeline
+// <i> Height in pixels of the MT9M114 MIPI sensor frame
+#define RTE_MT9M114_CAMERA_SENSOR_FRAME_HEIGHT 720
+
 #endif
 // </e> MT9M114_MIPI [Driver_MT9M114_MIPI]
 
@@ -1233,6 +1415,12 @@
 //     <I3C=> I2C OVER I3C
 // <i> Default: 1
 #define RTE_OV5675_CAMERA_SENSOR_I2C_INSTANCE            1
+
+
+// <o> Select camera sensor OV5675 CSI clock source division [Divisor] <2-511>
+// <i> Defines camera sensor OV5675 CSI clock source division
+// <i> Default: 20
+#define RTE_OV5675_CAMERA_SENSOR_MIPI_CSI_CLK_SCR_DIV    20
 
 #endif
 // </e> OV5675_MIPI [Driver_OV5675_MIPI]

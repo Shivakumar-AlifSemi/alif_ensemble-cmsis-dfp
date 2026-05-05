@@ -2069,7 +2069,7 @@ static void test_single_power_setting(char *p_test_name, uint32_t services_handl
     // Restore the original setting
     error_code = SERVICES_power_setting_configure(services_handle,
                                                   setting,
-                                                  &orig_val,
+                                                  orig_val,
                                                   &service_error_code);
     PRINT_TEST_RESULT;
  TEST_print(services_handle, "Restore original %s\n", p_setting_name);

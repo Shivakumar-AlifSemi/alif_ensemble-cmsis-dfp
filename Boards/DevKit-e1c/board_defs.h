@@ -54,34 +54,34 @@
 #define BOARD_CMPD_CMP_INSTANCE                         3
 
 // <e> CSI module enabled flag
-#define BOARD_CSI_ENABLED                               1
+#define BOARD_CSI_ENABLED                               0
 // <e> "ARX3A0" on CSI presence flag
-#define BOARD_CSI_ARX3A0_PRESENT                        1
+#define BOARD_CSI_ARX3A0_PRESENT                        0
 // </e>
 // <e> "AR0144" on CSI presence flag
-#define BOARD_CSI_AR0144_PRESENT                        1
+#define BOARD_CSI_AR0144_PRESENT                        0
 // </e>
 // </e>
 
 // <e> DSI module enabled flag
 #define BOARD_DSI_ENABLED                               1
 // <e> "ILI9806" on DSI presence flag
-#define BOARD_DSI_ILI9806_PRESENT                       1
+#define BOARD_DSI_ILI9806_PRESENT                       0
 // </e>
 // </e>
 
 // <e> ETH module enabled flag
-#define BOARD_ETH_ENABLED                               1
+#define BOARD_ETH_ENABLED                               0
 // <e> "RTL8201" on ETH presence flag
-#define BOARD_ETH_RTL8201_PRESENT                       1
+#define BOARD_ETH_RTL8201_PRESENT                       0
 // </e>
 // </e>
 
 // <o> "Clickboard" I2C instance number <0-3>
-#define BOARD_CLICKBOARD_I2C_INSTANCE                   0
+#define BOARD_CLICKBOARD_I2C_INSTANCE                   1
 
 // <o> "Slave" I2C instance number <0-3>
-#define BOARD_SLAVE_I2C_INSTANCE                        0
+#define BOARD_SLAVE_I2C_INSTANCE                        1
 
 // <o> "Camera" I2C instance number <0-3>
 #define BOARD_CAMERA_I2C_INSTANCE                       1
@@ -159,6 +159,10 @@
 // <e> "PDM MIC" on PDM presence flag
 #define BOARD_PDM_PDM_MIC_PRESENT                       1
 // </e>
+// </e>
+
+// <e> "I2S MIC" on I2S presence flag
+#define BOARD_I2S_MIC_PRESENT                           0
 // </e>
 
 // <o> "Encoder" UTIMER instance number <12-15>

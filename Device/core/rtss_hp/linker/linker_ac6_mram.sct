@@ -59,11 +59,6 @@ LR_ROM __ROM_BASE NOCOMPRESS __ROM_SIZE  {    ; load region size_region
    .ANY (+RW +ZI)
   }
 
-  MRAM_USER  APP_MRAM_USER_BASE  APP_MRAM_USER_SIZE  {
-   * (.mram_user)
-   * (.mram_user_bss)
-  }
-
   NS_REGION_0  (AlignExpr(+0, TGU_BLOCK_SIZE)) { ; Non secure region 0
     * (eth_buf)
     * (usb_dma_buf)
@@ -84,6 +79,11 @@ LR_ROM __ROM_BASE NOCOMPRESS __ROM_SIZE  {    ; load region size_region
   }
 
   ARM_LIB_STACK __STACK_TOP EMPTY -__STACK_SIZE {   ; Reserve empty region for stack
+  }
+
+  MRAM_USER  APP_MRAM_USER_BASE  APP_MRAM_USER_SIZE  {
+   * (.mram_user)
+   * (.mram_user_bss)
   }
 
 #if (SRAM0_SRAM1_COMBINED == 1)

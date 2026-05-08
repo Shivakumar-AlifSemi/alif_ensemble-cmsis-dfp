@@ -54,26 +54,26 @@
 #define BOARD_CMPD_CMP_INSTANCE                         3
 
 // <e> CSI module enabled flag
-#define BOARD_CSI_ENABLED                               1
+#define BOARD_CSI_ENABLED                               0
 // <e> "ARX3A0" on CSI presence flag
-#define BOARD_CSI_ARX3A0_PRESENT                        1
+#define BOARD_CSI_ARX3A0_PRESENT                        0
 // </e>
 // <e> "AR0144" on CSI presence flag
-#define BOARD_CSI_AR0144_PRESENT                        1
+#define BOARD_CSI_AR0144_PRESENT                        0
 // </e>
 // </e>
 
 // <e> DSI module enabled flag
-#define BOARD_DSI_ENABLED                               1
+#define BOARD_DSI_ENABLED                               0
 // <e> "ILI9806" on DSI presence flag
-#define BOARD_DSI_ILI9806_PRESENT                       1
+#define BOARD_DSI_ILI9806_PRESENT                       0
 // </e>
 // </e>
 
 // <e> ETH module enabled flag
-#define BOARD_ETH_ENABLED                               1
+#define BOARD_ETH_ENABLED                               0
 // <e> "RTL8201" on ETH presence flag
-#define BOARD_ETH_RTL8201_PRESENT                       1
+#define BOARD_ETH_RTL8201_PRESENT                       0
 // </e>
 // </e>
 
@@ -117,7 +117,7 @@
 #define BOARD_I3C_FLEXIO_PRESENT                        0
 
 // <e> "ICM42670 IMU" on I3C presence flag
-#define BOARD_I3C_ICM42670_IMU_PRESENT                  1
+#define BOARD_I3C_ICM42670_IMU_PRESENT                  0
 // </e>
 // <e> "BMI323 IMU" on I3C presence flag
 #define BOARD_I3C_BMI323_IMU_PRESENT                    1
@@ -257,7 +257,7 @@
 
 // <o> Onboard Push-buttons
 // <i> Sets the #define BOARD_BUTTON_COUNT in the board_def.h file exported from the Conductor tool.
-#define BOARD_BUTTON_COUNT                              5
+#define BOARD_BUTTON_COUNT                              1
 
 // <o> Onboard Config Switches or Jumpers
 // <i> Sets the #define BOARD_CONFIG_JUMPER_COUNT in the board_def.h file exported from the
@@ -1091,21 +1091,21 @@
 
 // <o> "I2C0_SDA_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_I2C0_SDA_GPIO_PORT                        7
+#define BOARD_I2C0_SDA_GPIO_PORT                        2
 // <o> "I2C0_SDA_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
-#define BOARD_I2C0_SDA_GPIO_PIN                         0
+#define BOARD_I2C0_SDA_GPIO_PIN                         5
 // <o> "I2C0_SDA_C" GPIO pin alternate function <0-7>
-#define BOARD_I2C0_SDA_ALTERNATE_FUNCTION               4
+#define BOARD_I2C0_SDA_ALTERNATE_FUNCTION               3
 
 // <o> "I2C0_SCL_C" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_I2C0_SCL_GPIO_PORT                        7
+#define BOARD_I2C0_SCL_GPIO_PORT                        2
 // <o> "I2C0_SCL_C" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5 <6=>
 // PIN6 <7=> PIN7
-#define BOARD_I2C0_SCL_GPIO_PIN                         1
+#define BOARD_I2C0_SCL_GPIO_PIN                         4
 // <o> "I2C0_SCL_C" GPIO pin alternate function <0-7>
-#define BOARD_I2C0_SCL_ALTERNATE_FUNCTION               4
+#define BOARD_I2C0_SCL_ALTERNATE_FUNCTION               3
 
 // <o> "Master" MW SPI instance number <0-3>
 #define BOARD_MW_SPI_MASTER_INSTANCE                    1
@@ -1298,7 +1298,7 @@
 
 // <o> "LPUART_RX_A" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_LPUART_RX_GPIO_PORT                       2
+#define BOARD_LPUART_RX_GPIO_PORT                       7
 // <o> "LPUART_RX_A" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5
 // <6=> PIN6 <7=> PIN7
 #define BOARD_LPUART_RX_GPIO_PIN                        0

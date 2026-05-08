@@ -1802,6 +1802,13 @@
       <accept Pname="M55_HE" Dname="AE1C1F*"/>
     </condition>
 
+    <condition id="e1c-startkit">
+      <description>Alif Semiconductor StartKit E1C device</description>
+      <require Dvendor="Alif Semiconductor:165"/>
+      <require Cclass="BSP" Cgroup="StartKit Config"  Cvariant="StartKit-e1c"/>
+      <accept Pname="M55_HE" Dname="AE1C1F*"/>
+    </condition>
+
     <condition id="E8">
       <description>Alif Semiconductor E8 device</description>
       <require Dvendor="Alif Semiconductor:165"/>
@@ -3519,6 +3526,7 @@
         <file category="header" name="libs/retarget_io/config/e8/retarget_config.h" version="2.1.0"  attr="config" condition="E8"/>
         <file category="header" name="libs/retarget_io/config/e7/retarget_config.h" version="2.1.0"  attr="config" condition="E7"/>
         <file category="header" name="libs/retarget_io/config/e1c/retarget_config.h" version="2.1.0"  attr="config" condition="E1C"/>
+        <file category="header" name="libs/retarget_io/config/startkit-e1c/retarget_config.h" version="2.1.0" attr="config" condition="e1c-startkit"/>
         <file category="source" name="libs/retarget_io/source/stdin_USART.c"/>
       </files>
     </component>
@@ -3529,6 +3537,7 @@
         <file category="header" name="libs/retarget_io/config/e8/retarget_config.h" version="2.1.0"  attr="config" condition="E8"/>
         <file category="header" name="libs/retarget_io/config/e7/retarget_config.h" version="2.1.0"  attr="config" condition="E7"/>
         <file category="header" name="libs/retarget_io/config/e1c/retarget_config.h" version="2.1.0"  attr="config" condition="E1C"/>
+        <file category="header" name="libs/retarget_io/config/startkit-e1c/retarget_config.h" version="2.1.0" attr="config" condition="e1c-startkit"/>
         <file category="source" name="libs/retarget_io/source/stdout_USART.c"/>
       </files>
     </component>
@@ -3539,6 +3548,7 @@
         <file category="header" name="libs/retarget_io/config/e8/retarget_config.h" version="2.1.0"  attr="config" condition="E8"/>
         <file category="header" name="libs/retarget_io/config/e7/retarget_config.h" version="2.1.0"  attr="config" condition="E7"/>
         <file category="header" name="libs/retarget_io/config/e1c/retarget_config.h" version="2.1.0" attr="config" condition="E1C"/>
+        <file category="header" name="libs/retarget_io/config/startkit-e1c/retarget_config.h" version="2.1.0" attr="config" condition="e1c-startkit"/>
         <file category="source" name="libs/retarget_io/source/stderr_USART.c"/>
       </files>
     </component>

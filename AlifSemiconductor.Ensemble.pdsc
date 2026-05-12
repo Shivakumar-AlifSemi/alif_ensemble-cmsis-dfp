@@ -2438,6 +2438,10 @@
         <file category="source" name="Boards/Templates/bayer2rgb/bayer2rgb.c" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/bayer2rgb/bayer.c" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
         <file category="header" name="Boards/Templates/bayer2rgb/bayer.h" attr="template" select="MT9M114 Camera Sensor FreeRTOS Demo"/>
+        <file category="source" name="Boards/Templates/FreeRTOS/demo_camera_ov5640_freertos.c" attr="template" select="OV5640 Camera Sensor FreeRTOS Demo"/>
+        <file category="source" name="Boards/Templates/bayer2rgb/bayer2rgb.c" attr="template" select="OV5640 Camera Sensor FreeRTOS Demo"/>
+        <file category="source" name="Boards/Templates/bayer2rgb/bayer.c" attr="template" select="OV5640 Camera Sensor FreeRTOS Demo"/>
+        <file category="header" name="Boards/Templates/bayer2rgb/bayer.h" attr="template" select="OV5640 Camera Sensor FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_flash_freertos.c" attr="template" select="OSPI Flash FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_hyperram_freertos.c" attr="template" select="OSPI Hyperram XIP FreeRTOS Demo" condition="E7"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_parallel_display_freertos.c" attr="template" select="Parallel Display FreeRTOS Demo"/>
@@ -2855,6 +2859,16 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/MT9M114_Camera_Sensor.c"/>
+      </files>
+    </component>
+
+    <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor OV5640" Cversion="2.2.0" condition="Camera Sensor Driver">
+      <description>CAMERA Sensor Driver for OV5640</description>
+      <RTE_Components_h> <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_CAMERA_SENSOR_OV5640           /* Driver CAMERA Sensor */
+      </RTE_Components_h>
+      <files>
+        <file category="source" name="components/Source/OV5640_Camera_Sensor.c" />
       </files>
     </component>
 

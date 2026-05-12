@@ -261,9 +261,9 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
-        <feature type="CoreOther" n="1"  name="Neural Processing Unit (NPU) Ethos-U85"/>
+        <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
+        <feature type="NPU" n="Ethos-U85" m="256MACs"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -382,9 +382,9 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
-        <feature type="CoreOther" n="1"  name="Neural Processing Unit (NPU) Ethos-U85"/>
+        <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
+        <feature type="NPU" n="Ethos-U85" m="256MACs"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -503,9 +503,9 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
-        <feature type="CoreOther" n="1"  name="Neural Processing Unit (NPU) Ethos-U85"/>
+        <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
+        <feature type="NPU" n="Ethos-U85" m="256MACs"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -659,8 +659,8 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
+        <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -772,8 +772,8 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
+        <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -926,7 +926,7 @@
         <feature type="PowerOther" n="1" name="BOR"/>
         <!--Security-->
         <feature type="CoreOther" n="1" name="Full Secure Enclave"/>
-        <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
+        <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
         <feature type="CoreOther" n="2" name="CRC Calculation Unit"/>
         <!--External Memory-->
         <feature type="ComOther" n="2" name="Cryptographic Octal SPI (OSPI)"/>
@@ -1011,7 +1011,7 @@
           <debug svd="Debug/SVD/AE302F80F55D5AE_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
           <debug svd="Debug/SVD/AE302F80F55D5AE_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="CSP" n="208" name="WLCSP Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
+          <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
           <feature type="CAN" n="1"  name="CAN-FD Controller"/>
         </device>
        <device Dname="AE302F80F5582AE">
@@ -1046,7 +1046,7 @@
           <debug svd="Debug/SVD/AE302F80F5582AE_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
           <debug svd="Debug/SVD/AE302F80F5582AE_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="CSP" n="208" name="WLCSP Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
+          <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
           <feature type="CAN" n="1"  name="CAN-FD Controller"/>
         </device>
 
@@ -1087,7 +1087,7 @@
           <debug svd="Debug/SVD/AE302F80F55D5LE_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
           <debug svd="Debug/SVD/AE302F80F55D5LE_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
+          <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
           <feature type="CAN" n="1"  name="CAN-FD Controller"/>
         </device>
 
@@ -1123,7 +1123,7 @@
           <debug svd="Debug/SVD/AE302F80F5582LE_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
           <debug svd="Debug/SVD/AE302F80F5582LE_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
+          <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
           <feature type="CAN" n="1"  name="CAN-FD Controller"/>
         </device>
 
@@ -1145,7 +1145,7 @@
           <debug svd="Debug/SVD/AE302F80C1557LE_CM55_HP_View.svd" Pname="M55_HP" __apid="0"/>
           <debug svd="Debug/SVD/AE302F80C1557LE_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HP"/>
+          <feature type="NPU" n="Ethos-U55" m="256MACs" Pname="M55_HP"/>
         </device>
 	<device Dname="AE302F40C1537LE">
 	    <!-- DebugConfig for E3(1.5MiB MRAM) -->
@@ -1253,7 +1253,7 @@
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
           <debug svd="Debug/SVD/AE101F4071542LH_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
+          <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
           <feature type="CAN" n="1" name="CAN-FD Controller"/>
           <feature type="Other" n="1" name="2D Graphics Processing Unit (GPU2D)"/>
           <feature type="GLCD" n="1" m="1280.800" name="Display Parallel Interface"/>
@@ -1348,7 +1348,7 @@
           <compile Pname="M55_HE" header="Device/core/common/include/alif.h" define="RTSS_HE"/>
           <debug svd="Debug/SVD/AE1C1F4051920PH0_CM55_HE_View.svd" Pname="M55_HE" __apid="1"/>
           <feature type="BGA" n="194" name="FBGA Package"/>
-          <feature type="CoreOther" n="1" name="Neural Processing Unit (NPU) Ethos-U55 HE"/>
+          <feature type="NPU" n="Ethos-U55" m="128MACs" Pname="M55_HE"/>
           <feature type="CAN" n="2" name="CAN-FD Controller"/>
           <feature type="Other" n="1" name="2D Graphics Processing Unit (GPU2D)"/>
           <feature type="GLCD" n="1" m="1280.800" name="Display Parallel Interface"/>

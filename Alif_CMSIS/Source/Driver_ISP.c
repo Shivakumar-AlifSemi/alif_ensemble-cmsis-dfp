@@ -216,6 +216,14 @@ static int32_t ISP_Uninit(ISP_RESOURCES *isp)
 {
     int32_t ret;
 
+    if (isp->state.streaming == 1) {
+        return ARM_DRIVER_ERROR_BUSY;
+    }
+
+    if (isp->state.powered == 1) {
+        return ARM_DRIVER_ERROR;
+    }
+
     if (isp->state.initialized == 0) {
         return ARM_DRIVER_OK;
     }
@@ -233,6 +241,7 @@ static int32_t ISP_Uninit(ISP_RESOURCES *isp)
     }
 
     isp->cb_event = NULL;
+    isp->state.initialized = 0;
 
     return ARM_DRIVER_OK;
 }
@@ -252,6 +261,10 @@ static int32_t ISP_PowerCtrl(ARM_POWER_STATE state, ISP_RESOURCES *isp)
 
     switch (state) {
     case ARM_POWER_OFF:
+        if (isp->state.streaming == 1) {
+            return ARM_DRIVER_ERROR_BUSY;
+        }
+
         if (isp->state.powered == 0) {
             return ARM_DRIVER_OK;
         }
@@ -262,6 +275,7 @@ static int32_t ISP_PowerCtrl(ARM_POWER_STATE state, ISP_RESOURCES *isp)
         NVIC_ClearPendingIRQ(ISP_IRQ_IRQn);
         NVIC_ClearPendingIRQ(ISP_MI_IRQ_IRQn);
 
+        isp->state.powered = 0;
         break;
 
     case ARM_POWER_FULL:

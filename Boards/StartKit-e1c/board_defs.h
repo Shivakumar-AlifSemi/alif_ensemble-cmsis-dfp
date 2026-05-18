@@ -1587,12 +1587,12 @@
 // <5=> PIN5 <6=> PIN6 <7=> PIN7
 #define BOARD_ICM42670_IMU_IRQ_GPIO_PIN                 1
 
-// <o> "BMI_IMU_IRQ" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
+// <o> "BMI323_IMU_IRQ" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_BMI_IMU_IRQ_GPIO_PORT                     8
-// <o> "BMI_IMU_IRQ" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5
+#define BOARD_BMI323_IMU_IRQ_GPIO_PORT                  6
+// <o> "BMI323_IMU_IRQ" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5
 // <6=> PIN6 <7=> PIN7
-#define BOARD_BMI_IMU_IRQ_GPIO_PIN                      5
+#define BOARD_BMI323_IMU_IRQ_GPIO_PIN                   6
 
 // <o> "TOUCH_INT" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO

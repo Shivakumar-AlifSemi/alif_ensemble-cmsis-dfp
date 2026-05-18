@@ -24,8 +24,8 @@
  *
  ****************************************************************************/
 
-#ifndef __MPI_ISP_WB_H__
-#define __MPI_ISP_WB_H__
+#ifndef __MPI_ISP_AE_H__
+#define __MPI_ISP_AE_H__
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -33,78 +33,130 @@ extern "C"{
 #endif
 #endif
 
-#include "vsi_comm_awb.h"
-
 /**
- * @cond WB_V10_1
+ * @cond AE_V10
  *
- * @defgroup mpi_isp_wb WB V10_1 Definitions
+ * @defgroup mpi_isp_ae AE V10 Definitions
  * @{
  *
  */
 
+#include "vsi_comm_ae.h"
+
 /*****************************************************************************/
 /**
- * @brief   Register AWB.
+ * @brief   Register AE.
  *
  * @param   IspPort             Port ID
- * @param   pAwbLib             Pointer to the AWB lib
+ * @param   pAeLib            Pointer to the AE lib
  *
  * @retval  VSI_SUCCESS         Operation succeeded
  *
  *****************************************************************************/
-int VSI_MPI_ISP_AwbRegCallBack(ISP_PORT IspPort, ISP_AWB_FUNC_S *pAwbLib);
+int VSI_MPI_ISP_AeRegCallBack(ISP_PORT IspPort, ISP_AE_FUNC_S *pAeLib);
+
 
 /*****************************************************************************/
 /**
- * @brief   Unregister AWB.
+ * @brief   Unregister AE.
  *
  * @param   IspPort             Port ID
  *
  * @retval  VSI_SUCCESS         Operation succeeded
  *
  *****************************************************************************/
-int VSI_MPI_ISP_AwbUnRegCallBack(ISP_PORT IspPort);
+int VSI_MPI_ISP_AeUnRegCallBack(ISP_PORT IspPort);
+
 
 /*****************************************************************************/
 /**
- * @brief   Gets WB attribute.
+ * @brief   Sets exposure attributes.
  *
  * @param   IspPort             Port ID
- * @param   pWbAttr           Pointer to the WB attribute
+ * @param   pExpAttr          Pointer to the exposure attributes
  *
  * @retval  VSI_SUCCESS         Operation succeeded
  *
  *****************************************************************************/
-int VSI_MPI_ISP_GetWbAttr(ISP_PORT IspPort, ISP_WB_ATTR_S *pWbAttr);
+int VSI_MPI_ISP_SetExposureAttr(ISP_PORT IspPort, ISP_EXPOSURE_ATTR_S *pExpAttr);
+
 
 /*****************************************************************************/
 /**
- * @brief   Sets WB attribute.
+ * @brief   Gets exposure attributes.
  *
  * @param   IspPort             Port ID
- * @param   pWbAttr           Pointer to the WB attribute
-
+ * @param   pExpAttr          Pointer to the exposure attributes
  *
  * @retval  VSI_SUCCESS         Operation succeeded
  *
  *****************************************************************************/
-int VSI_MPI_ISP_SetWbAttr(ISP_PORT IspPort, ISP_WB_ATTR_S *pWbAttr);
+int VSI_MPI_ISP_GetExposureAttr(ISP_PORT IspPort, ISP_EXPOSURE_ATTR_S *pExpAttr);
+
 
 /*****************************************************************************/
 /**
- * @brief   Gets AWB information.
+ * @brief   Sets HDR exposure attributes, Not currently supported.
  *
  * @param   IspPort             Port ID
- * @param   pAwbInfo            Pointer to the AWB information
+ * @param   pHdrExpAttr       Pointer to the HDR exposure attributes
  *
  * @retval  VSI_SUCCESS         Operation succeeded
  *
  *****************************************************************************/
-int VSI_MPI_ISP_QueryAwbInfo(ISP_PORT IspPort,  ISP_AWB_INFO_S *pAwbInfo);
+int VSI_MPI_ISP_SetHdrExposureAttr(ISP_PORT IspPort, ISP_HDR_EXPOSURE_ATTR_S *pHdrExpAttr);
 
-/* @} mpi_isp_wb */
-/* @endcond */
+
+/*****************************************************************************/
+/**
+ * @brief   Gets HDR exposure attributes, Not currently supported.
+ *
+ * @param   IspPort             Port ID
+ * @param   pHdrExpAttr       Pointer to the HDR exposure attributes
+ *
+ * @retval  VSI_SUCCESS         Operation succeeded
+ *
+ *****************************************************************************/
+int VSI_MPI_ISP_GetHdrExposureAttr(ISP_PORT IspPort, ISP_HDR_EXPOSURE_ATTR_S *pHdrExpAttr);
+
+
+/*****************************************************************************/
+/**
+ * @brief   Gets exposure information.
+ *
+ * @param   IspPort             Port ID
+ * @param   pExpInfo          Pointer to the exposure information
+ *
+ * @retval  VSI_SUCCESS         Operation succeeded
+ *
+ *****************************************************************************/
+int VSI_MPI_ISP_QueryExposureInfo(ISP_PORT IspPort,  ISP_EXPOSURE_INFO_S *pExpInfo);
+
+
+/*****************************************************************************/
+/**
+ * @brief   Gets sensor confiuration status.
+ *
+ * @param   IspPort             Port ID
+ *
+ * @retval  true                busy
+ * @retval  false               not busy
+ *
+ *****************************************************************************/
+vsi_bool_t VSI_MPI_ISP_SnsCfgIsBusy(ISP_PORT IspPort);
+
+
+/*****************************************************************************/
+/**
+ * @brief   Gets sensor stream status.
+ *
+ * @param   IspPort             Port ID
+ *
+ * @retval  true                stream on
+ * @retval  false               stream off
+ *
+ *****************************************************************************/
+vsi_bool_t VSI_MPI_ISP_SnsStreamStatus(ISP_PORT IspPort);
 
 #ifdef __cplusplus
 #if __cplusplus

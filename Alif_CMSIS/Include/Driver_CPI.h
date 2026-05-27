@@ -51,6 +51,7 @@ extern "C" {
 #define ARM_CPI_EVENT_ERR_CAMERA_OUTPUT_FIFO_OVERRUN (1UL << 4)  ///< Camera FIFO under run Error
 #define ARM_CPI_EVENT_ERR_HARDWARE                   (1UL << 5)  ///< Hardware Bus Error
 #define ARM_CPI_EVENT_MIPI_CSI2_ERROR                (1UL << 6)  ///< MIPI CSI2 Error
+#define ARM_CPI_VSYNC_BUF_IDX_Pos                    16U ///< Position of the completed-buffer index
 
 // Function documentation
 /**

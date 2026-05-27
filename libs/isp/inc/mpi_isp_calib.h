@@ -35,6 +35,7 @@ extern "C"{
 
 #include "vsi_comm_calib.h"
 #include "isp_interface.h"
+#include "isp_conf.h"
 
 static inline int VSI_MPI_ISP_SetCalib(ISP_PORT IspPort, ISP_CALIB_DATA_S *pCalibData)
 {

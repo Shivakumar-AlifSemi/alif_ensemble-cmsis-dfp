@@ -28,10 +28,18 @@
 #include "Camera_Sensor_i2c.h"
 
 /* Wrapper function for Delay
- * Delay for millisecond:
+ * Delay for microsecond:
  *  Provide busy loop delay
  */
-#define DELAY_mSEC(msec) sys_busy_loop_us(msec * 1000)
+#define DELAY_uSEC(usec) sys_busy_loop_us(usec)
+
+/* I2C callback polling parameters.
+ * S32K runs at 32768 Hz (1 tick = 30.51 us).
+ * I2C_POLL_DELAY_uSEC(30) -> 1 tick -> 30.5 us actual delay per iteration.
+ * I2C_POLL_MAX_ITERATIONS = 3278 -> 3278 x 30.5 us ~ 100 ms worst-case timeout.
+ */
+#define I2C_POLL_DELAY_uSEC          30U
+#define I2C_POLL_MAX_ITERATIONS      3278U
 
 /* i2c callback status macros */
 #define CB_XferDone      1
@@ -304,8 +312,8 @@ int32_t camera_sensor_i2c_write(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t re
         return ARM_DRIVER_ERROR;
     }
 
-    /* timeout in millisecond. */
-    timeout = 100;
+    /* timeout in microsecond steps. */
+    timeout = I2C_POLL_MAX_ITERATIONS;
 
     /* wait for i2c callback within timeout. */
     while (timeout--) {
@@ -314,8 +322,8 @@ int32_t camera_sensor_i2c_write(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t re
             break;
         }
 
-        /* sleep or wait for millisecond depending on RTOS availability. */
-        DELAY_mSEC(1);
+        /* busy-wait for one S32K hardware tick (~30.5 us). */
+        DELAY_uSEC(I2C_POLL_DELAY_uSEC);
     }
 
     /* i3c module failed to respond? power off and de-init i2c driver and return error. */
@@ -473,8 +481,8 @@ int32_t camera_sensor_i2c_write_burst(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint3
         return ARM_DRIVER_ERROR;
     }
 
-    /* timeout in millisecond. */
-    timeout = 100;
+    /* timeout in microsecond steps. */
+    timeout = I2C_POLL_MAX_ITERATIONS;
 
     /* wait for i2c callback within timeout. */
     while (timeout--) {
@@ -483,8 +491,8 @@ int32_t camera_sensor_i2c_write_burst(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint3
             break;
         }
 
-        /* sleep or wait for millisecond depending on RTOS availability. */
-        DELAY_mSEC(1);
+        /* busy-wait for one S32K hardware tick (~30.5 us). */
+        DELAY_uSEC(I2C_POLL_DELAY_uSEC);
     }
 
     /* i3c module failed to respond? power off and de-init i2c driver and return error. */
@@ -650,8 +658,8 @@ int32_t camera_sensor_i2c_read(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t reg
         return ARM_DRIVER_ERROR;
     }
 
-    /* timeout in millisecond. */
-    timeout = 100;
+    /* timeout in microsecond steps. */
+    timeout = I2C_POLL_MAX_ITERATIONS;
 
     /* wait for i2c callback within timeout. */
     while (timeout--) {
@@ -660,8 +668,8 @@ int32_t camera_sensor_i2c_read(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t reg
             break;
         }
 
-        /* sleep or wait for millisecond depending on RTOS availability. */
-        DELAY_mSEC(1);
+        /* busy-wait for one S32K hardware tick (~30.5 us). */
+        DELAY_uSEC(I2C_POLL_DELAY_uSEC);
     }
 
     /* i3c module failed to respond? power off and de-init i2c driver and return error. */
@@ -688,8 +696,8 @@ int32_t camera_sensor_i2c_read(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t reg
         return ARM_DRIVER_ERROR;
     }
 
-    /* timeout in millisecond. */
-    timeout = 100;
+    /* timeout in microsecond steps. */
+    timeout = I2C_POLL_MAX_ITERATIONS;
 
     /* wait for i2c callback within timeout. */
     while (timeout--) {
@@ -698,8 +706,8 @@ int32_t camera_sensor_i2c_read(CAMERA_SENSOR_SLAVE_I2C_CONFIG *i2c, uint32_t reg
             break;
         }
 
-        /* sleep or wait for millisecond depending on RTOS availability. */
-        DELAY_mSEC(1);
+        /* busy-wait for one S32K hardware tick (~30.5 us). */
+        DELAY_uSEC(I2C_POLL_DELAY_uSEC);
     }
 
     /* i3c module failed to respond? power off and de-init i2c driver and return error. */

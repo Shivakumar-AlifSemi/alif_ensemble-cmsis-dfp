@@ -41,6 +41,8 @@
 /* CMSIS ISP driver Includes */
 #include "Driver_ISP.h"
 
+#include "isp_param.h"
+
 extern void VSI_ISP_IrqProcessFrameEnd(ISP_PORT IspPort);
 
 #if (RTE_ISP_WB_MODULE)
@@ -409,9 +411,9 @@ static int32_t ISP_control(uint32_t control, uint32_t arg, ISP_RESOURCES *isp)
 static CAMERA_SENSOR_DEVICE *sensor;
 
 ISP_RESOURCES ISP_RES = {
-    .isp_calib_info = NULL,
-    .isp_port_attr  = NULL,
-    .isp_chan_attr  = NULL,
+    .isp_calib_info = &calibration_data,
+    .isp_port_attr  = &port_attr,
+    .isp_chan_attr  = &chan_attr,
     .cb_event       = NULL,
     .irq_priority   = RTE_ISP_IRQ_PRIORITY,
     .isp_dev_id     = 0,
@@ -437,27 +439,6 @@ static int32_t ISP_Initialize(ARM_ISP_SignalEvent_t cb_event)
 {
     sensor = Get_Camera_Sensor();
     return ISP_Init(cb_event, sensor, &ISP_RES);
-}
-
-/*
- * fn        int32_t ISP_SetConfig (struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr)
- * brief     Set ISP configuration from application.
- * param[in] calib_data Pointer to calibration data structure
- * param[in] port_attr  Pointer to port attribute structure
- * param[in] chan_attr  Pointer to channel attribute structure
- * return    @ref execution_status.
- */
-static int32_t ISP_SetConfig(struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr)
-{
-    if (!calib_data || !port_attr || !chan_attr) {
-        return ARM_DRIVER_ERROR_PARAMETER;
-    }
-
-    ISP_RES.isp_calib_info = calib_data;
-    ISP_RES.isp_port_attr = port_attr;
-    ISP_RES.isp_chan_attr = chan_attr;
-
-    return ARM_DRIVER_OK;
 }
 
 /*
@@ -612,7 +593,6 @@ ARM_DRIVER_ISP        Driver_ISP = {
     ISP_GetVersion,
     ISP_GetCapabilities,
     ISP_Initialize,
-    ISP_SetConfig,
     ISP_Uninitialize,
     ISP_PowerControl,
     ISP_Start,

@@ -2844,6 +2844,7 @@
         <file category="header" name="Alif_CMSIS/Include/Driver_ISP.h"/>
         <file category="header" name="Alif_CMSIS/Source/Driver_ISP_Private.h"/>
         <file category="source" name="Alif_CMSIS/Source/Driver_ISP.c"/>
+        <file category="header" name="Alif_CMSIS/Source/isp_param.h"/>
         <file category="library" name="libs/isp/libisp.a" condition="ARMCC6_HE"/>
         <file category="library" name="libs/isp/libisp.a" condition="ARMCC6_HP"/>
         <file category="library" name="libs/isp/libisp_gcc.a" condition="GCC_HE"/>
@@ -2874,6 +2875,7 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/MT9M114_Camera_Sensor.c"/>
+        <file category="source" name="Alif_CMSIS/Source/mt9m114_isp_param.c"/>
       </files>
     </component>
 
@@ -2904,6 +2906,7 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/arx3A0_camera_sensor.c"/>
+        <file category="source" name="Alif_CMSIS/Source/arx3a0_isp_param.c"/>
       </files>
     </component>
 
@@ -2954,6 +2957,7 @@
       </RTE_Components_h>
       <files>
         <file category="source" name="components/Source/OV5675_camera_sensor.c"/>
+        <file category="source" name="Alif_CMSIS/Source/ov5675_isp_param.c"/>
       </files>
     </component>
 

@@ -139,9 +139,6 @@ typedef struct _ARM_DRIVER_ISP {
     /* Pointer to @ref ISP_Initialize : Initialize ISP Interface. */
     int32_t (*Initialize)(ARM_ISP_SignalEvent_t cb_event);
 
-    /* Pointer to @ref ISP_SetConfig : Set ISP configuration from application. */
-    int32_t (*SetConfig)(struct vsiISP_CALIB_DATA_S *calib_data, struct vsiISP_PORT_ATTR_S *port_attr, struct vsiISP_CHN_ATTR_S *chan_attr);
-
     /* Pointer to @ref ISP_Uninitialize : De-initialize ISP Interface*/
     int32_t (*Uninitialize)(void);
 

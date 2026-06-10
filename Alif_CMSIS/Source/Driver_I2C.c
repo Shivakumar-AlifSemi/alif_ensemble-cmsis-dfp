@@ -17,7 +17,7 @@
 #include "Driver_I2C_Private.h"
 
 /* Driver version */
-#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 8)
+#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 9)
 
 /* Driver Version */
 static const ARM_DRIVER_VERSION DriverVersion        = {ARM_I2C_API_VERSION, ARM_I2C_DRV_VERSION};
@@ -1053,18 +1053,13 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         break;
 
     case ARM_I2C_BUS_CLEAR:
-        /* disable device, clear all the interrupt, enable device. */
-        i2c_disable(I2C->regs);
-        i2c_clear_all_interrupt(I2C->regs);
 
-        I2C->transfer.next_cond = I2C_MODE_STOP;
-        I2C->transfer.curr_stat = I2C_TRANSFER_NONE;
-        I2C->transfer.err_state = I2C_ERR_NONE;
-        I2C->transfer.abort     = false;
-        I2C->transfer.tx_over   = 0U;
-        I2C->transfer.rx_over   = 0U;
-
-        i2c_enable(I2C->regs);
+        if (I2C->mode != I2C_MASTER_MODE) {
+            return ARM_DRIVER_ERROR_PARAMETER;
+        }
+        /* Enable SDA low stuck recovery */
+        I2C->transfer.cmd_bus_clr = true;
+        i2c_master_recover_sda(I2C->regs);
 
         break;
 
@@ -1173,6 +1168,7 @@ void I2C_HandleIRQStatus(I2C_RESOURCES *I2C_RES)
     } else if (transfer->status & I2C_TRANSFER_STATUS_GENERAL_CALL) {
         I2C_RES->cb_event(ARM_I2C_EVENT_GENERAL_CALL);
     } else if (transfer->status & I2C_TRANSFER_STATUS_BUS_CLEAR) {
+        transfer->cmd_bus_clr = false;
         I2C_RES->cb_event(ARM_I2C_EVENT_BUS_CLEAR);
     } else {
 #if I2C_DMA_ENABLE

@@ -31,8 +31,9 @@ extern "C" {
 /* Disable I2C */
 #define I2C_IC_ENABLE_I2C_DISABLE            (0)
 
-/* i2c IC_ENABLE_STATUS Bits */
-#define I2C_IC_ENABLE_STATUS_IC_EN           (1 << 0)
+/* Field of IC_ENABLE_STATUS register*/
+#define I2C_ENABLE_STATUS_IC_EN              (1 << 0)
+#define I2C_IC_SDA_STUCK_RECOVERY_ENABLE     (1 << 3)
 
 /* i2c Status Register Fields. */
 #define I2C_IC_STATUS_ACTIVITY               (0x01) /* (1 << 0) */
@@ -176,9 +177,6 @@ extern "C" {
 #define I2C_IC_TAR_GC_OR_START (0x00)
 #endif
 
-/* Field of IC_ENABLE_STATUS register*/
-#define I2C_ENABLE_STATUS_IC_EN              (1 << 0)
-
 /* register configuration
  * ---------------------------------------------------------------------------------------- */
 #define I2C_IC_TAR_7BIT_ADDR_MASK            (0x7F) /* 7bit  I2C address mask for target address register  */
@@ -301,7 +299,8 @@ typedef struct i2c_transfer_info {
     volatile bool     abort;     /* i2c transfer abort */
     volatile I2C_TRANSFER_STATE curr_stat; /* \ref I2C_TRANSFER_STATE "current working state for i2c
                                               device"          */
-    volatile I2C_TRANSFER_STATUS status;  /* \ref to I2C_TRANSFER_STATUS for data transfer state  */
+    volatile bool     cmd_bus_clr;        /* user command to clear bus */
+    volatile I2C_XFER_EVENT evt_sts;  /* \ref to I2C_XFER_EVENT for data transfer event status  */
     volatile bool                wr_mode; /* write-read mode */
 } i2c_transfer_info_t;
 
@@ -331,6 +330,16 @@ static inline void i2c_disable(I2C_Type *i2c)
 
     while (i2c->I2C_ENABLE_STATUS & I2C_ENABLE_STATUS_IC_EN) {
     }
+}
+/**
+ * @brief   Recover the I2C SDA stuck at low
+ * @note    none
+ * @param   i2c : Pointer to i2c register map
+ * @retval  none
+ */
+static inline void i2c_master_recover_sda(I2C_Type *i2c)
+{
+    i2c->I2C_ENABLE |= I2C_IC_SDA_STUCK_RECOVERY_ENABLE;
 }
 
 /**

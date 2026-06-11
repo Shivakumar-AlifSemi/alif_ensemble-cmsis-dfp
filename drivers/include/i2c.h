@@ -249,12 +249,6 @@ typedef enum i2c_error_state {
     I2C_ERR_HS_NORSTRT = 10 /* No restart mode available for HigH speed mode */
 } i2c_error_state_t;
 
-/* I2C next Condition */
-typedef enum i2c_next_condtion {
-    I2C_MODE_STOP    = 0, /* Send a STOP condition after write/read operation     */
-    I2C_MODE_RESTART = 1  /* Send a RESTART condition after write/read operation  */
-} i2c_next_condtion_t;
-
 /* I2C Addressing Mode */
 typedef enum i2c_address_mode {
     I2C_7BIT_ADDRESS  = 0, /* Use 7bit address mode  */
@@ -307,9 +301,6 @@ typedef struct i2c_transfer_info {
     volatile bool     abort;     /* i2c transfer abort */
     volatile I2C_TRANSFER_STATE curr_stat; /* \ref I2C_TRANSFER_STATE "current working state for i2c
                                               device"          */
-    volatile uint32_t next_cond; /* \ref I2C_NEXT_CONDTION "next condition for master transmit or
-                                    receive", \ possible values are STOP or RESTART, it should be
-                                    STOP for first open  */
     volatile I2C_TRANSFER_STATUS status;  /* \ref to I2C_TRANSFER_STATUS for data transfer state  */
     volatile bool                wr_mode; /* write-read mode */
 } i2c_transfer_info_t;

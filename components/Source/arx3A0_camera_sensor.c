@@ -18,6 +18,7 @@
  ******************************************************************************/
 /* System Includes */
 #include "RTE_Device.h"
+#include "board_config.h"
 #include "RTE_Components.h"
 #include CMSIS_device_header
 #include "Camera_Sensor.h"
@@ -99,14 +100,14 @@ static uint32_t current_integration_time;
 static uint32_t max_integration_time;
 
 /* ARX3A0 Camera reset GPIO port */
-extern ARM_DRIVER_GPIO  ARM_Driver_GPIO_(RTE_ARX3A0_CAMERA_SENSOR_RESET_GPIO_PORT);
+extern ARM_DRIVER_GPIO  ARM_Driver_GPIO_(BOARD_CAMERA_RESET_GPIO_PORT);
 static ARM_DRIVER_GPIO *GPIO_Driver_CAM_RST =
-    &ARM_Driver_GPIO_(RTE_ARX3A0_CAMERA_SENSOR_RESET_GPIO_PORT);
+    &ARM_Driver_GPIO_(BOARD_CAMERA_RESET_GPIO_PORT);
 
 /* ARX3A0 Camera power GPIO port */
-extern ARM_DRIVER_GPIO  ARM_Driver_GPIO_(RTE_ARX3A0_CAMERA_SENSOR_POWER_GPIO_PORT);
+extern ARM_DRIVER_GPIO  ARM_Driver_GPIO_(BOARD_CAMERA_POWER_GPIO_PORT);
 static ARM_DRIVER_GPIO *GPIO_Driver_CAM_PWR =
-    &ARM_Driver_GPIO_(RTE_ARX3A0_CAMERA_SENSOR_POWER_GPIO_PORT);
+    &ARM_Driver_GPIO_(BOARD_CAMERA_POWER_GPIO_PORT);
 
 /* I2C Driver Instance */
 extern ARM_DRIVER_I2C ARM_Driver_I2C_(CAMERA_SENSOR_I2C_INSTANCE);
@@ -1442,39 +1443,39 @@ static int32_t ARX3A0_Camera_Hard_Reseten(void)
 {
     int32_t ret = 0;
 
-    ret         = GPIO_Driver_CAM_RST->Initialize(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO, NULL);
+    ret         = GPIO_Driver_CAM_RST->Initialize(BOARD_CAMERA_RESET_GPIO_PIN, NULL);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_RST->PowerControl(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO, ARM_POWER_FULL);
+    ret = GPIO_Driver_CAM_RST->PowerControl(BOARD_CAMERA_RESET_GPIO_PIN, ARM_POWER_FULL);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_RST->SetDirection(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO,
+    ret = GPIO_Driver_CAM_RST->SetDirection(BOARD_CAMERA_RESET_GPIO_PIN,
                                             GPIO_PIN_DIRECTION_OUTPUT);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->Initialize(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO, NULL);
+    ret = GPIO_Driver_CAM_PWR->Initialize(BOARD_CAMERA_POWER_GPIO_PIN, NULL);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->PowerControl(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO, ARM_POWER_FULL);
+    ret = GPIO_Driver_CAM_PWR->PowerControl(BOARD_CAMERA_POWER_GPIO_PIN, ARM_POWER_FULL);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->SetDirection(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO,
+    ret = GPIO_Driver_CAM_PWR->SetDirection(BOARD_CAMERA_POWER_GPIO_PIN,
                                             GPIO_PIN_DIRECTION_OUTPUT);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_RST->SetValue(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO,
+    ret = GPIO_Driver_CAM_RST->SetValue(BOARD_CAMERA_RESET_GPIO_PIN,
                                         GPIO_PIN_OUTPUT_STATE_LOW);
     if (ret != ARM_DRIVER_OK) {
         return ret;
@@ -1482,7 +1483,7 @@ static int32_t ARX3A0_Camera_Hard_Reseten(void)
 
     ARX3A0_DELAY_uSEC(2000);
 
-    ret = GPIO_Driver_CAM_PWR->SetValue(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO,
+    ret = GPIO_Driver_CAM_PWR->SetValue(BOARD_CAMERA_POWER_GPIO_PIN,
                                         GPIO_PIN_OUTPUT_STATE_HIGH);
     if (ret != ARM_DRIVER_OK) {
         return ret;
@@ -1490,7 +1491,7 @@ static int32_t ARX3A0_Camera_Hard_Reseten(void)
 
     ARX3A0_DELAY_uSEC(1000);
 
-    ret = GPIO_Driver_CAM_RST->SetValue(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO,
+    ret = GPIO_Driver_CAM_RST->SetValue(BOARD_CAMERA_RESET_GPIO_PIN,
                                         GPIO_PIN_OUTPUT_STATE_HIGH);
     if (ret != ARM_DRIVER_OK) {
         return ret;
@@ -1857,34 +1858,34 @@ static int32_t ARX3A0_Uninit(void)
     /*Disable camera sensor clock source config*/
     ARX3A0_Sensor_Disable_Clk_Src();
 
-    ret = GPIO_Driver_CAM_RST->SetValue(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO,
+    ret = GPIO_Driver_CAM_RST->SetValue(BOARD_CAMERA_RESET_GPIO_PIN,
                                         GPIO_PIN_OUTPUT_STATE_LOW);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_RST->PowerControl(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO, ARM_POWER_OFF);
+    ret = GPIO_Driver_CAM_RST->PowerControl(BOARD_CAMERA_RESET_GPIO_PIN, ARM_POWER_OFF);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_RST->Uninitialize(RTE_ARX3A0_CAMERA_SENSOR_RESET_PIN_NO);
+    ret = GPIO_Driver_CAM_RST->Uninitialize(BOARD_CAMERA_RESET_GPIO_PIN);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->SetValue(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO,
+    ret = GPIO_Driver_CAM_PWR->SetValue(BOARD_CAMERA_POWER_GPIO_PIN,
                                         GPIO_PIN_OUTPUT_STATE_LOW);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->PowerControl(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO, ARM_POWER_OFF);
+    ret = GPIO_Driver_CAM_PWR->PowerControl(BOARD_CAMERA_POWER_GPIO_PIN, ARM_POWER_OFF);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }
 
-    ret = GPIO_Driver_CAM_PWR->Uninitialize(RTE_ARX3A0_CAMERA_SENSOR_POWER_PIN_NO);
+    ret = GPIO_Driver_CAM_PWR->Uninitialize(BOARD_CAMERA_POWER_GPIO_PIN);
     if (ret != ARM_DRIVER_OK) {
         return ret;
     }

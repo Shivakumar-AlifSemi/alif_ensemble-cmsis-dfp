@@ -9587,13 +9587,13 @@
 // <i> Default: BUS_WIDTH_4BIT
 #define RTE_SDC_BUS_WIDTH       1
 
-//    <o> SDC CLOCK SELECT
-//    <0=> SDC_12_5MHz
-//    <1=> SDC_25MHz
-//    <2=> SDC_50MHz
-// <i> Defines SDC0 Clock select
+//    <o> SDC CLOCK SELECT (Hz)
+//    <12500000=> 12.5MHz
+//    <25000000=> 25MHz
+//    <50000000=> 50MHz
+// <i> Defines SDC0 Clock frequency in Hz
 // <i> Default: 25MHz
-#define RTE_SDC_CLOCK_SELECT    1
+#define RTE_SDC_CLOCK_SELECT    25000000
 
 //    <o> SDC DMA SELECT
 //    <0=> SDMA

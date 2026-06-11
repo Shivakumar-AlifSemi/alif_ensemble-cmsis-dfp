@@ -17,10 +17,10 @@
 #include "Driver_I2C_Private.h"
 
 /* Driver version */
-#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 10)
+#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 11)
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion        = {ARM_I2C_API_VERSION, ARM_I2C_DRV_VERSION};
+static const ARM_DRIVER_VERSION DriverVersion = {ARM_I2C_API_VERSION, ARM_I2C_DRV_VERSION};
 
 /* Driver Capabilities */
 static const ARM_I2C_CAPABILITIES DriverCapabilities = {
@@ -271,8 +271,8 @@ static int32_t ARM_I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES 
     I2C->addr_mode              = I2C_7BIT_ADDRESS;
     I2C->tar_addr               = I2C_0_TARADDR;
 
-    I2C->tar_addr              &= I2C_7BIT_ADDRESS_MASK;
-    I2C->slv_addr              &= I2C_7BIT_ADDRESS_MASK;
+    I2C->tar_addr              &= I2C_7BIT_ADDR_MASK;
+    I2C->slv_addr              &= I2C_7BIT_ADDR_MASK;
 
     I2C->transfer.abort         = false;
 
@@ -536,7 +536,8 @@ static int32_t ARM_I2C_MasterTransmit(I2C_RESOURCES *I2C, uint32_t addr, const u
 #endif
 
     /* addr 7bit addr: 0x7F , 10bit addr: 0x3FF */
-    if ((data == NULL) || (num == 0U) || ((addr & (~ARM_I2C_ADDRESS_10BIT)) > 0x3FF)) {
+    if ((data == NULL) || (num == 0U) ||
+        ((addr & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX)) {
         /* Invalid parameters */
         return ARM_DRIVER_ERROR_PARAMETER;
     }
@@ -666,7 +667,8 @@ static int32_t ARM_I2C_MasterReceive(I2C_RESOURCES *I2C, uint32_t addr, uint8_t 
 #endif
 
     /* addr 7bit addr: 0x7F , 10bit addr: 0x3FF */
-    if ((data == NULL) || (num == 0U) || ((addr & (~ARM_I2C_ADDRESS_10BIT)) > 0x3FF)) {
+    if ((data == NULL) || (num == 0U) ||
+        ((addr & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX)) {
         /* Invalid parameters */
         return ARM_DRIVER_ERROR_PARAMETER;
     }
@@ -1014,9 +1016,16 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         speed = I2C_GetBusSpeed(I2C, ARM_I2C_BUS_SPEED_STANDARD);
 
         if (arg & ARM_I2C_ADDRESS_10BIT) {
+            if ((arg & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX) {
+                return ARM_DRIVER_ERROR_UNSUPPORTED;
+            }
             /* Sets 10 bit addr mode */
             I2C->addr_mode = I2C_10BIT_ADDRESS;
         } else {
+            /* Reject reserved blocks: 0x00..0x07 and 0x78..0x7F. */
+            if (arg < I2C_7BIT_ADDR_MIN || arg > I2C_7BIT_ADDR_MAX) {
+                return ARM_DRIVER_ERROR_UNSUPPORTED;
+            }
             /* Sets 7 bit addr mode */
             I2C->addr_mode = I2C_7BIT_ADDRESS;
         }
@@ -1035,6 +1044,10 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
     case ARM_I2C_BUS_SPEED:
 
         speed = I2C_GetBusSpeed(I2C, arg);
+        /* Unsupported speed */
+        if (speed == ARM_DRIVER_ERROR_UNSUPPORTED) {
+            return speed;
+        }
         /* arg is i2c bus speed */
         i2c_master_init(I2C->regs, I2C->tar_addr);
 

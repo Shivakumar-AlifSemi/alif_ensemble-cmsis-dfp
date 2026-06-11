@@ -82,8 +82,12 @@ typedef struct _I2C_RESOURCES {
 
 #define I2C_0_TARADDR          (0x50) /* I2C target address     */
 
-#define I2C_7BIT_ADDRESS_MASK  (0x7F) /* 7bit I2C address mask  */
+/* 7-bit reserved-range boundaries (inclusive of valid window). */
+#define I2C_7BIT_ADDR_MIN          0x08U
+#define I2C_7BIT_ADDR_MAX          0x77U
+#define I2C_7BIT_ADDR_MASK         0x7FU
 
-#define I2C_10BIT_ADDRESS_MASK (0x3FF) /* 10bit I2C address mask */
+/* 10-bit address spans the full 10-bit field */
+#define I2C_10BIT_ADDR_MAX         0x3FFU
 
 #endif /* DRIVER_I2C_PRIVATE_H_ */

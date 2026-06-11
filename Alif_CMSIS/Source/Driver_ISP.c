@@ -46,6 +46,10 @@
 #include "sensor_attributes.h"
 #endif /* RTE_ISP_AE_MODULE */
 
+#if (RTE_ISP_BINNING_MODULE)
+#include "mpi_isp_binning.h"
+#endif /* RTE_ISP_BINNING_MODULE */
+
 /* CMSIS ISP driver Includes */
 #include "Driver_ISP.h"
 
@@ -280,6 +284,15 @@ static int32_t ISP_Init(ARM_ISP_SignalEvent_t cb_event, CAMERA_SENSOR_DEVICE *ca
         }
     }
 #endif /* RTE_ISP_AE_MODULE */
+
+#if (RTE_ISP_BINNING_MODULE)
+    if (isp->isp_binning_attr && isp->isp_binning_attr->enable) {
+        ret = VSI_MPI_ISP_SetBinningAttr(isp->isp_port_id, isp->isp_binning_attr);
+        if (ret) {
+            return ARM_DRIVER_ERROR;
+        }
+    }
+#endif /* RTE_ISP_BINNING_MODULE */
 
     ret = VSI_MPI_ISP_GetPortAttr(isp->isp_port_id, &isp_port_config);
     if (ret) {
@@ -555,6 +568,14 @@ static int32_t ISP_control(uint32_t control, uint32_t arg, ISP_RESOURCES *isp)
 /* ISP sensor access structure */
 static CAMERA_SENSOR_DEVICE *sensor;
 
+#if (RTE_ISP_BINNING_MODULE)
+static ISP_BINNING_ATTR_S binning_attr = {
+    .enable   = RTE_ISP_BINNING_ENABLE,
+    .binHStep = RTE_ISP_BINNING_HSTEP,
+    .binVStep = RTE_ISP_BINNING_VSTEP,
+};
+#endif /* RTE_ISP_BINNING_MODULE */
+
 ISP_RESOURCES ISP_RES = {
     .isp_calib_info = &calibration_data,
     .isp_port_attr  = &port_attr,
@@ -571,6 +592,9 @@ ISP_RESOURCES ISP_RES = {
         0, /* Port ID */
         0, /* Channel ID */
     },
+#if (RTE_ISP_BINNING_MODULE)
+    .isp_binning_attr = &binning_attr,
+#endif /* RTE_ISP_BINNING_MODULE */
     .state = {0},
 };
 

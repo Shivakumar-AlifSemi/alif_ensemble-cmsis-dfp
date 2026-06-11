@@ -451,6 +451,23 @@
 // <i> default: false
 #define RTE_ISP_BINNING_MODULE 1
 
+// <o> ISP Binning Enable
+//     <0=> disable
+//     <1=> enable
+// <i> Enable binning processing in ISP
+// <i> default: false
+#define RTE_ISP_BINNING_ENABLE 0
+
+// <o> ISP Binning Horizontal Step <0-255>
+// <i> Horizontal binning step size
+// <i> default: 0
+#define RTE_ISP_BINNING_HSTEP 0
+
+// <o> ISP Binning Vertical Step <0-255>
+// <i> Vertical binning step size
+// <i> default: 0
+#define RTE_ISP_BINNING_VSTEP 0
+
 // <o> ISP Enable Scaling Module
 //     <0=> disable
 //     <1=> enable

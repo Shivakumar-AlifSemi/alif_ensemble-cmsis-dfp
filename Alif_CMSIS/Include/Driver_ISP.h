@@ -41,6 +41,42 @@ struct vsiISP_CHN_ATTR_S;
 /* Process Frame-Dump Events. This includes pipeline caluculations. */
 #define ISP_PROCESS_FRAME_END                  (0x12UL)
 
+/**
+ * @brief Set ISP module parameters on a live ISP port.
+ *
+ * The arg parameter is a pointer to struct isp_params with valid_mask set.
+ * Only modules whose ISP_PARAM_MASK_* bit is set are applied.
+ */
+#define ISP_CONTROL_SET_PARAM                  (0x13UL)
+
+/**
+ * @brief Get ISP module parameters from a live ISP port.
+ *
+ * The arg parameter is a pointer to struct isp_params with valid_mask set.
+ * Only modules whose ISP_PARAM_MASK_* bit is set are read back.
+ */
+#define ISP_CONTROL_GET_PARAM                  (0x14UL)
+
+#if (RTE_ISP_AE_MODULE)
+/**
+ * @brief Get cached AE sensor values (int_line, again, dgain).
+ *
+ * The arg parameter is a pointer to struct isp_ae_cached_values.
+ */
+#define ISP_CONTROL_AE_GET_CACHED              (0x15UL)
+
+/**
+ * @brief Query whether AE has converged / is stable.
+ *
+ * The arg parameter is ignored.
+ * Returns 1 if stable, 0 if not yet stable, or ARM_DRIVER_ERROR on failure.
+ */
+#define ISP_CONTROL_AE_IS_STABLE               (0x16UL)
+#endif /* RTE_ISP_AE_MODULE */
+
+/* ISP parameter structs and masks */
+#include "isp_ctrl_params.h"
+
 /****** ISP Events *****/
 #define ARM_ISP_EVENT_EXP_MEASURE_DONE         (1UL << 7)
 #define ARM_ISP_EVENT_FRAME_HSYNC_DETECTED     (1UL << 8)
@@ -154,18 +190,6 @@ typedef struct _ARM_DRIVER_ISP {
     /* Pointer to @ref ISP_Control : Control SPI Interface  */
     int32_t (*Control)(uint32_t control, uint32_t arg);
 } const ARM_DRIVER_ISP;
-
-#if (RTE_ISP_AE_MODULE)
-/**
- * @brief Get cached AE sensor values (snapshot protected by critical section)
- *
- * @param pIntLine Pointer to store integration line value
- * @param pAgain   Pointer to store analog gain value (Q10 format)
- * @param pDgain   Pointer to store digital gain value (Q10 format)
- * @return 0 on success, -1 on invalid argument
- */
-int ISP_Sensor_AEGetCachedValues(uint32_t *pIntLine, uint32_t *pAgain, uint32_t *pDgain);
-#endif /* RTE_ISP_AE_MODULE */
 
 #ifdef __cplusplus
 }

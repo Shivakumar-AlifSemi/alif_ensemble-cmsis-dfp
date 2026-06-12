@@ -20,9 +20,11 @@
  ******************************************************************************/
 
 /* System Includes */
+#include <string.h>
 #include "RTE_Device.h"
 #include "sys_utils.h"
 #include "soc.h"
+#include "isp_ctrl_params.h"
 #include "Driver_ISP_Private.h"
 
 #if defined(RTE_Drivers_ISP)
@@ -49,6 +51,38 @@
 #if (RTE_ISP_BINNING_MODULE)
 #include "mpi_isp_binning.h"
 #endif /* RTE_ISP_BINNING_MODULE */
+
+#if (RTE_ISP_BLS_MODULE)
+#include "mpi_isp_bls.h"
+#endif /* RTE_ISP_BLS_MODULE */
+
+#if (RTE_ISP_DMSC_MODULE)
+#include "mpi_isp_dmsc.h"
+#endif /* RTE_ISP_DMSC_MODULE */
+
+#if (RTE_ISP_FLT_MODULE)
+#include "mpi_isp_flt.h"
+#endif /* RTE_ISP_FLT_MODULE */
+
+#if (RTE_ISP_CCM_MODULE)
+#include "mpi_isp_ccm.h"
+#endif /* RTE_ISP_CCM_MODULE */
+
+#if (RTE_ISP_GAMMAOUT_MODULE)
+#include "mpi_isp_gamma_out.h"
+#endif /* RTE_ISP_GAMMAOUT_MODULE */
+
+#if (RTE_ISP_CSM_MODULE)
+#include "mpi_isp_csm.h"
+#endif /* RTE_ISP_CSM_MODULE */
+
+#if (RTE_ISP_EXPM_MODULE)
+#include "mpi_isp_expm.h"
+#endif /* RTE_ISP_EXPM_MODULE */
+
+#if (RTE_ISP_WBM_MODULE)
+#include "mpi_isp_wbm.h"
+#endif /* RTE_ISP_WBM_MODULE */
 
 /* CMSIS ISP driver Includes */
 #include "Driver_ISP.h"
@@ -181,6 +215,19 @@ int ISP_Sensor_AEGetCachedValues(uint32_t *pIntLine, uint32_t *pAgain, uint32_t 
 #endif /* RTE_ISP_AE_MODULE */
 
 
+#if (RTE_ISP_AE_MODULE)
+int ISP_Sensor_AEIsStable(ISP_RESOURCES *isp)
+{
+    int ret = 0;
+    ISP_EXPOSURE_INFO_S info = {0};
+
+    ret = VSI_MPI_ISP_QueryExposureInfo(isp->isp_port_id, &info);
+    if (ret) {
+        return -1;
+    }
+    return (int)info.isStable;
+}
+#endif /* RTE_ISP_AE_MODULE */
 
 /*
  * fn        ARM_DRIVER_VERSION ISP_GetVersion(void)
@@ -529,6 +576,885 @@ static int32_t ISP_stop(ISP_RESOURCES *isp)
 
     return ARM_DRIVER_OK;
 }
+#if (RTE_ISP_AE_MODULE)
+static int32_t ISP_set_param_ae(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_AE)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_ae_param *ae = &params->ae;
+    ISP_EXPOSURE_ATTR_S exp_attr = {0};
+
+    exp_attr.opType = (ae->op_mode == ISP_OP_AUTO) ? OP_TYPE_AUTO : OP_TYPE_MANUAL;
+    exp_attr.manualAttr.intTime = ae->int_time;
+    exp_attr.manualAttr.again   = ae->again;
+    exp_attr.manualAttr.dgain   = ae->dgain;
+    exp_attr.autoAttr.expTimeRange.min = ae->int_time_min;
+    exp_attr.autoAttr.expTimeRange.max = ae->int_time_max;
+    exp_attr.autoAttr.againRange.min   = ae->again_min;
+    exp_attr.autoAttr.againRange.max   = ae->again_max;
+    exp_attr.autoAttr.dgainRange.min   = ae->dgain_min;
+    exp_attr.autoAttr.dgainRange.max   = ae->dgain_max;
+    exp_attr.autoAttr.aeTarget         = ae->ae_target;
+    exp_attr.autoAttr.dampOver         = ae->damp_over;
+    exp_attr.autoAttr.dampUnder        = ae->damp_under;
+    exp_attr.autoAttr.tolerance        = ae->tolerance;
+    exp_attr.autoAttr.aeRunInterval    = ae->run_interval;
+    exp_attr.autoAttr.antiflicker.enable      = ae->antiflicker_enable;
+    exp_attr.autoAttr.antiflicker.flickerFreq = ae->antiflicker_freq;
+    exp_attr.autoAttr.gainThreshold = ae->gain_threshold;
+    exp_attr.autoAttr.aeMode        = (ISP_AE_MODE_E)ae->ae_mode;
+    exp_attr.autoAttr.aeDelayAttr.blackDelayFrame = ae->ae_delay_attr.black_delay_frame;
+    exp_attr.autoAttr.aeDelayAttr.whiteDelayFrame = ae->ae_delay_attr.white_delay_frame;
+    for (int r = 0; r < 5; r++) {
+        for (int c = 0; c < 5; c++) {
+            exp_attr.autoAttr.weight[r][c] = ae->weight[r][c];
+        }
+    }
+    if (ae->ae_route_total_nodes > ISP_AE_ROUTE_MAX_NODES) {
+        exp_attr.autoAttr.aeRoute.totalNum = ISP_AE_ROUTE_MAX_NODES;
+    } else {
+        exp_attr.autoAttr.aeRoute.totalNum = ae->ae_route_total_nodes;
+    }
+    for (int i = 0; i < (int)exp_attr.autoAttr.aeRoute.totalNum; i++) {
+        exp_attr.autoAttr.aeRoute.routeNode[i].intTime = ae->ae_route[i].int_time;
+        exp_attr.autoAttr.aeRoute.routeNode[i].again   = ae->ae_route[i].again;
+        exp_attr.autoAttr.aeRoute.routeNode[i].dgain   = ae->ae_route[i].dgain;
+    }
+    ret = VSI_MPI_ISP_SetExposureAttr(isp->isp_port_id, &exp_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_WB_MODULE)
+static int32_t ISP_set_param_wb(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_WB)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_wb_param *wb = &params->wb;
+    ISP_WB_ATTR_S wb_attr = {0};
+
+    wb_attr.enable = wb->enable;
+    wb_attr.opType = (wb->op_mode == ISP_OP_AUTO) ? OP_TYPE_AUTO : OP_TYPE_MANUAL;
+    wb_attr.manualAttr.wbGain.rGain  = wb->r_gain;
+    wb_attr.manualAttr.wbGain.grGain = wb->gr_gain;
+    wb_attr.manualAttr.wbGain.gbGain = wb->gb_gain;
+    wb_attr.manualAttr.wbGain.bGain  = wb->b_gain;
+    wb_attr.autoAttr.runInterval    = wb->run_interval;
+    wb_attr.autoAttr.speed          = wb->speed;
+    wb_attr.autoAttr.tolerance      = wb->tolerance;
+    wb_attr.autoAttr.initColorTemp  = wb->init_color_temp;
+    wb_attr.autoAttr.calibParam.centLine.rgParam   = wb->calib.center_line.rg_param;
+    wb_attr.autoAttr.calibParam.centLine.bgParam   = wb->calib.center_line.bg_param;
+    wb_attr.autoAttr.calibParam.centLine.distParam = wb->calib.center_line.dist_param;
+    wb_attr.autoAttr.calibParam.rgMin = wb->calib.rg_min;
+    wb_attr.autoAttr.calibParam.rgMax = wb->calib.rg_max;
+    for (int i = 0; i < 16; i++) {
+        wb_attr.autoAttr.calibParam.wpRange0.wpLCurve.rg[i]   = wb->calib.wp_range0.left.rg[i];
+        wb_attr.autoAttr.calibParam.wpRange0.wpLCurve.dist[i] = wb->calib.wp_range0.left.dist[i];
+        wb_attr.autoAttr.calibParam.wpRange0.wpRCurve.rg[i]   = wb->calib.wp_range0.right.rg[i];
+        wb_attr.autoAttr.calibParam.wpRange0.wpRCurve.dist[i] = wb->calib.wp_range0.right.dist[i];
+        wb_attr.autoAttr.calibParam.wpRange1.wpLCurve.rg[i]   = wb->calib.wp_range1.left.rg[i];
+        wb_attr.autoAttr.calibParam.wpRange1.wpLCurve.dist[i] = wb->calib.wp_range1.left.dist[i];
+        wb_attr.autoAttr.calibParam.wpRange1.wpRCurve.rg[i]   = wb->calib.wp_range1.right.rg[i];
+        wb_attr.autoAttr.calibParam.wpRange1.wpRCurve.dist[i] = wb->calib.wp_range1.right.dist[i];
+    }
+    for (int i = 0; i < ILLUMINANT_TYPE_CNT; i++) {
+        wb_attr.autoAttr.calibParam.illuminant[i].illuType  =
+            (ISP_ILLUMINANT_TYPE_E)wb->calib.illuminant[i].illu_type;
+        wb_attr.autoAttr.calibParam.illuminant[i].colorTemp = wb->calib.illuminant[i].color_temp;
+        wb_attr.autoAttr.calibParam.illuminant[i].wbGain.rGain  = wb->calib.illuminant[i].r_gain;
+        wb_attr.autoAttr.calibParam.illuminant[i].wbGain.grGain = wb->calib.illuminant[i].gr_gain;
+        wb_attr.autoAttr.calibParam.illuminant[i].wbGain.gbGain = wb->calib.illuminant[i].gb_gain;
+        wb_attr.autoAttr.calibParam.illuminant[i].wbGain.bGain  = wb->calib.illuminant[i].b_gain;
+    }
+    ret = VSI_MPI_ISP_SetWbAttr(isp->isp_port_id, &wb_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_BLS_MODULE)
+static int32_t ISP_set_param_bls(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_BLS)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_bls_param *bls = &params->bls;
+    ISP_BLS_ATTR_S bls_attr = {0};
+
+    bls_attr.enable = bls->enable;
+    bls_attr.opType = (bls->op_mode == ISP_OP_AUTO) ? OP_TYPE_AUTO : OP_TYPE_MANUAL;
+    for (int i = 0; i < 4; i++) {
+        bls_attr.manualAttr.blackLevel[i] = bls->black_level[i];
+    }
+    for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+        for (int j = 0; j < 4; j++) {
+            bls_attr.autoAttr.blackLevel[i][j] = bls->auto_black_level[i][j];
+        }
+    }
+    ret = VSI_MPI_ISP_SetBlsAttr(isp->isp_port_id, &bls_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_DMSC_MODULE)
+static int32_t ISP_set_param_dmsc(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_DMSC)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_dmsc_param *dmsc = &params->dmsc;
+    ISP_DMSC_ATTR_S dmsc_attr = {0};
+
+    dmsc_attr.enable           = dmsc->enable;
+    dmsc_attr.threshold        = dmsc->threshold;
+    dmsc_attr.cacAttr.enable   = dmsc->cac_enable;
+    dmsc_attr.cacAttr.hClipMode = dmsc->cac_h_clip_mode;
+    dmsc_attr.cacAttr.vClipMode = dmsc->cac_v_clip_mode;
+    dmsc_attr.cacAttr.hStart    = dmsc->cac_h_start;
+    dmsc_attr.cacAttr.vStart    = dmsc->cac_v_start;
+    dmsc_attr.cacAttr.aBlue     = dmsc->cac_a_blue;
+    dmsc_attr.cacAttr.aRed      = dmsc->cac_a_red;
+    dmsc_attr.cacAttr.bBlue     = dmsc->cac_b_blue;
+    dmsc_attr.cacAttr.bRed      = dmsc->cac_b_red;
+    dmsc_attr.cacAttr.cBlue     = dmsc->cac_c_blue;
+    dmsc_attr.cacAttr.cRed      = dmsc->cac_c_red;
+    dmsc_attr.cacAttr.xNormShift  = dmsc->cac_x_norm_shift;
+    dmsc_attr.cacAttr.xNormFactor = dmsc->cac_x_norm_factor;
+    dmsc_attr.cacAttr.yNormShift  = dmsc->cac_y_norm_shift;
+    dmsc_attr.cacAttr.yNormFactor = dmsc->cac_y_norm_factor;
+    ret = VSI_MPI_ISP_SetDmscAttr(isp->isp_port_id, &dmsc_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_FLT_MODULE)
+static int32_t ISP_set_param_flt(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_FLT)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_flt_param *flt = &params->flt;
+    ISP_FLT_ATTR_S flt_attr = {0};
+
+    flt_attr.enable  = flt->enable;
+    flt_attr.opType  = (flt->op_mode == ISP_OP_AUTO) ? OP_TYPE_AUTO : OP_TYPE_MANUAL;
+    flt_attr.manualAttr.denoiseLevel = flt->denoise_level;
+    flt_attr.manualAttr.sharpenLevel  = flt->sharpen_level;
+    for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+        flt_attr.autoAttr.denoiseLevel[i] = flt->auto_denoise_level[i];
+        flt_attr.autoAttr.sharpenLevel[i] = flt->auto_sharpen_level[i];
+    }
+    ret = VSI_MPI_ISP_SetFltAttr(isp->isp_port_id, &flt_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+
+#if (RTE_ISP_CCM_MODULE)
+static int32_t ISP_set_param_ccm(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_CCM)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_ccm_param *ccm = &params->ccm;
+    ISP_CCM_ATTR_S ccm_attr = {0};
+
+    ccm_attr.opType = (ccm->op_mode == ISP_OP_AUTO) ? OP_TYPE_AUTO : OP_TYPE_MANUAL;
+    memcpy(ccm_attr.manualAttr.colorMatrix, ccm->color_matrix,
+        sizeof(ccm_attr.manualAttr.colorMatrix));
+    ccm_attr.manualAttr.rOffset = ccm->r_offset;
+    ccm_attr.manualAttr.gOffset = ccm->g_offset;
+    ccm_attr.manualAttr.bOffset = ccm->b_offset;
+    for (int i = 0; i < ILLUMINANT_TYPE_CNT; i++) {
+        memcpy(ccm_attr.autoAttr.illuminantCCM[i].colorMatrix,
+            ccm->auto_ccm[i].color_matrix, sizeof(ccm_attr.autoAttr.illuminantCCM[i].colorMatrix));
+        ccm_attr.autoAttr.illuminantCCM[i].rOffset   = ccm->auto_ccm[i].r_offset;
+        ccm_attr.autoAttr.illuminantCCM[i].gOffset   = ccm->auto_ccm[i].g_offset;
+        ccm_attr.autoAttr.illuminantCCM[i].bOffset   = ccm->auto_ccm[i].b_offset;
+        ccm_attr.autoAttr.illuminantCCM[i].colorTemp = ccm->auto_ccm[i].color_temp;
+    }
+    ret = VSI_MPI_ISP_SetCcmAttr(isp->isp_port_id, &ccm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_GAMMAOUT_MODULE)
+static int32_t ISP_set_param_gamma(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_GAMMA_OUT)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_gamma_param *gamma = &params->gamma_out;
+    ISP_GAMMA_OUT_ATTR_S gamma_attr = {0};
+
+    gamma_attr.enable = gamma->enable;
+    memcpy(gamma_attr.gammaY, gamma->gamma_y, sizeof(gamma_attr.gammaY));
+    ret = VSI_MPI_ISP_SetGammaOutAttr(isp->isp_port_id, &gamma_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_CSM_MODULE)
+static int32_t ISP_set_param_csm(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_CSM)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_csm_param *csm = &params->csm;
+    ISP_CSM_ATTR_S csm_attr = {0};
+
+    csm_attr.type         = (ISP_CSM_TYPE_E)csm->type;
+    csm_attr.quantization = (ISP_CSM_QUANTIZATION_E)csm->range;
+    memcpy(csm_attr.coef, csm->coef, sizeof(csm_attr.coef));
+    ret = VSI_MPI_ISP_SetCsmAttr(isp->isp_port_id, &csm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_EXPM_MODULE)
+static int32_t ISP_set_param_expm(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_AEM)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_aem_param *aem = &params->aem;
+    ISP_EXPM_ATTR_S expm_attr = {0};
+
+    expm_attr.enable         = aem->enable;
+    expm_attr.expAltMode     = aem->alt_mode;
+    expm_attr.blockWin.hOffs = aem->h_offs;
+    expm_attr.blockWin.vOffs = aem->v_offs;
+    expm_attr.blockWin.hSize = aem->h_size;
+    expm_attr.blockWin.vSize = aem->v_size;
+    ret = VSI_MPI_ISP_SetExpmAttr(isp->isp_port_id, &expm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_WBM_MODULE)
+static int32_t ISP_set_param_wbm(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_WBM)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_wbm_param *wbm = &params->wbm;
+    ISP_WBM_ATTR_S wbm_attr = {0};
+
+    wbm_attr.enable             = wbm->enable;
+    wbm_attr.measMode           = (ISP_WBM_MODE_E)wbm->meas_mode;
+    wbm_attr.measRect.hOffs     = wbm->h_offs;
+    wbm_attr.measRect.vOffs     = wbm->v_offs;
+    wbm_attr.measRect.hSize     = wbm->h_size;
+    wbm_attr.measRect.vSize     = wbm->v_size;
+    wbm_attr.wpRange.maxY       = wbm->max_y;
+    wbm_attr.wpRange.refCr_MaxR = wbm->ref_cr_max_r;
+    wbm_attr.wpRange.minY_MaxG  = wbm->min_y_max_g;
+    wbm_attr.wpRange.refCb_MaxB = wbm->ref_cb_max_b;
+    wbm_attr.wpRange.maxCSum    = wbm->max_c_sum;
+    wbm_attr.wpRange.minC       = wbm->min_c;
+    ret = VSI_MPI_ISP_SetWbmAttr(isp->isp_port_id, &wbm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_BINNING_MODULE)
+static int32_t ISP_set_param_binning(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    if (!(params->valid_mask & ISP_PARAM_MASK_BINNING)) {
+        return ARM_DRIVER_OK;
+    }
+    int ret;
+    const struct isp_binning_param *binning = &params->binning;
+    ISP_BINNING_ATTR_S binning_attr = {0};
+
+    binning_attr.enable   = binning->enable;
+    binning_attr.binHStep = binning->h_step;
+    binning_attr.binVStep = binning->v_step;
+    ret = VSI_MPI_ISP_SetBinningAttr(isp->isp_port_id, &binning_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+
+static int32_t ISP_set_param(ISP_RESOURCES *isp, const struct isp_params *params)
+{
+    int32_t ret = ARM_DRIVER_OK;
+
+    if (!params) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
+#if (RTE_ISP_AE_MODULE)
+    ret = ISP_set_param_ae(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_WB_MODULE)
+    ret = ISP_set_param_wb(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_BLS_MODULE)
+    ret = ISP_set_param_bls(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_DMSC_MODULE)
+    ret = ISP_set_param_dmsc(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_FLT_MODULE)
+    ret = ISP_set_param_flt(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_CCM_MODULE)
+    ret = ISP_set_param_ccm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_GAMMAOUT_MODULE)
+    ret = ISP_set_param_gamma(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_CSM_MODULE)
+    ret = ISP_set_param_csm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_EXPM_MODULE)
+    ret = ISP_set_param_expm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_WBM_MODULE)
+    ret = ISP_set_param_wbm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_BINNING_MODULE)
+    ret = ISP_set_param_binning(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+    if (params->valid_mask & ISP_PARAM_MASK_AUTO_ROUTE) {
+        ISP_AUTO_ROUTE_S route = {0};
+
+        for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+            route.autoRoute[i] = params->auto_route.auto_route[i];
+        }
+        ret = VSI_MPI_ISP_SetAutoRoute(isp->isp_port_id, &route);
+        if (ret != VSI_SUCCESS) {
+            return ARM_DRIVER_ERROR;
+        }
+    }
+    return ARM_DRIVER_OK;
+}
+
+
+#if (RTE_ISP_AE_MODULE)
+static int32_t ISP_get_param_ae(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret = 0;
+    ISP_EXPOSURE_ATTR_S exp_attr = {0};
+    struct isp_ae_param *ae = &params->ae;
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_AE)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetExposureAttr(isp->isp_port_id, &exp_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    ae->op_mode      = (exp_attr.opType == OP_TYPE_AUTO) ? ISP_OP_AUTO : ISP_OP_MANUAL;
+    ae->int_time     = exp_attr.manualAttr.intTime;
+    ae->again        = exp_attr.manualAttr.again;
+    ae->dgain        = exp_attr.manualAttr.dgain;
+    ae->int_time_min = exp_attr.autoAttr.expTimeRange.min;
+    ae->int_time_max = exp_attr.autoAttr.expTimeRange.max;
+    ae->again_min    = exp_attr.autoAttr.againRange.min;
+    ae->again_max    = exp_attr.autoAttr.againRange.max;
+    ae->dgain_min    = exp_attr.autoAttr.dgainRange.min;
+    ae->dgain_max    = exp_attr.autoAttr.dgainRange.max;
+    ae->ae_target    = exp_attr.autoAttr.aeTarget;
+    ae->damp_over    = exp_attr.autoAttr.dampOver;
+    ae->damp_under   = exp_attr.autoAttr.dampUnder;
+    ae->tolerance    = exp_attr.autoAttr.tolerance;
+    ae->run_interval = exp_attr.autoAttr.aeRunInterval;
+    ae->antiflicker_enable = exp_attr.autoAttr.antiflicker.enable;
+    ae->antiflicker_freq   = exp_attr.autoAttr.antiflicker.flickerFreq;
+    ae->gain_threshold = exp_attr.autoAttr.gainThreshold;
+    ae->ae_mode        = (enum isp_ae_mode)exp_attr.autoAttr.aeMode;
+    ae->ae_delay_attr.black_delay_frame = exp_attr.autoAttr.aeDelayAttr.blackDelayFrame;
+    ae->ae_delay_attr.white_delay_frame = exp_attr.autoAttr.aeDelayAttr.whiteDelayFrame;
+    for (int r = 0; r < 5; r++) {
+        for (int c = 0; c < 5; c++) {
+            ae->weight[r][c] = exp_attr.autoAttr.weight[r][c];
+        }
+    }
+    if (exp_attr.autoAttr.aeRoute.totalNum > ISP_AE_ROUTE_MAX_NODES) {
+        ae->ae_route_total_nodes = ISP_AE_ROUTE_MAX_NODES;
+    } else {
+        ae->ae_route_total_nodes = exp_attr.autoAttr.aeRoute.totalNum;
+    }
+    for (int i = 0; i < (int)ae->ae_route_total_nodes; i++) {
+        ae->ae_route[i].int_time = exp_attr.autoAttr.aeRoute.routeNode[i].intTime;
+        ae->ae_route[i].again    = exp_attr.autoAttr.aeRoute.routeNode[i].again;
+        ae->ae_route[i].dgain    = exp_attr.autoAttr.aeRoute.routeNode[i].dgain;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_WB_MODULE)
+static int32_t ISP_get_param_wb(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_wb_param *wb = &params->wb;
+    ISP_WB_ATTR_S wb_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_WB)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetWbAttr(isp->isp_port_id, &wb_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    wb->enable  = wb_attr.enable;
+    wb->op_mode = (wb_attr.opType == OP_TYPE_AUTO) ? ISP_OP_AUTO : ISP_OP_MANUAL;
+    wb->r_gain  = wb_attr.manualAttr.wbGain.rGain;
+    wb->gr_gain = wb_attr.manualAttr.wbGain.grGain;
+    wb->gb_gain = wb_attr.manualAttr.wbGain.gbGain;
+    wb->b_gain  = wb_attr.manualAttr.wbGain.bGain;
+    wb->run_interval    = wb_attr.autoAttr.runInterval;
+    wb->speed           = wb_attr.autoAttr.speed;
+    wb->tolerance       = wb_attr.autoAttr.tolerance;
+    wb->init_color_temp = wb_attr.autoAttr.initColorTemp;
+    wb->calib.center_line.rg_param   = wb_attr.autoAttr.calibParam.centLine.rgParam;
+    wb->calib.center_line.bg_param   = wb_attr.autoAttr.calibParam.centLine.bgParam;
+    wb->calib.center_line.dist_param = wb_attr.autoAttr.calibParam.centLine.distParam;
+    wb->calib.rg_min = wb_attr.autoAttr.calibParam.rgMin;
+    wb->calib.rg_max = wb_attr.autoAttr.calibParam.rgMax;
+    for (int i = 0; i < 16; i++) {
+        wb->calib.wp_range0.left.rg[i]   = wb_attr.autoAttr.calibParam.wpRange0.wpLCurve.rg[i];
+        wb->calib.wp_range0.left.dist[i] = wb_attr.autoAttr.calibParam.wpRange0.wpLCurve.dist[i];
+        wb->calib.wp_range0.right.rg[i]   = wb_attr.autoAttr.calibParam.wpRange0.wpRCurve.rg[i];
+        wb->calib.wp_range0.right.dist[i] = wb_attr.autoAttr.calibParam.wpRange0.wpRCurve.dist[i];
+        wb->calib.wp_range1.left.rg[i]   = wb_attr.autoAttr.calibParam.wpRange1.wpLCurve.rg[i];
+        wb->calib.wp_range1.left.dist[i] = wb_attr.autoAttr.calibParam.wpRange1.wpLCurve.dist[i];
+        wb->calib.wp_range1.right.rg[i]   = wb_attr.autoAttr.calibParam.wpRange1.wpRCurve.rg[i];
+        wb->calib.wp_range1.right.dist[i] = wb_attr.autoAttr.calibParam.wpRange1.wpRCurve.dist[i];
+    }
+    for (int i = 0; i < ILLUMINANT_TYPE_CNT; i++) {
+        wb->calib.illuminant[i].illu_type =
+            (enum isp_illuminant_type)wb_attr.autoAttr.calibParam.illuminant[i].illuType;
+        wb->calib.illuminant[i].color_temp =
+            wb_attr.autoAttr.calibParam.illuminant[i].colorTemp;
+        wb->calib.illuminant[i].r_gain  =
+            wb_attr.autoAttr.calibParam.illuminant[i].wbGain.rGain;
+        wb->calib.illuminant[i].gr_gain =
+            wb_attr.autoAttr.calibParam.illuminant[i].wbGain.grGain;
+        wb->calib.illuminant[i].gb_gain =
+            wb_attr.autoAttr.calibParam.illuminant[i].wbGain.gbGain;
+        wb->calib.illuminant[i].b_gain  =
+            wb_attr.autoAttr.calibParam.illuminant[i].wbGain.bGain;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_BLS_MODULE)
+static int32_t ISP_get_param_bls(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_bls_param *bls = &params->bls;
+    ISP_BLS_ATTR_S bls_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_BLS)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetBlsAttr(isp->isp_port_id, &bls_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    bls->enable = bls_attr.enable;
+    bls->op_mode = (bls_attr.opType == OP_TYPE_AUTO) ? ISP_OP_AUTO : ISP_OP_MANUAL;
+    for (int i = 0; i < 4; i++) {
+        bls->black_level[i] = bls_attr.manualAttr.blackLevel[i];
+    }
+    for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+        for (int j = 0; j < 4; j++) {
+            bls->auto_black_level[i][j] = bls_attr.autoAttr.blackLevel[i][j];
+        }
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_DMSC_MODULE)
+static int32_t ISP_get_param_dmsc(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_dmsc_param *dmsc = &params->dmsc;
+    ISP_DMSC_ATTR_S dmsc_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_DMSC)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetDmscAttr(isp->isp_port_id, &dmsc_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    dmsc->enable          = dmsc_attr.enable;
+    dmsc->threshold       = dmsc_attr.threshold;
+    dmsc->cac_enable      = dmsc_attr.cacAttr.enable;
+    dmsc->cac_h_clip_mode = dmsc_attr.cacAttr.hClipMode;
+    dmsc->cac_v_clip_mode = dmsc_attr.cacAttr.vClipMode;
+    dmsc->cac_h_start     = dmsc_attr.cacAttr.hStart;
+    dmsc->cac_v_start     = dmsc_attr.cacAttr.vStart;
+    dmsc->cac_a_blue      = dmsc_attr.cacAttr.aBlue;
+    dmsc->cac_a_red       = dmsc_attr.cacAttr.aRed;
+    dmsc->cac_b_blue      = dmsc_attr.cacAttr.bBlue;
+    dmsc->cac_b_red       = dmsc_attr.cacAttr.bRed;
+    dmsc->cac_c_blue      = dmsc_attr.cacAttr.cBlue;
+    dmsc->cac_c_red       = dmsc_attr.cacAttr.cRed;
+    dmsc->cac_x_norm_shift  = dmsc_attr.cacAttr.xNormShift;
+    dmsc->cac_x_norm_factor = dmsc_attr.cacAttr.xNormFactor;
+    dmsc->cac_y_norm_shift  = dmsc_attr.cacAttr.yNormShift;
+    dmsc->cac_y_norm_factor = dmsc_attr.cacAttr.yNormFactor;
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_FLT_MODULE)
+static int32_t ISP_get_param_flt(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_flt_param *flt = &params->flt;
+    ISP_FLT_ATTR_S flt_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_FLT)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetFltAttr(isp->isp_port_id, &flt_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    flt->enable  = flt_attr.enable;
+    flt->op_mode = (flt_attr.opType == OP_TYPE_AUTO) ? ISP_OP_AUTO : ISP_OP_MANUAL;
+    flt->denoise_level = flt_attr.manualAttr.denoiseLevel;
+    flt->sharpen_level  = flt_attr.manualAttr.sharpenLevel;
+    for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+        flt->auto_denoise_level[i] = flt_attr.autoAttr.denoiseLevel[i];
+        flt->auto_sharpen_level[i] = flt_attr.autoAttr.sharpenLevel[i];
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_CCM_MODULE)
+static int32_t ISP_get_param_ccm(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_ccm_param *ccm = &params->ccm;
+    ISP_CCM_ATTR_S ccm_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_CCM)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetCcmAttr(isp->isp_port_id, &ccm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    ccm->op_mode = (ccm_attr.opType == OP_TYPE_AUTO) ? ISP_OP_AUTO : ISP_OP_MANUAL;
+    memcpy(ccm->color_matrix, ccm_attr.manualAttr.colorMatrix, sizeof(ccm->color_matrix));
+    ccm->r_offset = ccm_attr.manualAttr.rOffset;
+    ccm->g_offset = ccm_attr.manualAttr.gOffset;
+    ccm->b_offset = ccm_attr.manualAttr.bOffset;
+    for (int i = 0; i < ILLUMINANT_TYPE_CNT; i++) {
+        memcpy(ccm->auto_ccm[i].color_matrix,
+               ccm_attr.autoAttr.illuminantCCM[i].colorMatrix,
+               sizeof(ccm->auto_ccm[i].color_matrix));
+        ccm->auto_ccm[i].r_offset   = ccm_attr.autoAttr.illuminantCCM[i].rOffset;
+        ccm->auto_ccm[i].g_offset   = ccm_attr.autoAttr.illuminantCCM[i].gOffset;
+        ccm->auto_ccm[i].b_offset   = ccm_attr.autoAttr.illuminantCCM[i].bOffset;
+        ccm->auto_ccm[i].color_temp = ccm_attr.autoAttr.illuminantCCM[i].colorTemp;
+    }
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_GAMMAOUT_MODULE)
+static int32_t ISP_get_param_gamma(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_gamma_param *gamma = &params->gamma_out;
+    ISP_GAMMA_OUT_ATTR_S gamma_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_GAMMA_OUT)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetGammaOutAttr(isp->isp_port_id, &gamma_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    gamma->enable = gamma_attr.enable;
+    memcpy(gamma->gamma_y, gamma_attr.gammaY, sizeof(gamma->gamma_y));
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_CSM_MODULE)
+static int32_t ISP_get_param_csm(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_csm_param *csm = &params->csm;
+    ISP_CSM_ATTR_S csm_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_CSM)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetCsmAttr(isp->isp_port_id, &csm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    csm->type  = (enum isp_csm_type)csm_attr.type;
+    csm->range = (enum isp_csm_range)csm_attr.quantization;
+    memcpy(csm->coef, csm_attr.coef, sizeof(csm->coef));
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_EXPM_MODULE)
+static int32_t ISP_get_param_expm(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_aem_param *aem = &params->aem;
+    ISP_EXPM_ATTR_S expm_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_AEM)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetExpmAttr(isp->isp_port_id, &expm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    aem->enable   = expm_attr.enable;
+    aem->alt_mode = expm_attr.expAltMode;
+    aem->h_offs   = expm_attr.blockWin.hOffs;
+    aem->v_offs   = expm_attr.blockWin.vOffs;
+    aem->h_size   = expm_attr.blockWin.hSize;
+    aem->v_size   = expm_attr.blockWin.vSize;
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_WBM_MODULE)
+static int32_t ISP_get_param_wbm(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_wbm_param *wbm = &params->wbm;
+    ISP_WBM_ATTR_S wbm_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_WBM)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetWbmAttr(isp->isp_port_id, &wbm_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    wbm->enable     = wbm_attr.enable;
+    wbm->meas_mode  = (enum isp_wbm_mode)wbm_attr.measMode;
+    wbm->h_offs     = wbm_attr.measRect.hOffs;
+    wbm->v_offs     = wbm_attr.measRect.vOffs;
+    wbm->h_size     = wbm_attr.measRect.hSize;
+    wbm->v_size     = wbm_attr.measRect.vSize;
+    wbm->max_y      = wbm_attr.wpRange.maxY;
+    wbm->ref_cr_max_r = wbm_attr.wpRange.refCr_MaxR;
+    wbm->min_y_max_g  = wbm_attr.wpRange.minY_MaxG;
+    wbm->ref_cb_max_b = wbm_attr.wpRange.refCb_MaxB;
+    wbm->max_c_sum    = wbm_attr.wpRange.maxCSum;
+    wbm->min_c        = wbm_attr.wpRange.minC;
+    return ARM_DRIVER_OK;
+}
+#endif
+
+#if (RTE_ISP_BINNING_MODULE)
+static int32_t ISP_get_param_binning(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int ret;
+    struct isp_binning_param *binning = &params->binning;
+    ISP_BINNING_ATTR_S binning_attr = {0};
+
+    if (!(params->valid_mask & ISP_PARAM_MASK_BINNING)) {
+        return ARM_DRIVER_OK;
+    }
+
+    ret = VSI_MPI_ISP_GetBinningAttr(isp->isp_port_id, &binning_attr);
+    if (ret) {
+        return ARM_DRIVER_ERROR;
+    }
+    binning->enable = binning_attr.enable;
+    binning->h_step = binning_attr.binHStep;
+    binning->v_step = binning_attr.binVStep;
+    return ARM_DRIVER_OK;
+}
+#endif
+
+static int32_t ISP_get_param(ISP_RESOURCES *isp, struct isp_params *params)
+{
+    int32_t ret = ARM_DRIVER_OK;
+
+    if (!params) {
+        return ARM_DRIVER_ERROR_PARAMETER;
+    }
+
+#if (RTE_ISP_AE_MODULE)
+    ret = ISP_get_param_ae(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_WB_MODULE)
+    ret = ISP_get_param_wb(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_BLS_MODULE)
+    ret = ISP_get_param_bls(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_DMSC_MODULE)
+    ret = ISP_get_param_dmsc(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_FLT_MODULE)
+    ret = ISP_get_param_flt(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_CCM_MODULE)
+    ret = ISP_get_param_ccm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_GAMMAOUT_MODULE)
+    ret = ISP_get_param_gamma(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_CSM_MODULE)
+    ret = ISP_get_param_csm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_EXPM_MODULE)
+    ret = ISP_get_param_expm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_WBM_MODULE)
+    ret = ISP_get_param_wbm(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+#if (RTE_ISP_BINNING_MODULE)
+    ret = ISP_get_param_binning(isp, params);
+    if (ret != ARM_DRIVER_OK) {
+        return ret;
+    }
+#endif
+    if (params->valid_mask & ISP_PARAM_MASK_AUTO_ROUTE) {
+        ISP_AUTO_ROUTE_S route = {0};
+
+        ret = VSI_MPI_ISP_GetAutoRoute(isp->isp_port_id, &route);
+        if (ret) {
+            return ARM_DRIVER_ERROR;
+        }
+        for (int i = 0; i < ISP_AUTO_STRENGTH_NUN; i++) {
+            params->auto_route.auto_route[i] = route.autoRoute[i];
+        }
+    }
+    return ARM_DRIVER_OK;
+}
 
 /*
  * fn        int32_t ISP_control (uint32_t control,
@@ -550,21 +1476,45 @@ static int32_t ISP_control(uint32_t control, uint32_t arg, ISP_RESOURCES *isp)
 
     switch (control) {
     case ISP_CONTROL_QBUF:
-        ret = VSI_MPI_ISP_QBUF(isp->isp_chn_id, (VIDEO_BUF_S *) arg);
+        ret = (VSI_MPI_ISP_QBUF(isp->isp_chn_id, (VIDEO_BUF_S *) arg) == VSI_SUCCESS) ?
+              ARM_DRIVER_OK : ARM_DRIVER_ERROR;
         break;
     case ISP_CONTROL_DQBUF:
-        ret = VSI_MPI_ISP_DQBUF(isp->isp_chn_id, (VIDEO_BUF_S *) arg, 0);
+        ret = (VSI_MPI_ISP_DQBUF(isp->isp_chn_id, (VIDEO_BUF_S *) arg, 0) == VSI_SUCCESS) ?
+              ARM_DRIVER_OK : ARM_DRIVER_ERROR;
         break;
     case ISP_PROCESS_FRAME_END:
         VSI_ISP_IrqProcessFrameEnd(isp->isp_port_id);
+        ret = ARM_DRIVER_OK;
         break;
+    case ISP_CONTROL_SET_PARAM:
+        ret = ISP_set_param(isp, (const struct isp_params *)arg);
+        break;
+    case ISP_CONTROL_GET_PARAM:
+        ret = ISP_get_param(isp, (struct isp_params *)arg);
+        break;
+#if (RTE_ISP_AE_MODULE)
+    case ISP_CONTROL_AE_GET_CACHED:
+        ret = ISP_Sensor_AEGetCachedValues(
+            &((struct isp_ae_cached_values *)arg)->int_line,
+            &((struct isp_ae_cached_values *)arg)->again,
+            &((struct isp_ae_cached_values *)arg)->dgain);
+        if (ret) {
+            ret = ARM_DRIVER_ERROR;
+        }
+        break;
+    case ISP_CONTROL_AE_IS_STABLE:
+        ret = ISP_Sensor_AEIsStable(isp);
+        break;
+#endif
     default:
-        return ARM_DRIVER_ERROR_UNSUPPORTED;
+        ret = ARM_DRIVER_ERROR_UNSUPPORTED;
+        break;
     }
-    return (ret == VSI_SUCCESS) ? ARM_DRIVER_OK : ARM_DRIVER_ERROR;
+    return ret;
 }
-
 #if (RTE_ISP)
+
 /* ISP sensor access structure */
 static CAMERA_SENSOR_DEVICE *sensor;
 
@@ -597,18 +1547,6 @@ ISP_RESOURCES ISP_RES = {
 #endif /* RTE_ISP_BINNING_MODULE */
     .state = {0},
 };
-
-#if (RTE_ISP_AE_MODULE)
-int ISP_Sensor_AEIsStable(void)
-{
-    ISP_EXPOSURE_INFO_S info = {0};
-    int ret = VSI_MPI_ISP_QueryExposureInfo(ISP_RES.isp_port_id, &info);
-    if (ret) {
-        return -1;
-    }
-    return (int)info.isStable;
-}
-#endif /* RTE_ISP_AE_MODULE */
 
 /*
  * fn        int32_t ISP_Initialize (ARM_ISP_SignalEvent_t cb_event)

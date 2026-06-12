@@ -200,7 +200,7 @@ static int32_t ARM_MCI_Initialize(ARM_MCI_SignalEvent_t cb_event)
 
     p_arm_mci_event_cb    = cb_event;
     sd_param.dev_id       = SDMMC_DEV_ID;
-    sd_param.clock_id     = RTE_SDC_CLOCK_SELECT;
+    sd_param.clock_freq   = RTE_SDC_CLOCK_SELECT;
     sd_param.bus_width    = RTE_SDC_BUS_WIDTH;
     sd_param.dma_mode     = RTE_SDC_DMA_SELECT;
     sd_param.app_callback = sd_cb;

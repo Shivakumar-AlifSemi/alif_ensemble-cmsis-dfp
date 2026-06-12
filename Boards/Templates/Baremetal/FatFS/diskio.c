@@ -127,7 +127,7 @@ DSTATUS disk_initialize(BYTE drivenum)  // FATFS *p_sd_card, char *MEDIA_NAME, v
 #endif
 
     sd_param.dev_id       = SDMMC_DEV_ID;
-    sd_param.clock_id     = RTE_SDC_CLOCK_SELECT;
+    sd_param.clock_freq   = RTE_SDC_CLOCK_SELECT;
     sd_param.bus_width    = RTE_SDC_BUS_WIDTH;
     sd_param.dma_mode     = RTE_SDC_DMA_SELECT;
     sd_param.app_callback = sd_cb;
@@ -203,7 +203,14 @@ DRESULT disk_write(BYTE        pdrv,   /* Physical drive number to identify the 
         res = RES_ERROR;
     }
 
-    while (!dma_done_irq) {
+    uint32_t timeout = 1000000; // Max write Delay 1sec
+
+    while (!dma_done_irq && timeout--) {
+        sys_busy_loop_us(10);
+    }
+
+    if (!dma_done_irq) {
+        res = RES_ERROR;
     }
 
     return res;
@@ -240,4 +247,19 @@ DRESULT disk_ioctl(BYTE  pdrv, /* Physical drive number (0..) */
     }
 
     return RES_PARERR;
+}
+
+/*-----------------------------------------------------------------------*/
+/* Deinitialize a Drive                                                   */
+/*-----------------------------------------------------------------------*/
+
+DRESULT disk_deinitialize(BYTE pdrv)  /* Physical drive number to identify the drive */
+{
+    ARG_UNUSED(pdrv);
+
+    if (p_SD_Driver->disk_uninitialize(SDMMC_DEV_ID) != SD_DRV_STATUS_OK) {
+        return RES_ERROR;
+    }
+
+    return RES_OK;
 }

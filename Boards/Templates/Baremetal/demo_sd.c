@@ -213,7 +213,7 @@ void BareMetalSDTest(uint32_t startSec, uint32_t EndSector)
 #endif
 
     sd_param.dev_id       = SDMMC_DEV_ID;
-    sd_param.clock_id     = RTE_SDC_CLOCK_SELECT;
+    sd_param.clock_freq   = RTE_SDC_CLOCK_SELECT;
     sd_param.bus_width    = RTE_SDC_BUS_WIDTH;
     sd_param.dma_mode     = RTE_SDC_DMA_SELECT;
     sd_param.app_callback = sd_cb;
@@ -258,6 +258,8 @@ void BareMetalSDTest(uint32_t startSec, uint32_t EndSector)
         }
         startSec++;
     }
+
+    p_SD_Driver->disk_uninitialize(SDMMC_DEV_ID);
 
     return;
 }

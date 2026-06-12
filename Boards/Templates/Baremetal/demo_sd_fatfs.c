@@ -249,6 +249,8 @@ int main()
     }
 #endif
 
+    printf("SD FatFS baremetal test app started\n");
+
     /* Initialize the SE services */
     se_services_port_init();
 
@@ -272,6 +274,12 @@ int main()
     }
 
     SD_Baremetal_fatfs_test();
+
+    /* Unmount the SD card before returning */
+    f_unmount(MEDIA_NAME);
+
+    /* Deinitialize SD card through diskio interface */
+    disk_deinitialize(0);
 
     error_code = SERVICES_clocks_enable_clock(se_services_s_handle,
                                               CLKEN_CLK_100M,

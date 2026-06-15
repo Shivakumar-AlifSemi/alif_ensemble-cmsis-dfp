@@ -3440,12 +3440,10 @@
         <file category="source" name="se_services/source/services_host_clocks.c"/>
         <file category="source" name="se_services/source/services_host_extsys0.c"/>
         <file category="source" name="se_services/source/services_host_update.c"/>
-        <file category="header" name="se_services/templates/services_lib_interface.h"/>
-        <file category="source" name="se_services/templates/services_lib_interface.c"/>
          <!--se services example-->
         <file category="source" name="se_services/templates/m55_services_main.c" attr="template" select="SE Services Example"/>
-        <!--file category="header" name="se_services/templates/services_lib_interface.h" attr="template" select="SE Services Example"/>
-        <file category="source" name="se_services/templates/services_lib_interface.c" attr="template" select="SE Services Example"/-->
+        <file category="header" name="se_services/templates/services_lib_interface.h" attr="template" select="SE Services Example"/>
+        <file category="source" name="se_services/templates/services_lib_interface.c" attr="template" select="SE Services Example"/>
         <file category="source" name="se_services/templates/services_test.c" attr="template" select="SE Services Example"/>
         <file category="source" name="se_services/templates/services_test_crypto.c" attr="template" select="SE Services Example"/>
       </files>

@@ -758,31 +758,31 @@
 
 // <o> "UT_TRIGGER_MODE_GPO0" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=>
 // GPIO4 <5=> GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_UT_TRIGGER_MODE_GPO0_GPIO_PORT            0
+#define BOARD_UT_TRIGGER_MODE_GPO0_GPIO_PORT            2
 // <o> "UT_TRIGGER_MODE_GPO0" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_UT_TRIGGER_MODE_GPIO0_GPIO_PIN            0
+#define BOARD_UT_TRIGGER_MODE_GPO0_GPIO_PIN            4
 
 // <o> "UTIMER_GPO1" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=> GPIO4 <5=>
 // GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_UT_TRIGGER_MODE_GPO1_GPIO_PORT            0
+#define BOARD_UT_TRIGGER_MODE_GPO1_GPIO_PORT            2
 // <o> "UTIMER_GPO1" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=> PIN5
 // <6=> PIN6 <7=> PIN7
-#define BOARD_UT_TRIGGER_MODE_GPO1_GPIO_PIN             1
+#define BOARD_UT_TRIGGER_MODE_GPO1_GPIO_PIN             5
 
 // <o> "UT_CAPTURE_MODE_GPO0" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=>
 // GPIO4 <5=> GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_UT_CAPTURE_MODE_GPO0_GPIO_PORT            0
+#define BOARD_UT_CAPTURE_MODE_GPO0_GPIO_PORT            2
 // <o> "UT_CAPTURE_MODE_GPO0" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_UT_CAPTURE_MODE_GPO0_GPIO_PIN             2
+#define BOARD_UT_CAPTURE_MODE_GPO0_GPIO_PIN             6
 
 // <o> "UT_CAPTURE_MODE_GPO1" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=>
 // GPIO4 <5=> GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO
-#define BOARD_UT_CAPTURE_MODE_GPO1_GPIO_PORT            0
+#define BOARD_UT_CAPTURE_MODE_GPO1_GPIO_PORT            2
 // <o> "UT_CAPTURE_MODE_GPO1" GPIO pin number <0=> PIN0 <1=> PIN1 <2=> PIN2 <3=> PIN3 <4=> PIN4 <5=>
 // PIN5 <6=> PIN6 <7=> PIN7
-#define BOARD_UT_CAPTURE_MODE_GPO1_GPIO_PIN             3
+#define BOARD_UT_CAPTURE_MODE_GPO1_GPIO_PIN             7
 
 // <o> "UT_TRIGGER_MODE_T0_GPO" GPIO port number <0=> GPIO0 <1=> GPIO1 <2=> GPIO2 <3=> GPIO3 <4=>
 // GPIO4 <5=> GPIO5 <6=> GPIO6 <7=> GPIO7 <8=> GPIO8 <9=> GPIO9 <15=> LPGPIO

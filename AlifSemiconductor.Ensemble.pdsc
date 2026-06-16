@@ -2258,43 +2258,43 @@
 
         <file category="header" name="Device/core/rtss_hp/config/core_config.h" version="2.1.0"  attr="config" condition="M55_HP CMSIS-Core"/>
         <!-- linker Script for HP -->
-        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_ac6_mram.sct" version="2.1.0"  attr="config" condition="ARMCC6_HP"/>
+        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_ac6_mram.sct" version="2.2.0"  attr="config" condition="ARMCC6_HP"/>
         <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_ac6_tcm.sct" version="2.1.0"  attr="config" condition="ARMCC6_HP"/>
         <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_ac6_ospi_boot.sct" version="2.1.0"  attr="config" condition="ARMCC6_HP"/>
-        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_mram.ld.src" version="2.1.0"  attr="config" condition="GCC_HP"/>
+        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_mram.ld.src" version="2.2.0"  attr="config" condition="GCC_HP"/>
         <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_tcm.ld.src" version="2.1.0"  attr="config" condition="GCC_HP"/>
-        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_mram.ld.src" version="2.1.0"  attr="config" condition="CLANG_HP"/>
+        <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_mram.ld.src" version="2.2.0"  attr="config" condition="CLANG_HP"/>
         <file category="linkerScript" name="Device/core/rtss_hp/linker/linker_gnu_tcm.ld.src" version="2.1.0"  attr="config" condition="CLANG_HP"/>
 
         <file category="header" name="Device/core/rtss_he/config/core_config.h" version="2.1.0"  attr="config" condition="M55_HE CMSIS-Core"/>
         <file category="header" name="Device/core/rtss_he/config/core_config.h" version="2.1.0"  attr="config" condition="E1C"/>
         <!-- linker Script for HE -->
-        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_ac6_mram.sct" version="2.1.0"  attr="config" condition="ARMCC6_HE"/>
+        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_ac6_mram.sct" version="2.2.0"  attr="config" condition="ARMCC6_HE"/>
         <file category="linkerScript" name="Device/core/rtss_he/linker/linker_ac6_tcm.sct" version="2.1.0"  attr="config" condition="ARMCC6_HE"/>
         <file category="linkerScript" name="Device/core/rtss_he/linker/linker_ac6_ospi_boot.sct" version="2.1.0"  attr="config" condition="ARMCC6_HE"/>
-        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_mram.ld.src" version="2.1.0"  attr="config" condition="GCC_HE"/>
+        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_mram.ld.src" version="2.2.0"  attr="config" condition="GCC_HE"/>
         <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_tcm.ld.src" version="2.1.0"  attr="config" condition="GCC_HE"/>
-        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_mram.ld.src" version="2.1.0"  attr="config" condition="CLANG_HE"/>
+        <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_mram.ld.src" version="2.2.0"  attr="config" condition="CLANG_HE"/>
         <file category="linkerScript" name="Device/core/rtss_he/linker/linker_gnu_tcm.ld.src" version="2.1.0"  attr="config" condition="CLANG_HE"/>
 
         <!-- AE822FA0E5597 specific files -->
         <file category="include" name="Device/soc/AE822FA0E5597/include/" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Device/soc/AE822FA0E5597/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Device/soc/AE822FA0E5597/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Device/soc/AE822FA0E5597/config/app_mem_regions.h" version="3.0.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Device/soc/AE822FA0E5597/rte/RTE_Device.h"         version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
         <file category="include" name="Device/soc/AE822FA0E5597/include/rtss_hp/" condition="SoC AE822FA0E5597 M55_HP"/>
         <file category="include" name="Device/soc/AE822FA0E5597/include/rtss_he/" condition="SoC AE822FA0E5597 M55_HE"/>
 
         <!-- AE402FA0E5597 specific files -->
         <file category="include" name="Device/soc/AE402FA0E5597/include/" condition="SoC AE402FA0E5597"/>
-        <file category="header" name="Device/soc/AE402FA0E5597/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
-        <file category="header" name="Device/soc/AE402FA0E5597/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
+        <file category="header" name="Device/soc/AE402FA0E5597/config/app_mem_regions.h" version="3.0.0"  attr="config" condition="SoC AE402FA0E5597"/>
+        <file category="header" name="Device/soc/AE402FA0E5597/rte/RTE_Device.h"         version="2.2.0"  attr="config" condition="SoC AE402FA0E5597"/>
         <file category="include" name="Device/soc/AE402FA0E5597/include/rtss_hp/" condition="SoC AE402FA0E5597 M55_HP"/>
         <file category="include" name="Device/soc/AE402FA0E5597/include/rtss_he/" condition="SoC AE402FA0E5597 M55_HE"/>
 
         <!-- AE722F80F55D5 specific files -->
         <file category="include" name="Device/soc/AE722F80F55D5/include/" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Device/soc/AE722F80F55D5/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Device/soc/AE722F80F55D5/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Device/soc/AE722F80F55D5/config/app_mem_regions.h" version="3.0.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Device/soc/AE722F80F55D5/rte/RTE_Device.h"         version="2.2.0"  attr="config" condition="SoC AE722F80F55D5"/>
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_hp/" condition="SoC AE722F80F55D5 M55_HP"/>
         <file category="include" name="Device/soc/AE722F80F55D5/include/rtss_he/" condition="SoC AE722F80F55D5 M55_HE"/>
 
@@ -2330,8 +2330,8 @@
 
         <!-- AE1C1F4051920 specific files -->
         <file category="include" name="Device/soc/AE1C1F4051920/include/" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Device/soc/AE1C1F4051920/config/app_mem_regions.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Device/soc/AE1C1F4051920/rte/RTE_Device.h"         version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Device/soc/AE1C1F4051920/config/app_mem_regions.h" version="3.0.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Device/soc/AE1C1F4051920/rte/RTE_Device.h"         version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
         <file category="include" name="Device/soc/AE1C1F4051920/include/rtss_he/" condition="SoC AE1C1F4051920 M55_HE"/>
 
         <!-- Baremetal Common Templates for HP and HE Core -->
@@ -3471,63 +3471,63 @@
     <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e7" Cversion="2.2.0" condition="board_config_devkit_e7">
       <description>Conductor Tool based board configuration for DevKit-e7</description>
       <files>
-        <file category="header" name="Boards/DevKit-e7/board_defs.h" version="2.1.0"  attr="config"/>
-        <file category="header" name="Boards/DevKit-e7/pins.h" version="2.1.0"  attr="config"/>
-        <file category="header" name="Boards/DevKit-e7/gpios.h" version="2.1.0"  attr="config"/>
+        <file category="header" name="Boards/DevKit-e7/board_defs.h" version="2.2.0"  attr="config"/>
+        <file category="header" name="Boards/DevKit-e7/pins.h" version="2.2.0"  attr="config"/>
+        <file category="header" name="Boards/DevKit-e7/gpios.h" version="2.2.0"  attr="config"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E7-AIML" Cversion="2.2.0" condition="board_config_devkit_e7">
       <description>Conductor Tool based board configuration for AppKit-e7-aiml</description>
       <files>
-        <file category="header" name="Boards/AppKit-e7-aiml/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Boards/AppKit-e7-aiml/pins.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
-        <file category="header" name="Boards/AppKit-e7-aiml/gpios.h" version="2.1.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/AppKit-e7-aiml/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/AppKit-e7-aiml/pins.h" version="2.2.0"  attr="config" condition="SoC AE722F80F55D5"/>
+        <file category="header" name="Boards/AppKit-e7-aiml/gpios.h" version="2.2.0"  attr="config" condition="SoC AE722F80F55D5"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e8" Cversion="2.2.0" condition="Board Config E8">
       <description>Conductor Tool based board configuration for DevKit-e8</description>
       <files>
-        <file category="header" name="Boards/DevKit-e8/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Boards/DevKit-e8/pins.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Boards/DevKit-e8/gpios.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e8/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e8/pins.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e8/gpios.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="AppKit Config"  Cvariant="AppKit-E8-AIML" Cversion="2.2.0" condition="Board Config E8">
       <description>Conductor Tool based board configuration for AppKit-e8</description>
       <files>
-        <file category="header" name="Boards/AppKit-e8/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Boards/AppKit-e8/pins.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
-        <file category="header" name="Boards/AppKit-e8/gpios.h" version="2.1.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/AppKit-e8/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/AppKit-e8/pins.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
+        <file category="header" name="Boards/AppKit-e8/gpios.h" version="2.2.0"  attr="config" condition="SoC AE822FA0E5597"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e4" Cversion="2.2.0" condition="Board Config E4">
       <description>Conductor Tool based board configuration for DevKit-e4</description>
       <files>
-        <file category="header" name="Boards/DevKit-e4/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
-        <file category="header" name="Boards/DevKit-e4/pins.h" version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
-        <file category="header" name="Boards/DevKit-e4/gpios.h" version="2.1.0"  attr="config" condition="SoC AE402FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e4/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE402FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e4/pins.h" version="2.2.0"  attr="config" condition="SoC AE402FA0E5597"/>
+        <file category="header" name="Boards/DevKit-e4/gpios.h" version="2.2.0"  attr="config" condition="SoC AE402FA0E5597"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="DevKit Config"  Cvariant="DevKit-e1c" Cversion="2.2.0" condition="Board Config E1C">
       <description>Conductor Tool based board configuration for DevKit-e1c</description>
       <files>
-        <file category="header" name="Boards/DevKit-e1c/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Boards/DevKit-e1c/pins.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Boards/DevKit-e1c/gpios.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/DevKit-e1c/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/DevKit-e1c/pins.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/DevKit-e1c/gpios.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
       </files>
     </component>
 
     <component Cclass="BSP" Cgroup="StartKit Config"  Cvariant="StartKit-e1c" Cversion="2.2.0" condition="Board Config E1C">
       <description>Conductor Tool based board configuration for StartKit-e1c</description>
       <files>
-        <file category="header" name="Boards/StartKit-e1c/board_defs.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Boards/StartKit-e1c/pins.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
-        <file category="header" name="Boards/StartKit-e1c/gpios.h" version="2.1.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/StartKit-e1c/board_defs.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/StartKit-e1c/pins.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
+        <file category="header" name="Boards/StartKit-e1c/gpios.h" version="2.2.0"  attr="config" condition="SoC AE1C1F4051920"/>
       </files>
     </component>
 
@@ -3537,7 +3537,7 @@
         <file category="header" name="libs/retarget_io/include/retarget_init.h"/>
         <file category="header" name="libs/retarget_io/config/e8/retarget_config.h" version="2.1.0"  attr="config" condition="E8"/>
         <file category="header" name="libs/retarget_io/config/e7/retarget_config.h" version="2.1.0"  attr="config" condition="E7"/>
-        <file category="header" name="libs/retarget_io/config/e1c/retarget_config.h" version="2.1.0"  attr="config" condition="E1C"/>
+        <file category="header" name="libs/retarget_io/config/e1c/retarget_config.h" version="2.1.1"  attr="config" condition="E1C"/>
         <file category="header" name="libs/retarget_io/config/startkit-e1c/retarget_config.h" version="2.1.0" attr="config" condition="e1c-startkit"/>
         <file category="source" name="libs/retarget_io/source/stdin_USART.c"/>
       </files>

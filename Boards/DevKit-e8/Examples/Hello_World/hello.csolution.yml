@@ -7,12 +7,11 @@ solution:
   select-compiler:
     - compiler: AC6
     - compiler: GCC
-    - compiler: IAR
     - compiler: CLANG
 
   # List the packs that define the device and/or board.
   packs:
-    - pack: AlifSemiconductor::Ensemble@^2.1.0
+    - pack: AlifSemiconductor::Ensemble@^2.2.0
     - pack: ARM::CMSIS@^6.2.0
     - pack: ARM::CMSIS-Compiler@^2.1.0
 
@@ -43,4 +42,3 @@ solution:
   # List related projects.
   projects:
     - project: M55_HE/M55_HE.cproject.yml
-  compiler: GCC

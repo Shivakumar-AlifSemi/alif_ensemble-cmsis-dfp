@@ -114,15 +114,6 @@ void clock_init(void)
     }
 }
 
-static void CpuCacheEnable(void)
-{
-    /* Enable I-Cache */
-    SCB_EnableICache();
-
-    /* Enable D-Cache */
-    SCB_EnableDCache();
-}
-
 int main(void)
 {
     /* Apply pin configuration */
@@ -145,9 +136,6 @@ int main(void)
 #ifdef CMSIS_shield_header
     shield_setup();
 #endif
-
-    /* Enable the CPU Cache */
-    CpuCacheEnable();
 
     return app_main();
 }

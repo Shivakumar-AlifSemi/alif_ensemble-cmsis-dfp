@@ -2851,6 +2851,22 @@
       </files>
     </component>
 
+    <component Cclass="Device" Cgroup="SOC Peripherals" Csub="JPEG" Cversion="2.2.0" condition="Ensemble ISP Driver">
+      <description>JPEG Driver for Alif Semiconductor SOC</description>
+      <RTE_Components_h>  <!-- the following content goes into file 'RTE_Components.h' -->
+        #define RTE_Drivers_JPEG              /* Driver JPEG Controller */
+      </RTE_Components_h>
+      <files>
+        <file category="include" name="libs/jpeg/inc/"/>
+		<file category="header" name="Alif_CMSIS/Include/Driver_JPEG.h"/>
+		<file category="header" name="Alif_CMSIS/Source/Driver_JPEG_Private.h"/>
+		<file category="header" name="drivers/include/jpeg_hantro_vc9000e.h"/>
+		<file category="source" name="drivers/source/jpeg_hantro_vc9000e.c"/>
+        <file category="source" name="Alif_CMSIS/Source/Driver_JPEG.c"/>
+        <file category="library" name="libs/jpeg/libjpeg_hantro_sw_armclang.a" />
+      </files>
+    </component>
+
     <component Cclass="BSP" Cgroup="External peripherals" Csub="CAMERA Sensor MT9M114" Cversion="2.2.0" condition="Camera Sensor Driver">
       <description>CAMERA Sensor Driver for MT9M114</description>
       <RTE_Components_h> <!-- the following content goes into file 'RTE_Components.h' -->

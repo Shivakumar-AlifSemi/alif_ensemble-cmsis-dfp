@@ -18,8 +18,6 @@
 
 #include "Driver_RTC.h"
 #include "Driver_RTC_Private.h"
-#include "rtc.h"
-#include "sys_ctrl_rtc.h"
 
 #if defined(RTE_Drivers_RTC)
 

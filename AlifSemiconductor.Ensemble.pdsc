@@ -1832,13 +1832,19 @@
     <condition id="Ensemble">
       <description>Alif Semiconductor Ensemble Series devices</description>
       <require Dvendor="Alif Semiconductor:165"/>
+      <accept condition="Ensemble_NonE1C"/>
+      <accept Dvendor="Alif Semiconductor:165" Dname="AE1C1F*"/>
+    </condition>
+
+    <condition id="Ensemble_NonE1C">
+      <description>Alif Semiconductor Ensemble Series devices</description>
+      <require Dvendor="Alif Semiconductor:165"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE822FA0*"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE402FA0*"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE722F80*"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE512F80*"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE302F*"/>
       <accept Dvendor="Alif Semiconductor:165" Dname="AE101F*"/>
-      <accept Dvendor="Alif Semiconductor:165" Dname="AE1C1F*"/>
     </condition>
 
     <condition id="E7">
@@ -2372,7 +2378,7 @@
         <file category="source" name="Boards/Templates/Baremetal/demo_hyperram_e7.c" attr="template" select="OSPI Hyperram XIP Baremetal Demo" condition="E7"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_parallel_display.c" attr="template" select="Parallel Display Baremetal Demo"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_pdm.c" attr="template" select="PDM Baremetal Demo"/>
-        <file category="source" name="Boards/Templates/Baremetal/demo_adc_potentiometer.c" attr="template" select="Potentiometer Baremetal Demo"/>
+        <file category="source" name="Boards/Templates/Baremetal/demo_adc_potentiometer.c" attr="template" select="Potentiometer Baremetal Demo" condition="Ensemble_NonE1C"/>
         <file category="source" name="Boards/Templates/Baremetal/demo_pm.c" attr="template" select="Power Management Baremetal Demo"/>
         <!--<file category="source" name="Boards/Templates/Baremetal/demo_qec.c" attr="template" select="QEC Baremetal Demo"/>-->
         <file category="source" name="Boards/Templates/Baremetal/demo_rtc.c" attr="template" select="RTC Baremetal Demo"/>
@@ -2408,7 +2414,7 @@
         <file category="source" name="Boards/Templates/FreeRTOS/demo_adc_freertos.c" attr="template" select="ADC FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_adc_clickboard_freertos.c" attr="template" select="ADC Click Board FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_adc_exttrigger_freertos.c" attr="template" select="ADC External Trigger FreeRTOS Demo"/>
-        <file category="source" name="Boards/Templates/FreeRTOS/demo_adc_potentiometer_freertos.c" attr="template" select="ADC Potentiometer FreeRTOS Demo"/>
+        <file category="source" name="Boards/Templates/FreeRTOS/demo_adc_potentiometer_freertos.c" attr="template" select="ADC Potentiometer FreeRTOS Demo" condition="Ensemble_NonE1C"/>
         <file category="source" name="Boards/Templates/FreeRTOS/demo_camera_arx3a0_freertos.c" attr="template" select="ARX3A0 Camera Sensor FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/bayer2rgb/bayer2rgb.c" attr="template" select="ARX3A0 Camera Sensor FreeRTOS Demo"/>
         <file category="source" name="Boards/Templates/bayer2rgb/bayer.c" attr="template" select="ARX3A0 Camera Sensor FreeRTOS Demo"/>

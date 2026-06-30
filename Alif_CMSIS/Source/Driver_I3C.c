@@ -22,7 +22,7 @@
 #error "I3C is not enabled in the RTE_Device.h"
 #endif
 
-#define ARM_I3C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(7, 13) /* driver version */
+#define ARM_I3C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(7, 14) /* driver version */
 
 #if I3C_DMA_ENABLE
 /* DMA helper macros */
@@ -899,6 +899,12 @@ static int I3Cx_MasterTransmit(I3C_RESOURCES *i3c, uint8_t addr, const uint8_t *
             i3c_setup_tx(i3c->regs, &i3c->xfer, 0);
             ret = I3C_DMA_Start_TX(i3c, data, len);
             if (ret) {
+                i3c_flush_all_buffers(i3c->regs);
+                i3c->xfer.xfer_cmd.cmd_type = I3C_XFER_TYPE_NONE;
+                i3c->xfer.xfer_cmd.data_len = 0;
+                i3c->xfer.tx_cur_cnt        = 0;
+                i3c->xfer.tx_len            = 0;
+                i3c->status.busy            = 0;
                 return ARM_DRIVER_ERROR;
             }
         } else
@@ -994,6 +1000,12 @@ static int I3Cx_MasterReceive(I3C_RESOURCES *i3c, uint8_t addr, uint8_t *data, u
             i3c_setup_rx(i3c->regs, 0);
             ret = I3C_DMA_Start_RX(i3c, data, len);
             if (ret) {
+                i3c_flush_all_buffers(i3c->regs);
+                i3c->xfer.xfer_cmd.cmd_type = I3C_XFER_TYPE_NONE;
+                i3c->xfer.xfer_cmd.data_len = 0;
+                i3c->xfer.rx_cur_cnt        = 0;
+                i3c->xfer.rx_len            = 0;
+                i3c->status.busy            = 0;
                 return ARM_DRIVER_ERROR;
             }
         } else
@@ -1080,6 +1092,12 @@ static int I3Cx_SlaveTransmit(I3C_RESOURCES *i3c, const uint8_t *data, uint16_t 
             i3c_setup_tx(i3c->regs, &i3c->xfer, 0);
             ret = I3C_DMA_Start_TX(i3c, data, len);
             if (ret) {
+                i3c_flush_all_buffers(i3c->regs);
+                i3c->xfer.xfer_cmd.cmd_type = I3C_XFER_TYPE_NONE;
+                i3c->xfer.xfer_cmd.data_len = 0;
+                i3c->xfer.tx_cur_cnt        = 0;
+                i3c->xfer.tx_len            = 0;
+                i3c->status.busy            = 0;
                 return ARM_DRIVER_ERROR;
             }
         } else
@@ -1166,6 +1184,10 @@ static int I3Cx_SlaveReceive(I3C_RESOURCES *i3c, uint8_t *data, uint32_t len)
             i3c_setup_rx(i3c->regs, 0);
             ret = I3C_DMA_Start_RX(i3c, data, len);
             if (ret) {
+                i3c->xfer.xfer_cmd.cmd_type = I3C_XFER_TYPE_NONE;
+                i3c->xfer.rx_cur_cnt        = 0;
+                i3c->xfer.rx_len            = 0;
+                i3c->status.busy            = 0;
                 return ARM_DRIVER_ERROR;
             }
         } else
@@ -2098,8 +2120,10 @@ static void I3Cx_HandleError(I3C_RESOURCES *i3c, i3c_xfer_t *xfer, uint32_t *eve
         /* mark event as Transfer Error. */
         *event = ARM_I3C_EVENT_MESSAGE_TRANSFER_ABORT;
     }
-    /* error: Resume i3c controller and
-     *        clear error status. */
+    /* error: Flushes all buffers, resumes i3c controller,
+     *        clears error status and resumes
+     */
+    i3c_flush_all_buffers(i3c->regs);
     i3c_resume(i3c->regs);
     i3c_clear_xfer_error(i3c->regs);
 }

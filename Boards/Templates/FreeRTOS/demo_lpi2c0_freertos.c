@@ -161,7 +161,17 @@ static void i2c_mst_tranfer_callback(uint32_t event)
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     BaseType_t xResult                  = pdFALSE;
 
-    if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
+    /* callback event occurred */
+    if (event & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | ARM_I2C_EVENT_ADDRESS_NACK |
+                 ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_ARBITRATION_LOST)) {
+        /* Transfer Error. */
+	event = LPI2C_CB_EVENT_ERROR;
+    } else if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
+        /* Transfer Done. */
+	event = LPI2C_CB_EVENT_SUCCESS;
+    }
+
+    if (event & LPI2C_CB_EVENT_SUCCESS) {
         /* Transfer Success */
         xResult = xTaskNotifyFromISR(master_taskHandle,
                                      LPI2C_CB_EVENT_SUCCESS,

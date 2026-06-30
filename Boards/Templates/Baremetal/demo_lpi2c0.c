@@ -49,6 +49,12 @@
 // Set to 1: Use Conductor-generated pin configuration (from pins.h).
 #define USE_CONDUCTOR_TOOL_PINS_CONFIG 0
 
+/* LPI2C0 callback events */
+typedef enum _LPI2C_CB_EVENT {
+    LPI2C_CB_EVENT_SUCCESS = (1 << 0),
+    LPI2C_CB_EVENT_ERROR   = (1 << 1)
+} LPI2C_CB_EVENT;
+
 /* I2C Driver instance */
 extern ARM_DRIVER_I2C  Driver_I2C0;
 static ARM_DRIVER_I2C *I2C_mstdrv = &Driver_I2C0;
@@ -98,9 +104,14 @@ static uint8_t SLV_TX_BUF[SLV_BYTE_TO_TRANSMIT + 1] = {"Test_Message_to_Master"}
  */
 static void i2c_mst_tranfer_callback(uint32_t event)
 {
-    if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
-        /* Transfer or receive is finished */
-        mst_cb_status = 1;
+    /* callback event occurred */
+    if (event & (ARM_I2C_EVENT_TRANSFER_INCOMPLETE | ARM_I2C_EVENT_ADDRESS_NACK |
+                 ARM_I2C_EVENT_BUS_ERROR | ARM_I2C_EVENT_ARBITRATION_LOST)) {
+        /* Transfer Error. */
+	mst_cb_status = LPI2C_CB_EVENT_ERROR;
+    } else if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
+        /* Transfer Done. */
+	mst_cb_status = LPI2C_CB_EVENT_SUCCESS;
     }
 }
 
@@ -115,7 +126,7 @@ static void i2c_slv_transfer_callback(uint32_t event)
 {
     if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
         /* Transfer or receive is finished */
-        slv_cb_status = 1;
+        slv_cb_status = LPI2C_CB_EVENT_SUCCESS;
     }
 }
 
@@ -297,6 +308,12 @@ static void LPI2C0_demo(void)
     /* wait for master/slave callback. */
     while (mst_cb_status == 0) {
     }
+
+    if (mst_cb_status & LPI2C_CB_EVENT_ERROR) {
+        printf("\r\n Error: Transfer incomplete\n");
+        goto error_poweroff;
+    }
+
     mst_cb_status = 0;
 
     while (slv_cb_status == 0) {
@@ -320,6 +337,12 @@ static void LPI2C0_demo(void)
         /* wait for master callback. */
         while (mst_cb_status == 0) {
         }
+
+        if (mst_cb_status & LPI2C_CB_EVENT_ERROR) {
+            printf("\r\n Error: Transfer incomplete\n");
+            goto error_poweroff;
+        }
+
         mst_cb_status = 0;
 
         while (slv_cb_status == 0) {

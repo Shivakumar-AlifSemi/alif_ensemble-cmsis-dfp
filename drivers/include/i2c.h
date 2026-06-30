@@ -31,8 +31,9 @@ extern "C" {
 /* Disable I2C */
 #define I2C_IC_ENABLE_I2C_DISABLE            (0)
 
-/* i2c IC_ENABLE_STATUS Bits */
-#define I2C_IC_ENABLE_STATUS_IC_EN           (1 << 0)
+/* Field of IC_ENABLE_STATUS register*/
+#define I2C_ENABLE_STATUS_IC_EN              (1 << 0)
+#define I2C_IC_SDA_STUCK_RECOVERY_ENABLE     (1 << 3)
 
 /* i2c Status Register Fields. */
 #define I2C_IC_STATUS_ACTIVITY               (0x01) /* (1 << 0) */
@@ -129,20 +130,27 @@ extern "C" {
 #define I2C_IC_TX_ABRT_SBYTE_NORSTRT   (1 << 9)
 #define I2C_IC_TX_ABRT_10B_RD_NORSTRT  (1 << 10)
 #define I2C_IC_TX_ABRT_MASTER_DIS      (1 << 11)
-
 #define I2C_IC_TX_ABRT_ARB_LOST        (1 << 12)
 #define I2C_IC_TX_ABRT_SLVFLUSH_TXFIFO (1 << 13)
 #define I2C_IC_TX_ABRT_SLV_ARBLOST     (1 << 14)
 #define I2C_IC_TX_ABRT_SLVRD_INTX      (1 << 15)
+#define I2C_IC_TX_ABRT_USER_ABRT            (1 << 16)
+#define I2C_IC_TX_ABRT_SDA_STUCK_AT_LOW     (1 << 17)
+#define I2C_IC_TX_ABRT_DEVICE_NOACK         (1 << 18)
+#define I2C_IC_TX_ABRT_DEVICE_SLVADDR_NOACK (1 << 19)
+#define I2C_IC_TX_ABRT_DEVICE_WRITE         (1 << 20)
 
-/* Combined bits for i2c abort source as master */
+/* Combined bits for i2c abort source */
 #define I2C_MST_ABRT_ADDR_NOACK                                                                    \
-    (I2C_IC_TX_ABRT_7B_ADDR_NOACK | I2C_IC_TX_ABRT_10ADDR1_NOACK | I2C_IC_TX_ABRT_10ADDR2_NOACK)
-#define I2C_MST_ABRT_LOST_BUS   (I2C_IC_TX_ABRT_ARB_LOST)
+        (I2C_IC_TX_ABRT_7B_ADDR_NOACK | I2C_IC_TX_ABRT_10ADDR1_NOACK |                             \
+         I2C_IC_TX_ABRT_10ADDR2_NOACK | I2C_IC_TX_ABRT_DEVICE_SLVADDR_NOACK)
 #define I2C_MST_ABRT_DATA_NOACK (I2C_IC_TX_ABRT_TXDATA_NOACK)
 
-/* Combined bits for i2c abort source as slave */
-#define I2C_SLV_ABRT_LOST_BUS   (I2C_IC_TX_ABRT_ARB_LOST | I2C_IC_TX_ABRT_SLV_ARBLOST)
+#define I2C_ABRT_ARBITRATION_LOST    (I2C_IC_TX_ABRT_ARB_LOST | I2C_IC_TX_ABRT_SLV_ARBLOST)
+#define I2C_MST_ABRT_GCALL            (I2C_IC_TX_ABRT_GCALL_NOACK | I2C_IC_TX_ABRT_GCALL_READ)
+#define I2C_MST_ABRT_UNEXPECTED_ACK_DET   (I2C_IC_TX_ABRT_HS_ACKDET | I2C_IC_TX_ABRT_SBYTE_ACKDET)
+#define I2C_MST_ABRT_NORSTRT                                                                       \
+    (I2C_IC_TX_ABRT_HS_NORSTRT | I2C_IC_TX_ABRT_SBYTE_NORSTRT | I2C_IC_TX_ABRT_10B_RD_NORSTRT)
 
 /* Enabling of I2C Tx and Rx transfer through DMA */
 #define I2C_DMACR_TX_DMA_ENABLE (1 << 1)
@@ -175,9 +183,6 @@ extern "C" {
 #define I2C_IC_TAR_SPECIAL     (0x00)
 #define I2C_IC_TAR_GC_OR_START (0x00)
 #endif
-
-/* Field of IC_ENABLE_STATUS register*/
-#define I2C_ENABLE_STATUS_IC_EN              (1 << 0)
 
 /* register configuration
  * ---------------------------------------------------------------------------------------- */
@@ -233,27 +238,6 @@ typedef enum i2c_speed_mode {
     I2C_SPEED_HIGH     = 4 /* Bidirectional, High-Speed-mode (HS), with a bitrate up to 3.4Mbit/s */
 } i2c_speed_mode_t;
 
-/* I2C Error State */
-typedef enum i2c_error_state {
-    I2C_ERR_NONE       = 0, /* Currently in I2C device free state */
-    I2C_ERR_LOST_BUS   = 1, /* Master or slave lost bus during operation */
-    I2C_ERR_ADDR_NOACK = 2, /* Slave address is sent but not addressed by any slave devices */
-    I2C_ERR_DATA_NOACK = 3, /* Data in transfer is not acked when it should be acked */
-    I2C_ERR_TIMEOUT    = 4, /* Transfer timeout, no more data is received or sent */
-    I2C_ERR_MSTSTOP    = 5, /* Slave received a STOP condition from master device */
-    I2C_ERR_UNDEF      = 6, /* Undefined error cases */
-    I2C_ERR_GCALL      = 7, /* General call detected after slave receiver address from master */
-    I2C_ERR_10B_RD_NORSTRT =
-        8, /* Master in Receive mode during 10 bit addressing but comm restart is disabled */
-    I2C_ERR_HS_ACKDET  = 9, /* Ack detected in High speed comm */
-    I2C_ERR_HS_NORSTRT = 10 /* No restart mode available for HigH speed mode */
-} i2c_error_state_t;
-
-/* I2C next Condition */
-typedef enum i2c_next_condtion {
-    I2C_MODE_STOP    = 0, /* Send a STOP condition after write/read operation     */
-    I2C_MODE_RESTART = 1  /* Send a RESTART condition after write/read operation  */
-} i2c_next_condtion_t;
 
 /* I2C Addressing Mode */
 typedef enum i2c_address_mode {
@@ -262,32 +246,38 @@ typedef enum i2c_address_mode {
 } i2c_address_mode_t;
 
 /* I2C transfer state */
-typedef enum _I2C_TRANSFER_STATE {
-    I2C_TRANSFER_NONE   = 0, /* Transfer state none      */
-    I2C_TRANSFER_MST_TX = 1, /* Transfer state master tx */
-    I2C_TRANSFER_MST_RX = 2, /* Transfer state master rx */
-    I2C_TRANSFER_SLV_TX = 3, /* Transfer state slave tx  */
-    I2C_TRANSFER_SLV_RX = 4  /* Transfer state slave rx  */
-} I2C_TRANSFER_STATE;
+typedef enum _I2C_XFER_STATE {
+    I2C_XFER_NONE   = 0, /* Transfer state none      */
+    I2C_XFER_MST_TX = 1, /* Transfer state master tx */
+    I2C_XFER_MST_RX = 2, /* Transfer state master rx */
+    I2C_XFER_SLV_TX = 3, /* Transfer state slave tx  */
+    I2C_XFER_SLV_RX = 4  /* Transfer state slave rx  */
+} I2C_XFER_STATE;
 
 /**
- * enum I2C_TRANSFER_STATUS.
+ * enum I2C_XFER_STS.
  * Status of an ongoing I2C transfer.
  */
-typedef enum _I2C_TRANSFER_STATUS {
-    I2C_TRANSFER_STATUS_NONE             = 0,        /**< Transfer status none             */
-    I2C_TRANSFER_STATUS_DONE             = (1 << 0), /**< Transfer status done             */
-    I2C_TRANSFER_STATUS_INCOMPLETE       = (1 << 1), /**< Transfer status incomplete       */
-    I2C_TRANSFER_STATUS_SLAVE_TRANSMIT   = (1 << 2), /**< Transfer status slave transmit   */
-    I2C_TRANSFER_STATUS_SLAVE_RECEIVE    = (1 << 3), /**< Transfer status slave receieve   */
-    I2C_TRANSFER_STATUS_ADDRESS_NACK     = (1 << 4), /**< Transfer status address nack     */
-    I2C_TRANSFER_STATUS_GENERAL_CALL     = (1 << 5), /**< Transfer status general call     */
-    I2C_TRANSFER_STATUS_ARBITRATION_LOST = (1 << 6), /**< Transfer status arbitration lost */
-    I2C_TRANSFER_STATUS_BUS_ERROR        = (1 << 7), /**< Transfer status bus error        */
-    I2C_TRANSFER_STATUS_BUS_CLEAR        = (1 << 8), /**< Transfer status bus clear        */
-    I2C_TRANSFER_STATUS_HS_ACKDET        = (1 << 9), /**< Transfer status Ack detected in HS Code */
-    I2C_TRANSFER_STATUS_HS_NORSTRT       = (1 << 10) /**< Transfer status No restart in HS Mode */
-} I2C_TRANSFER_STATUS;
+typedef enum _I2C_XFER_EVENT{
+    I2C_XFER_EVENT_NONE             = 0,         /* Xfer event: None                    */
+    I2C_XFER_EVENT_DONE             = (1 << 0),  /* Xfer event: Done (success)          */
+    I2C_XFER_EVENT_GCALL            = (1 << 1),  /* Xfer event: General call            */
+    I2C_XFER_EVENT_BUS_CLEAR        = (1 << 2),  /* Xfer event: Bus clear               */
+    I2C_XFER_EVENT_INCOMPLETE       = (1 << 3),  /* Xfer event: Incomplete              */
+    I2C_XFER_EVENT_ADDR_NOACK       = (1 << 4),  /* Xfer event: Slave address no ack    */
+    I2C_XFER_EVENT_GCALL_ERR        = (1 << 5),  /* Xfer event: Error in General call   */
+    I2C_XFER_EVENT_UNEXPECTED_ACK   = (1 << 6),  /* Xfer event: Unexpected ack rcvd: either for HS mode or Start byte */
+    I2C_XFER_EVENT_NO_RESTART       = (1 << 7),  /* Xfer event: Current comm requires Restart mode but it's disabled  */
+    I2C_XFER_EVENT_MASTER_DIS       = (1 << 8),  /* Xfer event: Current comm needs master mode but it's disabled      */
+    I2C_XFER_EVENT_ARBITRATION_LOST = (1 << 9),  /* Xfer event: Arbitration lost        */
+    I2C_XFER_EVENT_TX_FIFO_FLUSH    = (1 << 10), /* Xfer event: Flush the previous (stale) tx fifo as master sent fresh read cmd */
+    I2C_XFER_EVENT_RX_IN_TX_MODE    = (1 << 11), /* Xfer event: Read command sent in Tx mode  */
+    I2C_XFER_EVENT_USER_ABORT       = (1 << 12), /* Xfer event: User abort                    */
+    I2C_XFER_EVENT_SDA_STUCK_AT_LOW = (1 << 13), /* Xfer event: SDA is stuck at low for IC_SDA_STUCK_AT_LOW_TIMEOUT   */
+    I2C_XFER_EVENT_DEV_ID_NOACK     = (1 << 14), /* Xfer event: No ack for Device ID transfer */
+    I2C_XFER_EVENT_DEV_ID_WRITE     = (1 << 15), /* Xfer event: Some data available in Tx FIFO during Device ID communication */
+    I2C_XFER_EVENT_UNDEF_TX_ABORT   = (1 << 16), /* Xfer event: Undefined Tx abort            */
+} I2C_XFER_EVENT;
 
 /* i2c Transfer Information (Run-Time) */
 typedef struct i2c_transfer_info {
@@ -303,13 +293,11 @@ typedef struct i2c_transfer_info {
     volatile uint32_t curr_cnt;  /* common current count update in ARM_I2C_GetDataCount function  */
     volatile uint32_t tx_over;   /* i2c tx overflow count   */
     volatile uint32_t rx_over;   /* i2c rx overflow count   */
-    volatile int32_t  err_state; /* \ref I2C_ERROR_STATE "current error state for i2c device" */
-    volatile I2C_TRANSFER_STATE curr_stat; /* \ref I2C_TRANSFER_STATE "current working state for i2c
+    volatile bool     abort;     /* i2c transfer abort */
+    volatile I2C_XFER_STATE curr_stat; /* \ref I2C_XFER_STATE "current working state for i2c
                                               device"          */
-    volatile uint32_t next_cond; /* \ref I2C_NEXT_CONDTION "next condition for master transmit or
-                                    receive", \ possible values are STOP or RESTART, it should be
-                                    STOP for first open  */
-    volatile I2C_TRANSFER_STATUS status;  /* \ref to I2C_TRANSFER_STATUS for data transfer state  */
+    volatile bool     cmd_bus_clr;        /* user command to clear bus */
+    volatile I2C_XFER_EVENT evt_sts;  /* \ref to I2C_XFER_EVENT for data transfer event status  */
     volatile bool                wr_mode; /* write-read mode */
 } i2c_transfer_info_t;
 
@@ -339,6 +327,17 @@ static inline void i2c_disable(I2C_Type *i2c)
 
     while (i2c->I2C_ENABLE_STATUS & I2C_ENABLE_STATUS_IC_EN) {
     }
+}
+
+/**
+ * @brief   Recover the I2C SDA stuck at low
+ * @note    none
+ * @param   i2c : Pointer to i2c register map
+ * @retval  none
+ */
+static inline void i2c_master_recover_sda(I2C_Type *i2c)
+{
+    i2c->I2C_ENABLE |= I2C_IC_SDA_STUCK_RECOVERY_ENABLE;
 }
 
 /**
@@ -686,7 +685,7 @@ static inline void i2c_enable_dma_slave_rx(I2C_Type *i2c)
  * @retval   none
  */
 void i2c_set_target_addr(I2C_Type *i2c, const uint32_t address, const i2c_address_mode_t addr_mode,
-                         const I2C_TRANSFER_STATE cur_state);
+                         const I2C_XFER_STATE cur_state);
 
 /**
  * @brief   Setup i2c master clock configuration

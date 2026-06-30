@@ -209,7 +209,7 @@ void BareMetalSDIOTest(void)
 #endif
 
     sd_param.dev_id       = SDMMC_DEV_ID;
-    sd_param.clock_id     = RTE_SDC_CLOCK_SELECT;
+    sd_param.clock_freq   = RTE_SDC_CLOCK_SELECT;
     sd_param.bus_width    = RTE_SDC_BUS_WIDTH;
     sd_param.dma_mode     = RTE_SDC_DMA_SELECT;
     sd_param.app_callback = sd_cb;
@@ -229,6 +229,8 @@ void BareMetalSDIOTest(void)
         sdio_read_cia((uint8_t *) &sdbuffer[i], 0, i);  // cccr
         printf("0x%" PRIx32 ": 0x%" PRIx8 "\n", i, sdbuffer[i]);
     }
+
+    p_SD_Driver->disk_uninitialize(SDMMC_DEV_ID);
 }
 
 int main()

@@ -17,10 +17,10 @@
 #include "Driver_I2C_Private.h"
 
 /* Driver version */
-#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 8)
+#define ARM_I2C_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR(1, 11)
 
 /* Driver Version */
-static const ARM_DRIVER_VERSION DriverVersion        = {ARM_I2C_API_VERSION, ARM_I2C_DRV_VERSION};
+static const ARM_DRIVER_VERSION DriverVersion = {ARM_I2C_API_VERSION, ARM_I2C_DRV_VERSION};
 
 /* Driver Capabilities */
 static const ARM_I2C_CAPABILITIES DriverCapabilities = {
@@ -271,11 +271,10 @@ static int32_t ARM_I2C_Initialize(ARM_I2C_SignalEvent_t cb_event, I2C_RESOURCES 
     I2C->addr_mode              = I2C_7BIT_ADDRESS;
     I2C->tar_addr               = I2C_0_TARADDR;
 
-    I2C->tar_addr              &= I2C_7BIT_ADDRESS_MASK;
-    I2C->slv_addr              &= I2C_7BIT_ADDRESS_MASK;
+    I2C->tar_addr              &= I2C_7BIT_ADDR_MASK;
+    I2C->slv_addr              &= I2C_7BIT_ADDR_MASK;
 
-    I2C->transfer.err_state     = I2C_ERR_NONE;
-    I2C->transfer.next_cond     = I2C_MODE_STOP;
+    I2C->transfer.abort         = false;
 
     I2C->transfer.tx_over       = 0U;
     I2C->transfer.rx_over       = 0U;
@@ -353,9 +352,8 @@ static int32_t ARM_I2C_Uninitialize(I2C_RESOURCES *I2C)
     I2C->transfer.rx_over          = 0U;
 
     I2C->transfer.xfer_pending     = 0U;
-    I2C->transfer.next_cond        = I2C_MODE_STOP;
-    I2C->transfer.err_state        = I2C_ERR_NONE;
-    I2C->transfer.curr_stat        = I2C_TRANSFER_NONE;
+    I2C->transfer.abort            = false;
+    I2C->transfer.curr_stat        = I2C_XFER_NONE;
 
     /* Clear driver status \ref ARM_I2C_STATUS */
     I2C->status.busy               = 0U;
@@ -538,7 +536,8 @@ static int32_t ARM_I2C_MasterTransmit(I2C_RESOURCES *I2C, uint32_t addr, const u
 #endif
 
     /* addr 7bit addr: 0x7F , 10bit addr: 0x3FF */
-    if ((data == NULL) || (num == 0U) || ((addr & (~ARM_I2C_ADDRESS_10BIT)) > 0x3FF)) {
+    if ((data == NULL) || (num == 0U) ||
+        ((addr & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX)) {
         /* Invalid parameters */
         return ARM_DRIVER_ERROR_PARAMETER;
     }
@@ -566,7 +565,7 @@ static int32_t ARM_I2C_MasterTransmit(I2C_RESOURCES *I2C, uint32_t addr, const u
     I2C->transfer.tx_curr_cnt    = 0U;
     I2C->transfer.curr_cnt       = 0U;
     I2C->transfer.tx_over        = 0U;
-    I2C->transfer.curr_stat      = I2C_TRANSFER_MST_TX;
+    I2C->transfer.curr_stat      = I2C_XFER_MST_TX;
 
     I2C_SetTargetAddress(I2C, addr);
 
@@ -668,7 +667,8 @@ static int32_t ARM_I2C_MasterReceive(I2C_RESOURCES *I2C, uint32_t addr, uint8_t 
 #endif
 
     /* addr 7bit addr: 0x7F , 10bit addr: 0x3FF */
-    if ((data == NULL) || (num == 0U) || ((addr & (~ARM_I2C_ADDRESS_10BIT)) > 0x3FF)) {
+    if ((data == NULL) || (num == 0U) ||
+        ((addr & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX)) {
         /* Invalid parameters */
         return ARM_DRIVER_ERROR_PARAMETER;
     }
@@ -699,7 +699,7 @@ static int32_t ARM_I2C_MasterReceive(I2C_RESOURCES *I2C, uint32_t addr, uint8_t 
     I2C->transfer.curr_cnt         = 0U;
     I2C->transfer.rx_curr_tx_index = 0U;
     I2C->transfer.rx_over          = 0U;
-    I2C->transfer.curr_stat        = I2C_TRANSFER_MST_RX;
+    I2C->transfer.curr_stat        = I2C_XFER_MST_RX;
 
     /* Clear all interrupts */
     i2c_clear_all_interrupt(I2C->regs);
@@ -811,7 +811,7 @@ static int32_t ARM_I2C_SlaveTransmit(I2C_RESOURCES *I2C, const uint8_t *data, ui
     I2C->transfer.tx_curr_cnt    = 0U;
     I2C->transfer.curr_cnt       = 0U;
     I2C->transfer.tx_over        = 0U;
-    I2C->transfer.curr_stat      = I2C_TRANSFER_SLV_TX;
+    I2C->transfer.curr_stat      = I2C_XFER_SLV_TX;
 
     /* Clear all interrupts */
     i2c_clear_all_interrupt(I2C->regs);
@@ -923,7 +923,7 @@ static int32_t ARM_I2C_SlaveReceive(I2C_RESOURCES *I2C, uint8_t *data, uint32_t 
     /* fill the i2c transfer structure as per user detail */
     I2C->transfer.rx_curr_cnt = 0U;
     I2C->transfer.curr_cnt    = 0U;
-    I2C->transfer.curr_stat   = I2C_TRANSFER_SLV_RX;
+    I2C->transfer.curr_stat   = I2C_XFER_SLV_RX;
     I2C->transfer.rx_over     = 0U;
 
     /* Clear all interrupts */
@@ -1016,9 +1016,16 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         speed = I2C_GetBusSpeed(I2C, ARM_I2C_BUS_SPEED_STANDARD);
 
         if (arg & ARM_I2C_ADDRESS_10BIT) {
+            if ((arg & (~ARM_I2C_ADDRESS_10BIT)) > I2C_10BIT_ADDR_MAX) {
+                return ARM_DRIVER_ERROR_UNSUPPORTED;
+            }
             /* Sets 10 bit addr mode */
             I2C->addr_mode = I2C_10BIT_ADDRESS;
         } else {
+            /* Reject reserved blocks: 0x00..0x07 and 0x78..0x7F. */
+            if (arg < I2C_7BIT_ADDR_MIN || arg > I2C_7BIT_ADDR_MAX) {
+                return ARM_DRIVER_ERROR_UNSUPPORTED;
+            }
             /* Sets 7 bit addr mode */
             I2C->addr_mode = I2C_7BIT_ADDRESS;
         }
@@ -1037,6 +1044,10 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
     case ARM_I2C_BUS_SPEED:
 
         speed = I2C_GetBusSpeed(I2C, arg);
+        /* Unsupported speed */
+        if (speed == ARM_DRIVER_ERROR_UNSUPPORTED) {
+            return speed;
+        }
         /* arg is i2c bus speed */
         i2c_master_init(I2C->regs, I2C->tar_addr);
 
@@ -1053,17 +1064,13 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         break;
 
     case ARM_I2C_BUS_CLEAR:
-        /* disable device, clear all the interrupt, enable device. */
-        i2c_disable(I2C->regs);
-        i2c_clear_all_interrupt(I2C->regs);
 
-        I2C->transfer.next_cond = I2C_MODE_STOP;
-        I2C->transfer.curr_stat = I2C_TRANSFER_NONE;
-        I2C->transfer.err_state = I2C_ERR_NONE;
-        I2C->transfer.tx_over   = 0U;
-        I2C->transfer.rx_over   = 0U;
-
-        i2c_enable(I2C->regs);
+        if (I2C->mode != I2C_MASTER_MODE) {
+            return ARM_DRIVER_ERROR_PARAMETER;
+        }
+        /* Enable SDA low stuck recovery */
+        I2C->transfer.cmd_bus_clr = true;
+        i2c_master_recover_sda(I2C->regs);
 
         break;
 
@@ -1109,7 +1116,7 @@ static int32_t ARM_I2C_Control(I2C_RESOURCES *I2C, uint32_t control, uint32_t ar
         /* Reset the tx_buffer */
         I2C->transfer.tx_total_num = 0U;
         I2C->transfer.rx_total_num = 0U;
-        I2C->transfer.curr_stat    = I2C_TRANSFER_NONE;
+        I2C->transfer.curr_stat    = I2C_XFER_NONE;
 
         /* clear busy status bit. */
         I2C->status.busy           = 0U;
@@ -1153,6 +1160,79 @@ static ARM_I2C_STATUS ARM_I2C_GetStatus(const I2C_RESOURCES *I2C)
 }
 
 /**
+ * @brief   CMSIS-Driver i2c irq error handler
+ * @note    none
+ * @param   I2C_RES  : Pointer to i2c resources structure
+ * @retval  none
+ */
+void I2C_HandleIRQError(I2C_RESOURCES *I2C_RES)
+{
+    i2c_transfer_info_t *transfer = &(I2C_RES->transfer);
+    ARM_I2C_STATUS      *i2c_stat = &(I2C_RES->status);
+
+#if I2C_DMA_ENABLE
+        if (I2C_RES->dma_enable) {
+            if (I2C_RES->status.direction == I2C_DIR_TRANSMITTER) {
+                I2C_DMA_Stop(&I2C_RES->dma_cfg->dma_tx);
+            } else {
+                I2C_DMA_Stop(&I2C_RES->dma_cfg->dma_rx);
+            }
+        }
+#endif
+    if (transfer->evt_sts & I2C_XFER_EVENT_INCOMPLETE) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_TRANSFER_DONE |
+                           ARM_I2C_EVENT_TRANSFER_INCOMPLETE);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_ADDR_NOACK) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_ADDRESS_NACK);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_ARBITRATION_LOST) {
+        i2c_stat->arbitration_lost = 1U;
+
+        I2C_RES->cb_event(ARM_I2C_EVENT_ARBITRATION_LOST);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_USER_ABORT) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_USER_ABORT    |
+                          ARM_I2C_EVENT_TRANSFER_DONE |
+                          ARM_I2C_EVENT_TRANSFER_INCOMPLETE);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_GCALL_ERR) {
+        i2c_stat->bus_error = 1U;
+        I2C_RES->cb_event((ARM_I2C_EVENT_GCALL_ERROR  |
+                           ARM_I2C_EVENT_BUS_ERROR));
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_NO_RESTART) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_RESTART_DISABLED);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_SDA_STUCK_AT_LOW) {
+        i2c_stat->bus_error = 1U;
+        I2C_RES->cb_event(ARM_I2C_EVENT_SDA_STUCK_LOW  |
+                          ARM_I2C_EVENT_BUS_ERROR);
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_UNEXPECTED_ACK) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_UNEXPECTED_ACK |
+                          ARM_I2C_EVENT_BUS_ERROR);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_DEV_ID_NOACK) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_DEV_ID_NACK);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_MASTER_DIS) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_MASTER_DISABLED);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_RX_IN_TX_MODE) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_RX_IN_TX_MODE);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_DEV_ID_WRITE) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_DEV_ID_TX_DATA);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_TX_FIFO_FLUSH) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_TX_FIFO_FLUSHED);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_UNDEF_TX_ABORT) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_UNDEF_TX_ABORT);
+    }
+}
+
+/**
  * @brief   CMSIS-Driver i2c irq status handler
  * @note    none
  * @param   I2C_RES : Pointer to i2c resources structure
@@ -1164,58 +1244,23 @@ void I2C_HandleIRQStatus(I2C_RESOURCES *I2C_RES)
     ARM_I2C_STATUS      *i2c_stat = &(I2C_RES->status);
 
     /* Check the ISR response */
-    if (transfer->status & I2C_TRANSFER_STATUS_DONE) {
-        /* set busy flag to 0U */
-        i2c_stat->busy = 0U;
+    if (transfer->evt_sts & I2C_XFER_EVENT_DONE) {
 
         I2C_RES->cb_event(ARM_I2C_EVENT_TRANSFER_DONE);
-    } else if (transfer->status & I2C_TRANSFER_STATUS_GENERAL_CALL) {
-        I2C_RES->cb_event(ARM_I2C_EVENT_GENERAL_CALL);
-    } else if (transfer->status & I2C_TRANSFER_STATUS_BUS_CLEAR) {
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_GCALL) {
+        I2C_RES->cb_event(ARM_I2C_EVENT_GENERAL_CALL | ARM_I2C_EVENT_TRANSFER_DONE);
+
+    } else if (transfer->evt_sts & I2C_XFER_EVENT_BUS_CLEAR) {
+        transfer->cmd_bus_clr = false;
         I2C_RES->cb_event(ARM_I2C_EVENT_BUS_CLEAR);
+
     } else {
-#if I2C_DMA_ENABLE
-        if (I2C_RES->dma_enable) {
-            if (I2C_RES->status.direction == I2C_DIR_TRANSMITTER) {
-                I2C_DMA_Stop(&I2C_RES->dma_cfg->dma_tx);
-            } else {
-                I2C_DMA_Stop(&I2C_RES->dma_cfg->dma_rx);
-            }
-            /* set busy flag to 0U */
-            i2c_stat->busy = 0U;
-        }
-#endif
-        if (transfer->status & I2C_TRANSFER_STATUS_SLAVE_TRANSMIT) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_SLAVE_TRANSMIT);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_SLAVE_RECEIVE) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_SLAVE_RECEIVE);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_ADDRESS_NACK) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_ADDRESS_NACK);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_ARBITRATION_LOST) {
-            i2c_stat->arbitration_lost = 1U;
-
-            I2C_RES->cb_event(ARM_I2C_EVENT_ARBITRATION_LOST);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_BUS_ERROR) {
-            i2c_stat->bus_error = 1U;
-
-            I2C_RES->cb_event(ARM_I2C_EVENT_BUS_ERROR);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_INCOMPLETE) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_TRANSFER_INCOMPLETE);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_HS_ACKDET) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_HS_ACKDET);
-            i2c_stat->busy = 0U;
-        } else if (transfer->status & I2C_TRANSFER_STATUS_HS_NORSTRT) {
-            I2C_RES->cb_event(ARM_I2C_EVENT_HS_NO_RESTART);
-            i2c_stat->busy = 0U;
-        }
+        I2C_HandleIRQError(I2C_RES);
     }
-    transfer->status = I2C_TRANSFER_STATUS_NONE;
+    /* set busy flag to 0U */
+    i2c_stat->busy = 0U;
+    transfer->evt_sts = I2C_XFER_EVENT_NONE;
 }
 
 /**
@@ -1230,26 +1275,29 @@ void I2C_IRQHandler(I2C_RESOURCES *I2C_RES)
 
     /* Check for master mode */
     if (I2C_RES->mode == I2C_MASTER_MODE) {
-        if (transfer->curr_stat == I2C_TRANSFER_MST_TX) {
+        if (transfer->curr_stat == I2C_XFER_MST_TX) {
             /* Master transmit*/
             i2c_master_tx_isr(I2C_RES->regs, transfer);
         }
-        if (transfer->curr_stat == I2C_TRANSFER_MST_RX) {
+        if (transfer->curr_stat == I2C_XFER_MST_RX) {
             /* Master receive */
             i2c_master_rx_isr(I2C_RES->regs, transfer);
         }
     } else /* Slave mode */ {
-        if (transfer->curr_stat == I2C_TRANSFER_SLV_TX) {
+        if (transfer->curr_stat == I2C_XFER_SLV_TX) {
             /* slave transmit*/
             i2c_slave_tx_isr(I2C_RES->regs, transfer);
         }
-        if (transfer->curr_stat == I2C_TRANSFER_SLV_RX) {
+        if (transfer->curr_stat == I2C_XFER_SLV_RX) {
             /* slave receive */
             i2c_slave_rx_isr(I2C_RES->regs, transfer);
         }
     } /* Slave mode */
 
-    I2C_HandleIRQStatus(I2C_RES);
+    /* Handle the status only if any event occurred */
+    if (transfer->evt_sts != I2C_XFER_EVENT_NONE) {
+        I2C_HandleIRQStatus(I2C_RES);
+    }
 }
 
 #if I2C_DMA_ENABLE

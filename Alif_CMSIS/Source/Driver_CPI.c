@@ -1019,14 +1019,14 @@ static CPI_FIFO_CONFIG fifo_cnfg = {
 
 #if SOC_FEAT_CPI_HAS_CROPPING
 /* LPCPI Horizontal Configuration. */
-static CPI_HORIZONTAL_CONFIG hconfig = {
+static CPI_HORIZONTAL_CONFIG lp_hconfig = {
     .hbp = RTE_LPCPI_HBP,
     .hfp = RTE_LPCPI_HFP,
     .hfp_en = RTE_LPCPI_HFP_EN,
 };
 
 /* LPCPI Vertical Configuration. */
-static CPI_VERTICAL_CONFIG vconfig = {
+static CPI_VERTICAL_CONFIG lp_vconfig = {
     .vbp = RTE_LPCPI_VBP,
     .vfp = RTE_LPCPI_VFP,
     .vfp_en = RTE_LPCPI_VFP_EN,
@@ -1041,8 +1041,8 @@ static CPI_CONFIG cnfg = {
 #endif
     .fifo           = &fifo_cnfg,
 #if SOC_FEAT_CPI_HAS_CROPPING
-    .horizontal_cfg = &hconfig,
-    .vertical_cfg   = &vconfig,
+    .horizontal_cfg = &lp_hconfig,
+    .vertical_cfg   = &lp_vconfig,
 #endif
 };
 

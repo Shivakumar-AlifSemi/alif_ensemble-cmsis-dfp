@@ -8,8 +8,8 @@
   <license>License.txt</license>
 
   <releases>
-    <release version="2.2.0-rc1"  tag="v2.2.0-rc1" url="https://github.com/alifsemi/alif_ensemble-cmsis-dfp/releases/download/v2.2.0-rc1/AlifSemiconductor.Ensemble.2.2.0-rc1.pack" date="2025-05-04">
-      - Updates in LPTIMER, ISP, I2C, GPIO, RTC Driver
+    <release version="2.2.0"  tag="v2.2.0" url="https://github.com/alifsemi/alif_ensemble-cmsis-dfp/releases/download/v2.2.0/AlifSemiconductor.Ensemble.2.2.0.pack" date="2026-06-30">
+      - Updates in LPTIMER, UTIMER, CPI, UART, I3C, ISP, I2C, GPIO, RTC Driver
       - update SE FW v110 in DFP pack
       - OV5640 Camera sensor Driver Support
       - Support Standard and Selfie camera
@@ -20,7 +20,15 @@
       - Update user MRAM regions
       - ILI9806E initialization fix
       - Update SVD files
-      - Add OV5675 Camera Sensor Support
+      - Add OV5675 Camera Sensor with multi-resolution Support
+      - Update temperature lookup table for recalibrated ADC
+      - Update for using APP_MRAM_USER_BASE as MRAM base address
+      - SD Driver Refactor
+      - Add JPEG Driver Support
+      - Update example projects and demo_pm, demo_rtc, viewfinder demo applications
+      - Update hyperram_e1c OSPI parameters
+      - Optimize camera sensor init time
+      - Update various apps to use pinmux from board_defs.h
     </release>
     <release version="2.1.0"  tag="v2.1.0" url="https://github.com/alifsemi/alif_ensemble-cmsis-dfp/releases/download/v2.1.0/AlifSemiconductor.Ensemble.2.1.0.pack" date="2025-12-19">
       - Update AppKit-E8 board Support
